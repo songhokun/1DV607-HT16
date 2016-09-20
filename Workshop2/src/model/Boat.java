@@ -31,6 +31,9 @@ public class Boat {
 	public void setType(BoatType type) {
 		this.type = type;
 	}
+	public void setType(String type){
+		this.type=BoatType.valueOf(type);
+	}
 
 	public double getLength() {
 		return length;
