@@ -48,8 +48,7 @@ public class Query {
 		if (o instanceof Member) {
 			sb.append("INSERT INTO `boatDB`.`members` (`name`, `personalnumber`, `uniqueid`) VALUES ('");
 			sb.append(((Member) o).getName() + "', '");
-			sb.append(((Member) o).getPersonnumber() + "', '");
-			sb.append(((Member) o).getMemberID() + "');");
+			sb.append(((Member) o).getPersonnumber() + "');");
 		} else if (o instanceof Boat) {
 			sb.append("INSERT INTO `boatDB`.`boats` (`length`, `boattype`, `owner`) VALUES ('");
 			sb.append(((Boat) o).getLength() + "', '");
@@ -63,14 +62,10 @@ public class Query {
 	public void changeInDatabase(Object o) {
 		StringBuilder sb = new StringBuilder();
 		if (o instanceof Member) {
-			sb.append(
-					"DELETE FROM `boatDB`.`members` WHERE `personalnumber`='" + ((Member) o).getPersonnumber() + "';");
 			sb.append("UPDATE `boatDB`.`members` SET `name`='" + ((Member) o).getName() + "', `");
 			sb.append("personalnumber`='" + ((Member) o).getPersonnumber() + "', `");
-			sb.append("memberid`='" + ((Member) o).getMemberID() + "'");
-			sb.append(" WHERE `personalnumber`='" + ((Member) o).getPersonnumber() + "';");
+			sb.append(" WHERE `memberid`='" + ((Member) o).getMemberID() + "';");
 		} else if (o instanceof Boat) {
-			sb.append("DELETE FROM `boatDB`.`boats` WHERE `boatid`='" + ((Boat) o).getBoatID() + "';");
 			sb.append("UPDATE `boatDB`.`boats` SET `length`='" + ((Boat) o).getLength() + "', `");
 			sb.append("boattype`='" + ((Boat) o).getType().toString() + "', `");
 			sb.append(" WHERE `boatid`='" + ((Boat) o).getBoatID() + "';");
@@ -83,8 +78,7 @@ public class Query {
 	public void deleteInDatabase(Object o) {
 		StringBuilder sb = new StringBuilder();
 		if (o instanceof Member) {
-			sb.append(
-					"DELETE FROM `boatDB`.`members` WHERE `personalnumber`='" + ((Member) o).getPersonnumber() + "';");
+			sb.append("DELETE FROM `boatDB`.`members` WHERE `memberid`='" + ((Member) o).getMemberID() + "';");
 		} else if (o instanceof Boat) {
 			sb.append("DELETE FROM `boatDB`.`boats` WHERE `boatid`='" + ((Boat) o).getBoatID() + "';");
 		} else

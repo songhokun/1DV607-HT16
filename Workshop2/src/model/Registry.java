@@ -38,7 +38,7 @@ public class Registry {
 		ResultSet rs = query.fetchQuery("SELECT * from boatDB.members");
 		try {
 			while (rs.next()) {
-				registry.add(new Member(rs.getString("name"), rs.getString("personalnumber")));
+				registry.add(new Member(rs.getString("name"), rs.getString("personalnumber"), rs.getInt("memberid")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
