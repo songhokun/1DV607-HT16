@@ -18,6 +18,7 @@ public class programme {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		/*
 		System.out.println("Registering members");
 		System.out.println("Enter q! quit");
 		
@@ -38,6 +39,8 @@ public class programme {
 			
 		}while(true);
 		scan.close();
+		*/
+		
 	}
 
 }
