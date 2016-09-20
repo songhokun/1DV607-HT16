@@ -3,6 +3,7 @@
  */
 package view;
 
+import model.Boat;
 import model.Member;
 
 /**
@@ -16,8 +17,9 @@ public class programme {
 	 */
 	public static void main(String[] args) {
 		Member test = new Member();
+		Boat b = new Boat();
 		System.out.println(test);
-
+		System.out.println(b);
 	}
 
 }
