@@ -28,4 +28,5 @@ public class Registry {
 		}
 		throw new IllegalArgumentException("The provided member is not registered in our registry");
 	}
+	
 }

@@ -9,8 +9,10 @@ public class Boat {
 
 	private double length;
 	private Type type;
-	public enum Type {Sailboat, Motorsailer, Kayak, Other};
 
+	public enum Type {
+		Sailboat, Motorsailer, Kayak, Other
+	};
 
 	public Boat() {
 
