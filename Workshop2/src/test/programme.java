@@ -12,6 +12,7 @@ public class programme {
 		
 		System.out.println("Our current registered members are following:");
 		for(Member m : membersregistry.getRegistry()){
+			System.out.println(m.getMemberID()+"\t"+m.getName()+"\t"+m.getPersonnumber());
 		}
 	}
 
