@@ -12,16 +12,8 @@ public class Boat {
 	private Member owner;
 
 	public enum BoatType {
-		Sailboat("Sailboat"), Motorsailer("Motorsailer"), Kayak("Kayak"), Other("Other");
-		private String label;
-		
-		private BoatType(String label){
-			this.label = label;
-		}
-		public String getLabel(){
-			return label;
-		}
-	};
+		Sailboat, Motorsailer, Kayak, Other
+	}
 
 	public Boat() {
 
@@ -30,7 +22,6 @@ public class Boat {
 	public Boat(double length, BoatType type) {
 		this.length = length;
 		this.type = type;
-
 	}
 
 	public void setLength(double length) {
@@ -39,9 +30,6 @@ public class Boat {
 
 	public void setType(BoatType type) {
 		this.type = type;
-	}
-	public void setType(String type) {
-		this.type = BoatType.valueOf("type");
 	}
 
 	public double getLength() {
@@ -59,5 +47,5 @@ public class Boat {
 	public void setOwner(Member owner) {
 		this.owner = owner;
 	}
-	
+
 }

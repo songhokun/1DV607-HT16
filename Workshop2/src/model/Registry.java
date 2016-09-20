@@ -19,7 +19,19 @@ public class Registry {
 
 	public void addMember(Member member) {
 		registry.add(member);
+		query.addToDatabase(member);
 	
+	}
+
+	
+	
+	
+	public ArrayList<Member> getRegistry() {
+		return registry;
+	}
+
+	public void setRegistry(ArrayList<Member> registry) {
+		this.registry = registry;
 	}
 
 	private void fetchRegistry() {

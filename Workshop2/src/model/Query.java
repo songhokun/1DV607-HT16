@@ -54,9 +54,21 @@ public class Query {
 			sb.append("INSERT INTO `boatDB`.`boats` (`length`, `boattype`, `owner`) VALUES ('");
 			sb.append(((Boat) o).getLength() + "', '");
 			sb.append(((Boat) o).getType().toString() + "', '");
-			// sb.append(((Boat) o).ge + "');");
+			sb.append(((Boat) o).getOwner().getMemberID() + "');");
 		}
 		else System.err.println("The give object is not insertable.");
 		executeQuery(sb.toString());
 	}
-}
+	
+	public void deleteInDatabase(Object o){
+		StringBuilder sb = new StringBuilder();
+		if (o instanceof Member) {
+			sb.append("DELETE FROM `boatDB`.`members` WHERE `personalnumber`='" + ((Member) o).getPersonnumber() + "';");
+		} else if (o instanceof Boat) {
+	//		sb.append("DELETE FROM `boatDB`.`boats` WHERE `id`='" + ((Boat) o).getId() + "';");
+		}
+		else System.err.println("The give object is not insertable.");
+		executeQuery(sb.toString());
+	}	
+	}
+	
