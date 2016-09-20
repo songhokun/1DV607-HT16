@@ -10,6 +10,7 @@ public class Boat {
 	private double length;
 	private BoatType type;
 	private Member owner;
+	private int boatID;
 
 	public enum BoatType {
 		Sailboat, Motorsailer, Kayak, Other
@@ -49,6 +50,14 @@ public class Boat {
 
 	public void setOwner(Member owner) {
 		this.owner = owner;
+	}
+
+	public int getBoatID() {
+		return boatID;
+	}
+
+	public void setBoatID(int boatID) {
+		this.boatID = boatID;
 	}
 
 }

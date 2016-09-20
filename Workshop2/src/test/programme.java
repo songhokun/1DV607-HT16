@@ -1,5 +1,6 @@
 package test;
 
+import model.Member;
 import model.Registry;
 
 public class programme {
@@ -10,7 +11,8 @@ public class programme {
 		Registry membersregistry = new Registry();
 		
 		System.out.println("Our current registered members are following:");
-
+		for(Member m : membersregistry.getRegistry()){
+		}
 	}
 
 }

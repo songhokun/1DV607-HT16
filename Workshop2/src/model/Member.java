@@ -17,7 +17,7 @@ public class Member {
 	private String name;
 	private String personnumber;
 	
-	private String memberID;
+	private int memberID;
 	
 	private ArrayList<Boat> boatdata = new ArrayList<Boat>();
 	private Query query;
@@ -25,23 +25,24 @@ public class Member {
 	public Member(){
 	}
 	
-	public Member(String name, String personnumber){
+	public Member(String name, String personnumber, int memberID){
 		this.name=name;
 		this.personnumber=personnumber;
-		this.memberID=this.personnumber;
+		this.memberID=memberID;
 		
 		fetchBoats();
 	}
 	
 	private void fetchBoats(){
 		query = new Query();
-		ResultSet rs = query.fetchQuery("SELECT length, boattype FROM boatDB.boats where owner='"+this.personnumber+"';");
+		ResultSet rs = query.fetchQuery("SELECT id, length, boattype FROM boatDB.boats where owner='"+this.personnumber+"';");
 		try {
 			while (rs.next()) {
 				Boat temp = new Boat();
 				temp.setLength(rs.getDouble("length"));
 				temp.setType(rs.getString("type"));
 				temp.setOwner(this);
+				temp.setBoatID(rs.getInt("id"));
 				this.boatdata.add(temp);
 			}
 		} catch (SQLException e) {
@@ -75,10 +76,10 @@ public class Member {
 	}
 	//TODO : Do we still need an unique ID even when social security number is unique enough? 
 	
-	public String getMemberID(){
+	public int getMemberID(){
 		return this.memberID;
 	}
-	public void setMemberID(String memberID){
+	public void setMemberID(int memberID){
 		this.memberID=memberID;
 	}
 }
