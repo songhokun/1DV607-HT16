@@ -3,7 +3,11 @@
  */
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import model.Boat.BoatType;
 
 /**
  * @author songhokun
@@ -16,7 +20,7 @@ public class Member {
 	private String memberID;
 	
 	private ArrayList<Boat> boatdata = new ArrayList<Boat>();
-	
+	private Query query;
 	
 	public Member(){
 	}
@@ -25,6 +29,24 @@ public class Member {
 		this.name=name;
 		this.personnumber=personnumber;
 		this.memberID=this.personnumber;
+		
+		fetchBoats();
+	}
+	
+	private void fetchBoats(){
+		query = new Query();
+		ResultSet rs = query.fetchQuery("SELECT length, boattype FROM boatDB.boats where owner='"+this.personnumber+"';");
+		try {
+			while (rs.next()) {
+				Boat temp = new Boat();
+				temp.setLength(rs.getDouble("length"));
+				temp.setType(rs.getString("type"));
+				
+				this.boatdata.add(temp);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	public String getName() {
 		return name;

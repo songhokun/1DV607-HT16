@@ -8,17 +8,26 @@ package model;
 public class Boat {
 
 	private double length;
-	private Type type;
+	private BoatType type;
+	private Member owner;
 
-	public enum Type {
-		Sailboat, Motorsailer, Kayak, Other
+	public enum BoatType {
+		Sailboat("Sailboat"), Motorsailer("Motorsailer"), Kayak("Kayak"), Other("Other");
+		private String label;
+		
+		private BoatType(String label){
+			this.label = label;
+		}
+		public String getLabel(){
+			return label;
+		}
 	};
 
 	public Boat() {
 
 	}
 
-	public Boat(double length, Type type) {
+	public Boat(double length, BoatType type) {
 		this.length = length;
 		this.type = type;
 
@@ -28,15 +37,27 @@ public class Boat {
 		this.length = length;
 	}
 
-	public void setType(Type type) {
+	public void setType(BoatType type) {
 		this.type = type;
+	}
+	public void setType(String type) {
+		this.type = BoatType.valueOf("type");
 	}
 
 	public double getLength() {
 		return length;
 	}
 
-	public Type getType() {
+	public BoatType getType() {
 		return type;
 	}
+
+	public Member getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Member owner) {
+		this.owner = owner;
+	}
+	
 }
