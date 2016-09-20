@@ -41,7 +41,7 @@ public class Member {
 				Boat temp = new Boat();
 				temp.setLength(rs.getDouble("length"));
 				temp.setType(rs.getString("type"));
-				
+				temp.setOwner(this);
 				this.boatdata.add(temp);
 			}
 		} catch (SQLException e) {
@@ -73,7 +73,7 @@ public class Member {
 	public void setBoatdata(ArrayList<Boat> boatdata) {
 		this.boatdata = boatdata;
 	}
-	//TO-DO : Do we still need an unique ID even when social security number is unique enough? 
+	//TODO : Do we still need an unique ID even when social security number is unique enough? 
 	
 	public String getMemberID(){
 		return this.memberID;
