@@ -14,7 +14,6 @@ public class Member {
 	private String personnumber;
 	
 	private int memberID;
-	private int numberOfBoats=0;
 	
 	private ArrayList<Boat> boatdata = new ArrayList<Boat>();
 	
@@ -53,13 +52,9 @@ public class Member {
 	}
 
 	public int getNumberOfBoats() {
-		return numberOfBoats;
+		return boatdata.size();
 	}
-
-	public void setNumberOfBoats(int numberOfBoats) {
-		this.numberOfBoats = numberOfBoats;
-	}
-
+	
 	public ArrayList<Boat> getBoatdata() {
 		return boatdata;
 	}
@@ -67,5 +62,4 @@ public class Member {
 	public void setBoatdata(ArrayList<Boat> boatdata) {
 		this.boatdata = boatdata;
 	}
-	
 }
