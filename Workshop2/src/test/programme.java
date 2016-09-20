@@ -1,7 +1,9 @@
 package test;
 
 import java.util.ArrayList;
+import model.Boat.BoatType;
 
+import model.Boat;
 import model.Member;
 import model.Registry;
 
@@ -11,13 +13,14 @@ public class programme {
 		System.out.println("The boat club programme");
 		
 		Registry membersregistry = new Registry();
-		ArrayList<Member> a = membersregistry.getRegistry();
 		
-		System.out.println(a.get(0));
-	//	System.out.println("Our current registered members are following:");
-	//	for(Member m : membersregistry.getRegistry()){
-	//		System.out.println(m.getMemberID()+"\t"+m.getName()+"\t"+m.getPersonnumber());
-	//	}
+	
+		System.out.println("Our current registered members are following:");
+		for(Member m : membersregistry.getRegistry()){
+			System.out.println(m.getMemberID()+"\t"+m.getName()+"\t"+m.getPersonnumber());
+			for(Boat b: m.getBoatdata())
+				System.out.println("\t"+b.getBoatID()+"\t"+b.getType().toString()+"\t"+b.getLength());
+		}
 	}
 
 }

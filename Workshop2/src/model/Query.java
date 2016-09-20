@@ -3,6 +3,7 @@ package model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import model.Boat.BoatType;
 
 public class Query {
 
@@ -20,7 +21,7 @@ public class Query {
 			PreparedStatement stat = db.getConnection().prepareStatement(sqlQuery);
 			stat.execute();
 			rs = stat.getResultSet();
-			db.closeConnection();
+			//db.closeConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +37,7 @@ public class Query {
 					ResultSet.CONCUR_UPDATABLE);
 			stat.execute();
 			rs = stat.getResultSet();
-			db.closeConnection();
+			//db.closeConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
