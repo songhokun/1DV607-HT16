@@ -8,10 +8,12 @@ package model;
  *
  */
 public class Member {
-	public Member(){
+	
+	public Member() {
 		System.out.println("test changes");
 	}
-	public String toString(){
+
+	public String toString() {
 		return "Hello";
 	}
 }
