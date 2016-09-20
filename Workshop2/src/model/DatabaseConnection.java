@@ -1,8 +1,7 @@
 package model;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -15,41 +14,10 @@ public class DatabaseConnection {
 	private boolean connection = false;
 
 	public DatabaseConnection() {
-		Connection();
+		startConnection();
 	}
 
-	public ResultSet fetch(String sqlQuery) {
-		if (connectionDB == null)
-			Connection();
-		ResultSet rs = null;
-
-		try {
-			PreparedStatement stat = connectionDB.prepareStatement(sqlQuery);
-			stat.execute();
-			rs = stat.getResultSet();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return rs;
-	}
-
-	public ResultSet execute(String sqlQuery) {
-		if (connectionDB == null)
-			Connection();
-		ResultSet rs = null;
-
-		try {
-			PreparedStatement stat = connectionDB.prepareStatement(sqlQuery, ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
-			stat.execute();
-			rs = stat.getResultSet();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return rs;
-	}
-
-	public void Connection() {
+	public void startConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Properties user = new Properties();
@@ -59,7 +27,7 @@ public class DatabaseConnection {
 			connection = true;
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
-			System.out.println("DATABASE_CONNECTED: " + connection);
+			// System.out.println("DATABASE_CONNECTED: " + connection);
 		}
 
 	}
@@ -76,5 +44,9 @@ public class DatabaseConnection {
 
 	public boolean isConnected() {
 		return connection;
+	}
+
+	public Connection getConnection() {
+		return connectionDB;
 	}
 }
