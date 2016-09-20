@@ -1,5 +1,7 @@
 package test;
 
+import java.util.ArrayList;
+
 import model.Member;
 import model.Registry;
 
@@ -9,11 +11,13 @@ public class programme {
 		System.out.println("The boat club programme");
 		
 		Registry membersregistry = new Registry();
+		ArrayList<Member> a = membersregistry.getRegistry();
 		
-		System.out.println("Our current registered members are following:");
-		for(Member m : membersregistry.getRegistry()){
-			System.out.println(m.getMemberID()+"\t"+m.getName()+"\t"+m.getPersonnumber());
-		}
+		System.out.println(a.get(0));
+	//	System.out.println("Our current registered members are following:");
+	//	for(Member m : membersregistry.getRegistry()){
+	//		System.out.println(m.getMemberID()+"\t"+m.getName()+"\t"+m.getPersonnumber());
+	//	}
 	}
 
 }

@@ -35,14 +35,14 @@ public class Member {
 	
 	private void fetchBoats(){
 		query = new Query();
-		ResultSet rs = query.fetchQuery("SELECT id, length, boattype FROM boatDB.boats where owner='"+this.personnumber+"';");
+		ResultSet rs = query.fetchQuery("SELECT id, length, boattype FROM boatDB.boats where owner='"+this.memberID+"';");
 		try {
 			while (rs.next()) {
 				Boat temp = new Boat();
 				temp.setLength(rs.getDouble("length"));
 				temp.setType(rs.getString("type"));
 				temp.setOwner(this);
-				temp.setBoatID(rs.getInt("id"));
+				temp.setBoatID(rs.getInt("boatid"));
 				this.boatdata.add(temp);
 			}
 		} catch (SQLException e) {
