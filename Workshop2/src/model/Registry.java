@@ -1,6 +1,3 @@
-/**
- * 
- */
 package model;
 
 import java.sql.ResultSet;
@@ -12,34 +9,28 @@ import java.util.ArrayList;
  *
  */
 public class Registry {
-	private ArrayList<Member> memberdata = new ArrayList<Member>();
-	private Query query;
+
+	private ArrayList<Member> registry = new ArrayList<Member>();
+	private Query query = new Query();
 
 	public Registry() {
-		query = new Query();
+		fetchRegistry();
+	}
+
+	public void addMember(Member member) {
+		registry.add(member);
+	
+	}
+
+	private void fetchRegistry() {
 		ResultSet rs = query.fetchQuery("SELECT * from boatDB.members");
 		try {
 			while (rs.next()) {
-
+				registry.add(new Member(rs.getString("name"), rs.getString("personalnumber")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void addMember(Member in) {
-		memberdata.add(in);
-	}
-
-	public void registerBoat(Member member, Boat boat) {
-
-		for (Member i : memberdata) {
-			if (i.equals(member)) {
-				i.getBoatdata().add(boat);
-				return;
-			}
-		}
-		throw new IllegalArgumentException("The provided member is not registered in our registry");
 	}
 
 }

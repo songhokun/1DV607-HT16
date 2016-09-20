@@ -3,7 +3,6 @@ package model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class Query {
 
@@ -44,9 +43,20 @@ public class Query {
 		return rs;
 	}
 
-	public ArrayList<Member> toMembers(ResultSet rs){
-		return null;
-		
-		
+	public void addToDatabase(Object o) {
+		StringBuilder sb = new StringBuilder();
+		if (o instanceof Member) {
+			sb.append("INSERT INTO `boatDB`.`members` (`name`, `personalnumber`, `uniqueid`) VALUES ('");
+			sb.append(((Member) o).getName() + "', '");
+			sb.append(((Member) o).getPersonnumber() + "', '");
+			sb.append(((Member) o).getMemberID() + "');");
+		} else if (o instanceof Boat) {
+			sb.append("INSERT INTO `boatDB`.`boats` (`length`, `boattype`, `owner`) VALUES ('");
+			sb.append(((Boat) o).getLength() + "', '");
+			sb.append(((Boat) o).getType().toString() + "', '");
+			// sb.append(((Boat) o).ge + "');");
+		}
+		else System.err.println("The give object is not insertable.");
+		executeQuery(sb.toString());
 	}
 }
