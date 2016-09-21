@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,7 @@ public class Registry {
 	private ReadWriteFile readWriteFile;
 	
 	public Registry() {
-		registry = readWriteFile.setDataInRegistry();
+		//registry = readWriteFile.setDataInRegistry();
 		
 		//readWriteFile.setDataInRegistry(this);
 		
@@ -26,8 +27,7 @@ public class Registry {
 		return registry;
 	}
 
-	public void addMember(String name, String personalnumber) {
-		Member m = new Member(name, personalnumber);
-		
+	public void updateFile() throws IOException{
+		readWriteFile.updateBoatFile(this);
 	}
 }

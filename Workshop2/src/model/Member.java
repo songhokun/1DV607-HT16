@@ -5,6 +5,8 @@ package model;
 
 import java.util.ArrayList;
 
+import model.Boat.BoatType;
+
 
 /**
  * @author songhokun
@@ -80,5 +82,9 @@ public class Member {
 
 	public void setMemberID(int memberID) {
 		this.memberID = memberID;
+	}
+	
+	public void registerBoat(double length, String type){
+		 this.getBoatdata().add(new Boat(12.2, BoatType.Kayak));
 	}
 }
