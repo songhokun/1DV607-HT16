@@ -1,0 +1,5 @@
+1.5;Sailboat;1
+2;Kayak;1
+5;Motorsailer;2
+4;Other;2
+2.5;Kayak;5

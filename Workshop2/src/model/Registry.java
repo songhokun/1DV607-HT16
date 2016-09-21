@@ -1,5 +1,6 @@
 package model;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -9,13 +10,12 @@ import java.util.ArrayList;
  */
 public class Registry {
 
-	private ArrayList<Member> registry;
+	private ArrayList<Member> registry = new ArrayList<Member>();
 	private WriteFile readWriteFile;
+	private int maxID=0;
 	
-	public Registry() {
-		//registry = readWriteFile.setDataInRegistry();
-		
-		//readWriteFile.setDataInRegistry(this);
+	public Registry() throws FileNotFoundException {
+		ReadFile read = new ReadFile(this);
 		
 	}
 
@@ -29,5 +29,12 @@ public class Registry {
 
 	public void updateFile() throws IOException{
 		readWriteFile.updateBoatFile(this);
+	}
+
+	public int getMaxID() {
+		return maxID;
+	}
+	public void setMaxID(int maxID){
+		this.maxID=maxID;
 	}
 }
