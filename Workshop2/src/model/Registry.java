@@ -1,7 +1,5 @@
 package model;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -10,22 +8,16 @@ import java.util.ArrayList;
  */
 public class Registry {
 
-	private ArrayList<Member> registry = new ArrayList<Member>();
-	private Query query = new Query();
+	private ArrayList<Member> registry;
 
 	public Registry() {
-		fetchRegistry();
+		registry = new ArrayList<Member>();
 	}
 
-	public void addMember(Member member) {
-		registry.add(member);
-		query.addToDatabase(member);
-	
+	public Registry(ArrayList<Member> memberList) {
+		this.registry = memberList;
 	}
 
-	
-	
-	
 	public ArrayList<Member> getRegistry() {
 		return registry;
 	}
@@ -33,16 +25,4 @@ public class Registry {
 	public void setRegistry(ArrayList<Member> registry) {
 		this.registry = registry;
 	}
-
-	private void fetchRegistry() {
-		ResultSet rs = query.fetchQuery("SELECT * from boatDB.members");
-		try {
-			while (rs.next()) {
-				registry.add(new Member(rs.getString("name"), rs.getString("personalnumber"), rs.getInt("memberid")));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

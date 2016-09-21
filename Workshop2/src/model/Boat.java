@@ -12,14 +12,19 @@ public class Boat {
 	private Member owner;
 	private int boatID;
 
-	public enum BoatType {
-		Sailboat, Motorsailer, Kayak, Other
-	}
+	public enum BoatType {Sailboat, Motorsailer, Kayak, Other}
 
 	public Boat() {
 
 	}
 
+	public Boat(double length, BoatType type, Member owner, int boatID) {
+		this.length = length;
+		this.type = type;
+		this.owner = owner;
+		this.boatID = boatID;
+	}
+	
 	public Boat(double length, BoatType type) {
 		this.length = length;
 		this.type = type;
