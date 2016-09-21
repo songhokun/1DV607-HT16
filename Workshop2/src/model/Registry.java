@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Registry {
 
 	private ArrayList<Member> registry;
-	private ReadWriteFile readWriteFile;
+	private WriteFile readWriteFile;
 	
 	public Registry() {
 		//registry = readWriteFile.setDataInRegistry();

@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class ReadWriteFile {
+public class WriteFile {
 
 	private File memberDataFile = new File("Members.txt");
 	private File boatDataFile = new File("Boats.txt");
 	//private
 	
-	public ReadWriteFile() {
+	public WriteFile() {
 
 	}
 	
