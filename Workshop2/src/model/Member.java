@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Member {
 	private String name;
-	private String personnumber;
+	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatdata = new ArrayList<Boat>();
 
@@ -20,27 +20,27 @@ public class Member {
 	
 	}
 
-	public Member(String name, String personnumber) {
+	public Member(String name, String personalnumber) {
 		this.name = name;
-		this.personnumber = personnumber;
+		this.personalnumber = personalnumber;
 	}
 	
-	public Member(String name, String personnumber, int memberID) {
+	public Member(String name, String personalnumber, int memberID) {
 		this.name = name;
-		this.personnumber = personnumber;
+		this.personalnumber = personalnumber;
 		this.memberID = memberID;
 	}
 	
-	public Member(String name, String personnumber, int memberID, ArrayList<Boat> list) {
+	public Member(String name, String personalnumber, int memberID, ArrayList<Boat> list) {
 		this.name = name;
-		this.personnumber = personnumber;
+		this.personalnumber = personalnumber;
 		this.memberID = memberID;
 		this.boatdata = list;
 	}
 	
-	public Member(String name, String personnumber, ArrayList<Boat> list) {
+	public Member(String name, String personalnumber, ArrayList<Boat> list) {
 		this.name = name;
-		this.personnumber = personnumber;
+		this.personalnumber = personalnumber;
 		this.boatdata = list;
 	}
 
@@ -48,16 +48,16 @@ public class Member {
 		return name;
 	}
 
-	public String getPersonnumber() {
-		return personnumber;
+	public String getPersonalnumber() {
+		return personalnumber;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setPersonnumber(String personnumber) {
-		this.personnumber = personnumber;
+	public void setPersonalnumber(String personalnumber) {
+		this.personalnumber = personalnumber;
 	}
 
 	public int getNumberOfBoats() {

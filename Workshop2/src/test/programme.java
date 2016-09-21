@@ -17,7 +17,7 @@ public class programme {
 	
 		System.out.println("Our current registered members are following:");
 		for(Member m : membersregistry.getRegistry()){
-			System.out.println(m.getMemberID()+"\t"+m.getName()+"\t"+m.getPersonnumber());
+			System.out.println(m.getMemberID()+"\t"+m.getName()+"\t"+m.getPersonalnumber());
 			for(Boat b: m.getBoatdata())
 				System.out.println("\t"+b.getBoatID()+"\t"+b.getType().toString()+"\t"+b.getLength());
 		}
