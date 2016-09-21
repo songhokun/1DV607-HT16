@@ -9,9 +9,13 @@ import java.util.ArrayList;
 public class Registry {
 
 	private ArrayList<Member> registry;
-
+	private ReadWriteFile readWriteFile;
+	
 	public Registry() {
-		registry = new ArrayList<Member>();
+		registry = readWriteFile.setDataInRegistry();
+		
+		//readWriteFile.setDataInRegistry(this);
+		
 	}
 
 	public Registry(ArrayList<Member> memberList) {
@@ -22,7 +26,8 @@ public class Registry {
 		return registry;
 	}
 
-	public void setRegistry(ArrayList<Member> registry) {
-		this.registry = registry;
+	public void addMember(String name, String personalnumber) {
+		Member m = new Member(name, personalnumber);
+		
 	}
 }
