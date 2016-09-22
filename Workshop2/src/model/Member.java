@@ -17,6 +17,7 @@ public class Member {
 	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatdata = new ArrayList<Boat>();
+	private ArrayList<IMemberUpdateObserver> subscribers;
 
 	public Member() {
 	
@@ -84,7 +85,14 @@ public class Member {
 		this.memberID = memberID;
 	}
 	
+	public void addSubscriber(IMemberUpdateObserver sub) {
+		subscribers.add(sub);
+	}
+	
 	public void registerBoat(double length, String type){
 		 this.getBoatdata().add(new Boat(12.2, BoatType.Kayak));
+		 for (IMemberUpdateObserver obs : subscribers) {
+				obs.memberInformationChanged();
+		}
 	}
 }

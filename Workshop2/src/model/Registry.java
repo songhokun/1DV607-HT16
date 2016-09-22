@@ -1,22 +1,19 @@
 package model;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * @author songhokun
  *
  */
-public class Registry {
+public class Registry implements IMemberUpdateObserver{
 
 	private ArrayList<Member> registry = new ArrayList<Member>();
-	private WriteFile readWriteFile;
-	private int maxID=0;
-	
+	private int maxID = 0;
+
 	public Registry() throws FileNotFoundException {
-		ReadFile read = new ReadFile(this);
-		
+		new ReadFile(this);
 	}
 
 	public Registry(ArrayList<Member> memberList) {
@@ -27,14 +24,21 @@ public class Registry {
 		return registry;
 	}
 
-	public void updateFile() throws IOException{
-		readWriteFile.updateBoatFile(this);
-	}
-
 	public int getMaxID() {
 		return maxID;
 	}
-	public void setMaxID(int maxID){
-		this.maxID=maxID;
+
+	public void setMaxID(int maxID) {
+		this.maxID = maxID;
+	}
+
+	public void createMember(String name, String personalNumber) {
+		this.registry.add(new Member(name, personalNumber, ++maxID));
+		new WriteFile(this);
+	}
+
+	@Override
+	public void memberInformationChanged() {
+		new WriteFile(this);	
 	}
 }
