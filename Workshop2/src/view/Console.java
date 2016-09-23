@@ -52,6 +52,7 @@ public class Console implements IView {
 		return true;
 	}
 
+	@Override
 	public void displayUpdateMemberDetails() {
 		displayCompactList();
 		System.out.print("Enter the memebr # \n>");
@@ -86,6 +87,7 @@ public class Console implements IView {
 		System.out.println("****** Member Updated!! *******");
 	}
 
+	@Override
 	public void displayDeleteMemberDetails() {
 		displayCompactList();
 		System.out.print("Enter the memebr # \n>");
@@ -98,6 +100,7 @@ public class Console implements IView {
 		System.out.println("****** Member Deleted!! *******");
 	}
 
+	@Override
 	public void displayAddMemberDetails() {
 		System.out.print("Name \n>");
 		String name = scan.next();
@@ -141,8 +144,6 @@ public class Console implements IView {
 					System.out.printf("\t%.2f m length, %s\n", b.getLength(), b.getType());
 			} else
 				System.out.println("does not have any boat.");
-
 		}
 	}
-
 }
