@@ -36,7 +36,20 @@ public class Registry implements IMemberUpdateObserver{
 		this.registry.add(new Member(name, personalNumber, ++maxID));
 		new WriteFile(this);
 	}
+	
+	public void deleteMember(int index){
+		this.registry.remove(index);
+		new WriteFile(this);
+	}
 
+	public void updateMember(int index, String name, String personalNumber){
+		if(!name.isEmpty()) 
+			this.registry.get(index).setName(name);
+		if(!personalNumber.isEmpty())
+			this.registry.get(index).setPersonalnumber(personalNumber);
+		new WriteFile(this);
+	}
+	
 	@Override
 	public void memberInformationChanged() {
 		new WriteFile(this);	

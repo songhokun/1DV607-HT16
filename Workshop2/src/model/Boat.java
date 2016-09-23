@@ -9,20 +9,12 @@ public class Boat {
 
 	private double length;
 	private BoatType type;
-	private Member owner;
-
 	public enum BoatType {Sailboat, Motorsailer, Kayak, Other}
 
 	public Boat() {
 
 	}
 
-	public Boat(double length, BoatType type, Member owner) {
-		this.length = length;
-		this.type = type;
-		this.owner = owner;
-	}
-	
 	public Boat(double length, BoatType type) {
 		this.length = length;
 		this.type = type;
@@ -50,13 +42,5 @@ public class Boat {
 
 	public BoatType getType() {
 		return type;
-	}
-
-	public Member getOwner() {
-		return owner;
-	}
-
-	public void setOwner(Member owner) {
-		this.owner = owner;
 	}
 }

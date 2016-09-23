@@ -2,7 +2,6 @@ package view;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
 import model.Boat;
 import model.Member;
 
@@ -18,13 +17,13 @@ public class Console implements IView {
 		} catch (FileNotFoundException e) {
 			System.err.println("There was a problem in loading a file becuase it did not exist");
 		}
-
 	}
 
 	@Override
 	public void startProgram() {
 		System.out.println("Boat club programme.");
-		while (displayMainInstructions());
+		while (displayMainInstructions())
+			;
 		scan.close();
 	}
 
@@ -33,24 +32,79 @@ public class Console implements IView {
 		System.out.println("Please select following options:");
 		System.out.println("1 : List all members");
 		System.out.println("2 : Create a member");
+		System.out.println("3 : Delete a member");
+		System.out.println("4 : Update a member");
 		System.out.printf("%c : quit\n>", quitSequence);
 
 		String userInput = scan.next();
 		if (userInput.equals(String.valueOf(quitSequence)))
 			return false;
 		else {
-			if (userInput.equals("1")) {
+			if (userInput.equals("1"))
 				displayMemberListType();
-			} else if (userInput.equals("2")) {
-				System.out.print("Name: ");
-				String name = scan.next();
-				System.out.print("\nPersonal Number: ");
-				String personalNumber = scan.next();
-				reg.createMember(name, personalNumber);
-				System.out.println("Member Created!!");
-			}
+			else if (userInput.equals("2"))
+				displayAddMemberDetails();
+			else if (userInput.equals("3"))
+				displayDeleteMemberDetails();
+			else if (userInput.endsWith("4"))
+				displayUpdateMemberDetails();
 		}
 		return true;
+	}
+
+	public void displayUpdateMemberDetails() {
+		displayCompactList();
+		System.out.print("Enter the memebr # \n>");
+		String input = scan.next();
+		int index = Integer.parseInt(input);
+		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) >= reg.getRegistry().size()) {
+			System.err.println("Invalid Member #\n");
+			displayDeleteMemberDetails();
+		}
+		System.out.println("Please select following options:");
+		System.out.println("1 : Update name");
+		System.out.println("2 : Update personal number");
+		System.out.println("3 : Update both");
+		System.out.println("r : go back");
+		System.out.print(">");
+		String name = "";
+		String personalNumber = "";
+		input = scan.next();
+		if (input.equals("r")) {
+			displayMainInstructions();
+			return;
+		}
+		if (Integer.parseInt(input) == 1 || Integer.parseInt(input) == 3) {
+			System.out.print("Enter name\n>");
+			name = scan.next();
+		}
+		if (Integer.parseInt(input) == 2 || Integer.parseInt(input) == 3) {
+			System.out.print("Enter Personal number\n>");
+			personalNumber = scan.next();
+		}
+		reg.updateMember(index - 1, name, personalNumber);
+		System.out.println("****** Member Updated!! *******");
+	}
+
+	public void displayDeleteMemberDetails() {
+		displayCompactList();
+		System.out.print("Enter the memebr # \n>");
+		int input = scan.nextInt();
+		if (input <= 0 || input >= reg.getRegistry().size()) {
+			System.err.println("Invalid Member #\n");
+			displayDeleteMemberDetails();
+		}
+		reg.deleteMember(input - 1);
+		System.out.println("****** Member Deleted!! *******");
+	}
+
+	public void displayAddMemberDetails() {
+		System.out.print("Name \n>");
+		String name = scan.next();
+		System.out.print("Personal Number\n>");
+		String personalNumber = scan.next();
+		reg.createMember(name, personalNumber);
+		System.out.println("****** Member Created!! ******");
 	}
 
 	@Override

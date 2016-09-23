@@ -36,7 +36,7 @@ public class ReadFile {
 			String[] temp = scan.nextLine().split(";");
 			for(Member i : r.getRegistry()){
 				if(i.getMemberID()==Integer.parseInt(temp[2])){
-					i.getBoatdata().add(new Boat(Double.parseDouble(temp[0]),BoatType.valueOf(temp[1]),i));
+					i.getBoatdata().add(new Boat(Double.parseDouble(temp[0]),BoatType.valueOf(temp[1])));
 					break;
 				}
 				
