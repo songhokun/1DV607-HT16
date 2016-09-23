@@ -58,7 +58,7 @@ public class Console implements IView {
 		System.out.print("Enter the memebr # \n>");
 		String input = scan.next();
 		int index = Integer.parseInt(input);
-		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) >= reg.getRegistry().size()) {
+		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > reg.getRegistry().size()) {
 			System.err.println("Invalid Member #\n");
 			displayDeleteMemberDetails();
 		}
@@ -92,7 +92,7 @@ public class Console implements IView {
 		displayCompactList();
 		System.out.print("Enter the memebr # \n>");
 		int input = scan.nextInt();
-		if (input <= 0 || input >= reg.getRegistry().size()) {
+		if (input <= 0 || input > reg.getRegistry().size()) {
 			System.err.println("Invalid Member #\n");
 			displayDeleteMemberDetails();
 		}
@@ -104,6 +104,10 @@ public class Console implements IView {
 	public void displayAddMemberDetails() {
 		System.out.print("Name \n>");
 		String name = scan.next();
+		while (scan.hasNext()) {
+			name = name + scan.nextLine();
+			break;
+		}
 		System.out.print("Personal Number\n>");
 		String personalNumber = scan.next();
 		reg.createMember(name, personalNumber);
