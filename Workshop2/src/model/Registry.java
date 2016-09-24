@@ -7,13 +7,15 @@ import java.util.ArrayList;
  * @author songhokun
  *
  */
-public class Registry implements IMemberUpdateObserver{
+public class Registry implements IMemberUpdateObserver {
 
 	private ArrayList<Member> registry = new ArrayList<Member>();
 	private int maxID = 0;
 
 	public Registry() throws FileNotFoundException {
 		new ReadFile(this);
+		for(Member m: registry)
+			m.addSubscriber(this);
 	}
 
 	public Registry(ArrayList<Member> memberList) {
@@ -36,43 +38,47 @@ public class Registry implements IMemberUpdateObserver{
 		this.registry.add(new Member(name, personalNumber, ++maxID));
 		this.memberInformationChanged();
 	}
-	
-	public void deleteMember(int ID){
+
+	public void deleteMember(int ID) {
 		this.registry.remove(lookUpMember(ID));
 		this.memberInformationChanged();
 	}
 
-	public void updateMember(int memberID, String name, String personalNumber){
-		if(!name.isEmpty()) 
+	public void updateMember(int memberID, String name, String personalNumber) {
+		if (!name.isEmpty())
 			lookUpMember(memberID).setName(name);
-		if(!personalNumber.isEmpty())
+		if (!personalNumber.isEmpty())
 			lookUpMember(memberID).setPersonalnumber(personalNumber);
-		
+
 		this.memberInformationChanged();
 	}
-	
+
 	@Override
 	public void memberInformationChanged() {
-		new WriteFile(this);	
+		new WriteFile(this);
 	}
-	private Member lookUpMember(String personalNumber){
-		for(Member m : this.registry){
-			if(m.getPersonalnumber().equals(personalNumber))
+
+	private Member lookUpMember(String personalNumber) {
+		for (Member m : this.registry) {
+			if (m.getPersonalnumber().equals(personalNumber))
 				return m;
 		}
 		return null;
 	}
-	private Member lookUpMember(int ID){
-		for(Member m : this.registry){
-			if(m.getMemberID() == ID)
+
+	public Member lookUpMember(int ID) {
+		for (Member m : this.registry) {
+			if (m.getMemberID() == ID)
 				return m;
 		}
 		return null;
 	}
-	public boolean isMemberExist(String personalNumber){
-		return lookUpMember(personalNumber)!= null;
+
+	public boolean isMemberExist(String personalNumber) {  // I used this method to access the member.
+		return lookUpMember(personalNumber) != null;
 	}
-	public boolean isMemberExist(int ID){
-		return lookUpMember(ID)!= null;
+
+	public boolean isMemberExist(int ID) {
+		return lookUpMember(ID) != null;
 	}
 }

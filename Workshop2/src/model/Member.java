@@ -4,9 +4,7 @@
 package model;
 
 import java.util.ArrayList;
-
 import model.Boat.BoatType;
-
 
 /**
  * @author songhokun
@@ -17,34 +15,21 @@ public class Member {
 	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatdata = new ArrayList<Boat>();
-	private ArrayList<IMemberUpdateObserver> subscribers;
+	private ArrayList<IMemberUpdateObserver> subscribers = new ArrayList<IMemberUpdateObserver>();
 
 	public Member() {
-	
+
 	}
 
 	public Member(String name, String personalnumber) {
 		this.name = name;
 		this.personalnumber = personalnumber;
 	}
-	
+
 	public Member(String name, String personalnumber, int memberID) {
 		this.name = name;
 		this.personalnumber = personalnumber;
 		this.memberID = memberID;
-	}
-	
-	public Member(String name, String personalnumber, int memberID, ArrayList<Boat> list) {
-		this.name = name;
-		this.personalnumber = personalnumber;
-		this.memberID = memberID;
-		this.boatdata = list;
-	}
-	
-	public Member(String name, String personalnumber, ArrayList<Boat> list) {
-		this.name = name;
-		this.personalnumber = personalnumber;
-		this.boatdata = list;
 	}
 
 	public String getName() {
@@ -84,15 +69,30 @@ public class Member {
 	public void setMemberID(int memberID) {
 		this.memberID = memberID;
 	}
-	
+
 	public void addSubscriber(IMemberUpdateObserver sub) {
 		subscribers.add(sub);
 	}
-	
-	public void registerBoat(double length, String type){
-		 this.getBoatdata().add(new Boat(12.2, BoatType.Kayak));
-		 for (IMemberUpdateObserver obs : subscribers) {
-				obs.memberInformationChanged();
-		}
+
+	public void registerBoat(double length, int type) {
+		this.getBoatdata().add(new Boat(length, BoatType.values()[type - 1]));
+		for (IMemberUpdateObserver obs : subscribers)
+			obs.memberInformationChanged();
+	}
+
+	public void updateBoat(double length, int type, int index) {
+		if (length != -1)
+			this.getBoatdata().get(index - 1).setLength(length);
+		if (type != -1)
+			this.getBoatdata().get(index - 1).setType(BoatType.values()[type - 1]);
+
+		for (IMemberUpdateObserver obs : subscribers)
+			obs.memberInformationChanged();
+	}
+
+	public void deleteBoat(int index) {
+		this.getBoatdata().remove(index - 1);
+		for (IMemberUpdateObserver obs : subscribers)
+			obs.memberInformationChanged();
 	}
 }
