@@ -34,24 +34,45 @@ public class Registry implements IMemberUpdateObserver{
 
 	public void createMember(String name, String personalNumber) {
 		this.registry.add(new Member(name, personalNumber, ++maxID));
-		new WriteFile(this);
+		this.memberInformationChanged();
 	}
 	
-	public void deleteMember(int index){
-		this.registry.remove(index);
-		new WriteFile(this);
+	public void deleteMember(int ID){
+		this.registry.remove(lookUpMember(ID));
+		this.memberInformationChanged();
 	}
 
-	public void updateMember(int index, String name, String personalNumber){
+	public void updateMember(int memberID, String name, String personalNumber){
 		if(!name.isEmpty()) 
-			this.registry.get(index).setName(name);
+			lookUpMember(memberID).setName(name);
 		if(!personalNumber.isEmpty())
-			this.registry.get(index).setPersonalnumber(personalNumber);
-		new WriteFile(this);
+			lookUpMember(memberID).setPersonalnumber(personalNumber);
+		
+		this.memberInformationChanged();
 	}
 	
 	@Override
 	public void memberInformationChanged() {
 		new WriteFile(this);	
+	}
+	private Member lookUpMember(String personalNumber){
+		for(Member m : this.registry){
+			if(m.getPersonalnumber().equals(personalNumber))
+				return m;
+		}
+		return null;
+	}
+	private Member lookUpMember(int ID){
+		for(Member m : this.registry){
+			if(m.getMemberID() == ID)
+				return m;
+		}
+		return null;
+	}
+	public boolean isMemberExist(String personalNumber){
+		return lookUpMember(personalNumber)!= null;
+	}
+	public boolean isMemberExist(int ID){
+		return lookUpMember(ID)!= null;
 	}
 }

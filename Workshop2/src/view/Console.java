@@ -15,15 +15,14 @@ public class Console implements IView {
 		try {
 			reg = new model.Registry();
 		} catch (FileNotFoundException e) {
-			System.err.println("There was a problem in loading a file becuase it did not exist");
+			System.err.println("There was a problem in loading a file becuase it did not exist!\n");
 		}
 	}
 
 	@Override
 	public void startProgram() {
 		System.out.println("Boat club programme.");
-		while (displayMainInstructions())
-			;
+		while (displayMainInstructions());
 		scan.close();
 	}
 
@@ -40,6 +39,7 @@ public class Console implements IView {
 		if (userInput.equals(String.valueOf(quitSequence)))
 			return false;
 		else {
+			try{
 			if (userInput.equals("1"))
 				displayMemberListType();
 			else if (userInput.equals("2"))
@@ -48,20 +48,23 @@ public class Console implements IView {
 				displayDeleteMemberDetails();
 			else if (userInput.endsWith("4"))
 				displayUpdateMemberDetails();
+			}
+			catch(Exception e){
+				System.err.println(e.getLocalizedMessage());
+			}
 		}
 		return true;
 	}
 
 	@Override
-	public void displayUpdateMemberDetails() {
+	public void displayUpdateMemberDetails() throws Exception {
 		displayCompactList();
-		System.out.print("Enter the memebr # \n>");
+		System.out.print("Enter the memeber's ID \n>");
 		String input = scan.next();
-		int index = Integer.parseInt(input);
-		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > reg.getRegistry().size()) {
-			System.err.println("Invalid Member #\n");
-			displayDeleteMemberDetails();
-		}
+		int id = Integer.parseInt(input);
+		if(!reg.isMemberExist(id))
+			throw new Exception("Invalid member ID");
+		
 		System.out.println("Please select following options:");
 		System.out.println("1 : Update name");
 		System.out.println("2 : Update personal number");
@@ -72,7 +75,6 @@ public class Console implements IView {
 		String personalNumber = "";
 		input = scan.next();
 		if (input.equals("r")) {
-			displayMainInstructions();
 			return;
 		}
 		if (Integer.parseInt(input) == 1 || Integer.parseInt(input) == 3) {
@@ -83,21 +85,20 @@ public class Console implements IView {
 			System.out.print("Enter Personal number\n>");
 			personalNumber = scan.next();
 		}
-		reg.updateMember(index - 1, name, personalNumber);
-		System.out.println("****** Member Updated!! *******");
+		reg.updateMember(id, name, personalNumber);
+		displaySuccess("Updated");
 	}
 
 	@Override
-	public void displayDeleteMemberDetails() {
+	public void displayDeleteMemberDetails() throws Exception {
 		displayCompactList();
-		System.out.print("Enter the memebr # \n>");
+		System.out.print("Enter the memebr's ID \n>");
 		int input = scan.nextInt();
-		if (input <= 0 || input > reg.getRegistry().size()) {
-			System.err.println("Invalid Member #\n");
-			displayDeleteMemberDetails();
+		if (!reg.isMemberExist(input)) {
+			throw new Exception("Invalid member ID");
 		}
 		reg.deleteMember(input - 1);
-		System.out.println("****** Member Deleted!! *******");
+		displaySuccess("Deleted");
 	}
 
 	@Override
@@ -111,11 +112,14 @@ public class Console implements IView {
 		System.out.print("Personal Number\n>");
 		String personalNumber = scan.next();
 		reg.createMember(name, personalNumber);
-		System.out.println("****** Member Created!! ******");
+		displaySuccess("Created");
 	}
 
 	@Override
-	public void displayMemberListType() {
+	public void displayMemberListType() throws Exception {
+		if(!(reg.getRegistry().size()>0))
+			throw new Exception("Member does not exist!\n");
+		
 		System.out.println("1 : list by compact");
 		System.out.println("2 : list by verbose");
 		System.out.print('>');
@@ -123,7 +127,7 @@ public class Console implements IView {
 		if (userInput == 1) {
 			displayCompactList();
 		} else if (userInput == 2) {
-			displayVerboList();
+			displayVerboseList();
 		}
 	}
 
@@ -137,7 +141,7 @@ public class Console implements IView {
 	}
 
 	@Override
-	public void displayVerboList() {
+	public void displayVerboseList() {
 		int i = 0;
 		for (Member m : reg.getRegistry()) {
 			System.out.printf("[%d] %s, which id is %s, and personal number is %s ", ++i, m.getName(), m.getMemberID(),
@@ -149,5 +153,8 @@ public class Console implements IView {
 			} else
 				System.out.println("does not have any boat.");
 		}
+	}
+	private void displaySuccess(String message){
+		System.out.println("****** Member "+message+"!! *******");
 	}
 }

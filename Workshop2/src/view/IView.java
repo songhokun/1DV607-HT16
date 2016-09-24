@@ -5,11 +5,11 @@ public interface IView {
 	void startProgram();
 	boolean displayMainInstructions();
 	void displayCompactList();
-	void displayVerboList(); 
-	void displayMemberListType(); 
+	void displayVerboseList(); 
+	void displayMemberListType() throws Exception; 
 	void displayAddMemberDetails();
-	void displayDeleteMemberDetails();
-	void displayUpdateMemberDetails();
+	void displayDeleteMemberDetails() throws Exception;
+	void displayUpdateMemberDetails() throws Exception;
 	//void displaySpecificMember(int index); 
 	//void displaySpecificInstruction();
 }
