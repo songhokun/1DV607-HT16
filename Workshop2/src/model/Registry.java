@@ -14,7 +14,7 @@ public class Registry implements IMemberUpdateObserver {
 
 	public Registry() throws FileNotFoundException {
 		new ReadFile(this);
-		for(Member m: registry)
+		for (Member m : registry)
 			m.addSubscriber(this);
 	}
 
@@ -33,12 +33,34 @@ public class Registry implements IMemberUpdateObserver {
 	public void setMaxID(int maxID) {
 		this.maxID = maxID;
 	}
+	
+	@Override
+	public void memberInformationChanged() {
+		new WriteFile(this);
+	}
 
 	public void createMember(String name, String personalNumber) {
 		this.registry.add(new Member(name, personalNumber, ++maxID));
 		this.memberInformationChanged();
 	}
 
+	public void updateMember(Member m) {
+		for (Member member : registry)
+			if (member.getMemberID() == m.getMemberID()) {
+				member = m;
+				break;
+			}
+		this.memberInformationChanged();
+	}
+	
+	public void deleteMember(Member m) {
+		this.registry.remove(m);
+		this.memberInformationChanged();
+	}
+	
+	/********************Below methods I am not using**************************************************************************/
+	
+	
 	public void deleteMember(int ID) {
 		this.registry.remove(lookUpMember(ID));
 		this.memberInformationChanged();
@@ -51,11 +73,6 @@ public class Registry implements IMemberUpdateObserver {
 			lookUpMember(memberID).setPersonalnumber(personalNumber);
 
 		this.memberInformationChanged();
-	}
-
-	@Override
-	public void memberInformationChanged() {
-		new WriteFile(this);
 	}
 
 	private Member lookUpMember(String personalNumber) {
@@ -74,7 +91,7 @@ public class Registry implements IMemberUpdateObserver {
 		return null;
 	}
 
-	public boolean isMemberExist(String personalNumber) {  // I used this method to access the member.
+	public boolean isMemberExist(String personalNumber) {
 		return lookUpMember(personalNumber) != null;
 	}
 

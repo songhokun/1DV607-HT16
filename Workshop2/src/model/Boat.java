@@ -19,7 +19,7 @@ public class Boat {
 		this.length = length;
 		this.type = type;
 	}
-
+	
 	public void setLength(double length) {
 		this.length = length;
 	}

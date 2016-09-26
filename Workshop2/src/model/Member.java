@@ -74,12 +74,35 @@ public class Member {
 		subscribers.add(sub);
 	}
 
+	public void registerBoat(double length, BoatType type) {
+		this.boatdata.add(new Boat(length, type));
+		for (IMemberUpdateObserver obs : subscribers)
+			obs.memberInformationChanged();
+	}
+		
+	public void updateBoat(Boat boat) {	
+		int index = this.boatdata.indexOf(boat);
+		this.boatdata.get(index).setLength(boat.getLength());
+		this.boatdata.get(index).setType(boat.getType());
+		for (IMemberUpdateObserver obs : subscribers)
+			obs.memberInformationChanged();
+	}
+	
+	public void deleteBoat(Boat boat) {
+		this.boatdata.remove(boat);
+		for (IMemberUpdateObserver obs : subscribers)
+			obs.memberInformationChanged();
+	}
+	
+/***********************************Below methods I am not using*************************************************************/	
+	
+	
 	public void registerBoat(double length, int type) {
 		this.getBoatdata().add(new Boat(length, BoatType.values()[type - 1]));
 		for (IMemberUpdateObserver obs : subscribers)
 			obs.memberInformationChanged();
-	}
-
+	}	
+	
 	public void updateBoat(double length, int type, int index) {
 		if (length != -1)
 			this.getBoatdata().get(index - 1).setLength(length);

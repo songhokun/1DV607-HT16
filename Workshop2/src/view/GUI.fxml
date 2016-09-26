@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GUI">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="497.0" prefWidth="798.0">
+         <children>
+            <AnchorPane layoutX="12.0" layoutY="64.0">
+               <children>
+                  <TableView fx:id="memberTableView" prefHeight="400.0" prefWidth="775.0">
+                    <columns>
+                      <TableColumn fx:id="memberNameColumn" prefWidth="169.0" text="Name" />
+                        <TableColumn fx:id="memberPersonalNumberColumn" prefWidth="127.0" text="Personal Number" />
+                      <TableColumn fx:id="memberIDColumn" prefWidth="87.0" text="Member ID" />
+                        <TableColumn fx:id="numberOfBoatsColumn" prefWidth="128.0" text="Number of Boats" />
+                        <TableColumn fx:id="boatDetailColumn" prefWidth="105.0" text="Boat Detail" />
+                        <TableColumn fx:id="memberEditColumn" prefWidth="85.0" text="Edit" />
+                        <TableColumn fx:id="memberDeleteColumn" prefWidth="72.0" text="Delete" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+            <Button fx:id="verboListButton" layoutX="183.0" layoutY="16.0" mnemonicParsing="false" text="Verbo List" />
+            <Button fx:id="addMemberButton" layoutX="642.0" layoutY="15.0" mnemonicParsing="false" text="Add Member" />
+            <Button fx:id="compactListButton" layoutX="67.0" layoutY="16.0" mnemonicParsing="false" text="Compact List" />
+            <AnchorPane fx:id="boatTableViewPane" layoutX="200.0" layoutY="80.0" prefHeight="366.0" prefWidth="399.0" visible="false">
+               <children>
+                  <TableView fx:id="boatTableView" layoutY="-15.0" prefHeight="313.0" prefWidth="399.0">
+                    <columns>
+                      <TableColumn fx:id="boatLengthColumn" prefWidth="98.0" text="Length" />
+                      <TableColumn fx:id="boatTypeColumn" prefWidth="135.0" text="Type" />
+                        <TableColumn fx:id="boatEditColumn" prefWidth="81.0" text="Edit" />
+                        <TableColumn fx:id="boatDeleteColumn" prefWidth="83.0" text="Delete" />
+                    </columns>
+                  </TableView>
+                  <Button fx:id="addBoatButton" layoutX="216.0" layoutY="325.0" mnemonicParsing="false" text="Add Boat" />
+                  <Button fx:id="closeBoatListButton" layoutX="319.0" layoutY="325.0" mnemonicParsing="false" text="Close" />
+               </children>
+            </AnchorPane>
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
