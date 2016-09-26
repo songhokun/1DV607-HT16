@@ -41,11 +41,6 @@ public class Console implements IView {
 		System.out.println("Please select following options:");
 		System.out.println("1 : List all members");
 		System.out.println("2 : Create a member");
-		/*System.out.println("3 : Delete a member");
-		System.out.println("4 : Update a member");
-		System.out.println("5 : Add a boat");
-		System.out.println("6 : Update a boat");
-		System.out.println("7 : Remove a boat");*/
 		System.out.print(quitSequence+" : quit\n>");
 
 		String userInput = scan.next();
@@ -56,17 +51,8 @@ public class Console implements IView {
 				if (userInput.equals("1"))
 					displayMemberListType();
 				else if (userInput.equals("2"))
-					displayAddMemberDetails();
-				/*else if (userInput.equals("3"))
-					displayDeleteMemberDetails();
-				else if (userInput.equals("4"))
-					displayUpdateMemberDetails();
-				else if (userInput.equals("5"))
-					displayAddBoatDetails();
-				else if (userInput.equals("6"))
-					displayUpdateBoatDetails();
-				else if (userInput.equals("7"))
-					displayDeleteBoatDetails();*/
+					displayAddMember();
+
 			} catch (Exception e) {
 				System.out.println(e.getLocalizedMessage());
 			}
@@ -74,27 +60,52 @@ public class Console implements IView {
 		return true;
 	}
 
-	public void displayInstructionMemberSelected(Member m){
+	public void displayInstructionMemberSelected(Member m) throws Exception{
 		clearConsole();
 		
-		System.out.println("Member "+m.getName()+" is selected. This member has following boats: ");
+		System.out.println("Selected member "+m.getName()+";"
+				+ "\nPersonal number: "+m.getPersonalnumber());
 		displaySpecificMemberBoats(m);
-		System.out.println("\nSelect following options:");
-		System.out.println("1 : Delete a member");
-		System.out.println("2 : Update a member");
-		System.out.println("3 : Add a boat");
-		System.out.println("4 : Update a boat");
-		System.out.println("5 : Remove a boat");
 		
+		String options[] = {"","Delete the member","Update the member","Add a boat", "Update a boat", "Remove a boat"};
+		
+		System.out.println("\nSelect following options:");
+		for(int i=1;i<options.length;i++)
+			System.out.printf("%d: %s\n",i,options[i]);
+		
+		System.out.print(">");
+		int userInput = scan.nextInt();
+		
+		switch(userInput){
+		case 1:
+			controlDeleteMember(m);
+			break;
+		case 2:
+			displayUpdateMember(m);
+			break;
+		case 3:
+			displayAddBoat(m);
+			break;
+		case 4:
+			displayUpdateBoat(m);
+			break;
+		case 5:
+			displayRemoveBoat(m);
+			break;
+		default:
+			System.out.println("Invalid choice");
+			break;
+		}
 		
 	}
-	@Override
-	public void displayUpdateMemberDetails() throws Exception {
-		System.out.print("Enter the memeber's ID \n>");
+	
+	public void displayUpdateMember(Member m) throws Exception {
+		/*System.out.print("Enter the memeber's ID \n>");
 		String input = scan.next();
 		int id = Integer.parseInt(input);
 		if (!reg.isMemberExist(id))
 			throw new Exception("Invalid member ID");
+		*/
 
 		System.out.println("Please select following options:");
 		System.out.println("1 : Update name");
@@ -104,7 +115,7 @@ public class Console implements IView {
 		System.out.print(">");
 		String name = "";
 		String personalNumber = "";
-		input = scan.next();
+		String input = scan.next();
 		clearConsole();
 		
 		if (input.equals(backSequence)) {
@@ -122,22 +133,22 @@ public class Console implements IView {
 			System.out.print("Enter Personal number\n>");
 			personalNumber = scan.next();
 		}
-		reg.updateMember(id, name, personalNumber);
+		reg.updateMember(m, name, personalNumber);
 		displaySuccess("Member Updated");
 	}
-	@Override
-	public void displayDeleteMemberDetails() throws Exception {
-		System.out.print("Enter the memebr's ID \n>");
-		int input = scan.nextInt();
-		if (!reg.isMemberExist(input)) {
-			throw new Exception("Invalid member ID");
+	
+	public void controlDeleteMember(Member inMember){
+		try{
+			reg.deleteMember(inMember);
+			displaySuccess("Member Deleted!!");
 		}
-		reg.deleteMember(input);
-		displaySuccess("Member Deleted");
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 
-	@Override
-	public void displayAddMemberDetails() {
+	
+	public void displayAddMember() {
 		System.out.print("Name \n>");
 		String name = scan.next();
 		while (scan.hasNext()) {
@@ -185,17 +196,17 @@ public class Console implements IView {
 	@Override
 	public void displayCompactList() {
 		int i = 0;
-		System.out.println("+ # |  name of a member  | id | # boats+");
+		System.out.println("+ id |  name of a member  | # boats+");
 		for (Member m : reg.getRegistry())
-			System.out.printf("%4d|%20s|%4s|%8d|\n", ++i, m.getName(), m.getMemberID(), m.getNumberOfBoats());
-		System.out.println("+---|--------------------|----|--------+");
+			System.out.printf("%5d|%20s|%8d|\n",m.getMemberID(), m.getName(), m.getNumberOfBoats());
+		System.out.println("+----|--------------------|--------+");
 	}
 
 	@Override
 	public void displayVerboseList() {
 		int i = 0;
 		for (Member m : reg.getRegistry()) {
-			System.out.printf("[%d] %s, which id is %s, and personal number is %s ", ++i, m.getName(), m.getMemberID(),
+			System.out.printf("[%d] %s, personal number %s ", m.getMemberID(), m.getName(),
 					m.getPersonalnumber());
 			if (m.getNumberOfBoats() != 0) {
 				System.out.println("has following boats: ");
@@ -209,92 +220,82 @@ public class Console implements IView {
 	private void displaySuccess(String message) {
 		System.out.println("****** " + message + "!! *******");
 	}
-
-	public void displayAddBoatDetails() throws Exception {
-		displayCompactList();
-		System.out.print("Enter the memebr's ID \n>");
-		int input = scan.nextInt();
-		if (!reg.isMemberExist(input)) {
-			throw new Exception("Invalid member ID");
-		}
-		System.out.print("Length\n>");
-		double length = scan.nextDouble();
-		int i = 0;
-		System.out.println("ID  |  Boat type\n____|______________");
-		for (BoatType b : BoatType.values()) {
-			System.out.println(++i + "   |  " + b.toString());
-		}
+	private BoatType displayBoatTypes(){
+		
+		System.out.println("+ ID | Boat type +");
+		for (BoatType b : BoatType.values())
+			System.out.printf("%5d|%11s|\n", b.getCode(),b.toString());
+		System.out.println("+----|-----------+");
+		
 		System.out.print("\nEnter Boat type ID\n>");
 		int type = scan.nextInt();
-		reg.lookUpMember(input).registerBoat(length, type);
+		for(BoatType b : BoatType.values())
+			if(b.getCode()==type)
+				return b;
+		
+		return null;
+	}
+	public void displayAddBoat(Member inMember) throws Exception {
+		System.out.print("Length?\n>");
+		double length = scan.nextDouble();
+		
+		inMember.registerBoat(length, displayBoatTypes());		
 		displaySuccess("Boat added");
 	}
 
-	public void displayUpdateBoatDetails() throws Exception {
-		displayCompactList();
-		System.out.print("Enter the memebr's ID \n>");
-		int input = scan.nextInt();
-		if (!reg.isMemberExist(input)) {
-			throw new Exception("Invalid member ID");
-		}
-		if(reg.lookUpMember(input).getNumberOfBoats() == 0)
+	public void displayUpdateBoat(Member inMember) throws Exception {
+		if(inMember.getNumberOfBoats() == 0)
 			throw new Exception("Member have no boat.");
-		displaySpecificMemberBoats(reg.lookUpMember(input));
-		System.out.print("\nEnter Boat # to update\n>");
+		System.out.print("\nEnter Boat # to Update\n>");
 		int index = scan.nextInt();
-		if (index <= 0 || index > reg.lookUpMember(input).getNumberOfBoats())
-			throw new Exception("Invalid Boat #");
-
+		
+		System.out.println("Choose one of the following options:");
 		System.out.println("1: Update length");
 		System.out.println("2: Update type");
 		System.out.println("3: Update both");
 		int choice = scan.nextInt();
 		double length = -1;
-		int type = -1;
+		BoatType type = null;
 		if (choice == 1 || choice == 3) {
 			System.out.print("Length\n>");
 			length = scan.nextDouble();
 		}
 		if (choice == 2 || choice == 3) {
-			int i = 0;
-			System.out.println("ID  |  Boat type\n____|______________");
-			for (BoatType b : BoatType.values()) {
-				System.out.println(++i + "   |  " + b.toString());
-			}
-			System.out.print("\nEnter Boat type ID\n>");
-			type = scan.nextInt();
+			type = displayBoatTypes();
 		} else if (choice < 1 || choice > 3)
 			throw new Exception("Invalid option");
-		reg.lookUpMember(input).updateBoat(length, type, index);
+		
+		inMember.updateBoat(length, type, index);
 		displaySuccess("Boat Updated");
 	}
 
-	public void displayDeleteBoatDetails() throws Exception {
-		displayCompactList();
-		System.out.print("Enter the memebr's ID \n>");
-		int input = scan.nextInt();
-		if (!reg.isMemberExist(input)) {
-			throw new Exception("Invalid member ID");
-		}
-		if(reg.lookUpMember(input).getNumberOfBoats() == 0)
+	public void displayRemoveBoat(Member inMember) throws Exception {
+		if(inMember.getNumberOfBoats() == 0)
 			throw new Exception("Member have no boat.");
-		displaySpecificMemberBoats(reg.lookUpMember(input));
+		
 		System.out.print("\nEnter Boat # to delete\n>");
 		int index = scan.nextInt();
-		if (index <= 0 || index > reg.lookUpMember(input).getNumberOfBoats())
+		if (index <= 0 || index > inMember.getNumberOfBoats())
 			throw new Exception("Invalid Boat #");
-		reg.lookUpMember(input).deleteBoat(index);
+		
+		inMember.deleteBoat(index);
 		displaySuccess("Boat deleted");
 	}
 
 	// this method does not print nice output. You can fix this. I am not good
 	// in this.
 	public void displaySpecificMemberBoats(Member m) {
-		System.out.println("#    |   Boat type        |  Length"
-				+ "\n_____|____________________|_______________");
-		int i = 0;
-		for (Boat b : m.getBoatdata())
-			System.out.println(++i + "    |   " + b.getType().toString() + "         |  " + b.getLength());
+		if(m.getNumberOfBoats()>0){
+			System.out.println("+ # |  Boat Type  | Length +");
+			int i = 0;
+			for (Boat b : m.getBoatdata())
+				System.out.printf("%4d|%13s|%6.2f  |\n", ++i,b.getType(),b.getLength());
+				//System.out.println(++i + "    |   " + b.getType().toString() + "         |  " + b.getLength());
+			System.out.printf("+---|-------------|--------+\n");
+		}
+		else
+			System.out.println("This member does not have any boat.");
+		
 	}
 	private void clearConsole()
 	{

@@ -103,11 +103,11 @@ public class Member {
 			obs.memberInformationChanged();
 	}	
 	
-	public void updateBoat(double length, int type, int index) {
+	public void updateBoat(double length, BoatType type, int index) {
 		if (length != -1)
 			this.getBoatdata().get(index - 1).setLength(length);
-		if (type != -1)
-			this.getBoatdata().get(index - 1).setType(BoatType.values()[type - 1]);
+		if (type != null)
+			this.getBoatdata().get(index - 1).setType(type);
 
 		for (IMemberUpdateObserver obs : subscribers)
 			obs.memberInformationChanged();

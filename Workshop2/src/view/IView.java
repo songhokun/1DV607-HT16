@@ -14,19 +14,19 @@ public interface IView {
 
 	void displayMemberListType() throws Exception;
 
-	void displayAddMemberDetails();
+	//void displayAddMemberDetails();
 
-	void displayDeleteMemberDetails() throws Exception;
+	//void displayDeleteMemberDetails() throws Exception;
 
-	void displayUpdateMemberDetails() throws Exception;
+	//void displayUpdateMemberDetails() throws Exception;
 
-	void displaySpecificMemberBoats(Member m);
+	//void displaySpecificMemberBoats(Member m);
 
-	void displayAddBoatDetails() throws Exception;
+	//void displayAddBoatDetails() throws Exception;
 
-	void displayUpdateBoatDetails() throws Exception;
+	//void displayUpdateBoatDetails() throws Exception;
 
-	void displayDeleteBoatDetails() throws Exception;
+	//void displayDeleteBoatDetails() throws Exception;
 
 	// void displaySpecificMember(int index);
 	// void displaySpecificInstruction();
