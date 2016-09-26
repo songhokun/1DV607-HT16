@@ -9,14 +9,22 @@ import model.Member;
 public class Console implements IView {
 
 	private model.Registry reg;
-	private char quitSequence = 'q';
+	private String quitSequence = "q";
+	private String backSequence = "r";
 	private Scanner scan = new Scanner(System.in);
 
 	public Console() {
 		try {
 			reg = new model.Registry();
 		} catch (FileNotFoundException e) {
-			System.err.println("There was a problem in loading a file becuase it did not exist!\n");
+			System.out.println("There was a problem in loading a file becuase it did not exist!\n");
+		}
+	}
+	public Console(String path) {
+		try {
+			reg = new model.Registry();
+		} catch (FileNotFoundException e) {
+			System.out.println("There was a problem in loading a file becuase it did not exist!\n");
 		}
 	}
 
@@ -33,15 +41,15 @@ public class Console implements IView {
 		System.out.println("Please select following options:");
 		System.out.println("1 : List all members");
 		System.out.println("2 : Create a member");
-		System.out.println("3 : Delete a member");
+		/*System.out.println("3 : Delete a member");
 		System.out.println("4 : Update a member");
 		System.out.println("5 : Add a boat");
 		System.out.println("6 : Update a boat");
-		System.out.println("7 : Remove a boat");
-		System.out.printf("%c : quit\n>", quitSequence);
+		System.out.println("7 : Remove a boat");*/
+		System.out.print(quitSequence+" : quit\n>");
 
 		String userInput = scan.next();
-		if (userInput.equals(String.valueOf(quitSequence)))
+		if (userInput.equals(quitSequence))
 			return false;
 		else {
 			try {
@@ -49,7 +57,7 @@ public class Console implements IView {
 					displayMemberListType();
 				else if (userInput.equals("2"))
 					displayAddMemberDetails();
-				else if (userInput.equals("3"))
+				/*else if (userInput.equals("3"))
 					displayDeleteMemberDetails();
 				else if (userInput.equals("4"))
 					displayUpdateMemberDetails();
@@ -58,17 +66,30 @@ public class Console implements IView {
 				else if (userInput.equals("6"))
 					displayUpdateBoatDetails();
 				else if (userInput.equals("7"))
-					displayDeleteBoatDetails();
+					displayDeleteBoatDetails();*/
 			} catch (Exception e) {
-				System.err.println(e.getLocalizedMessage());
+				System.out.println(e.getLocalizedMessage());
 			}
 		}
 		return true;
 	}
 
+	public void displayInstructionMemberSelected(Member m){
+		clearConsole();
+		
+		System.out.println("Member "+m.getName()+" is selected. This member has following boats: ");
+		displaySpecificMemberBoats(m);
+		System.out.println("\nSelect following options:");
+		System.out.println("1 : Delete a member");
+		System.out.println("2 : Update a member");
+		System.out.println("3 : Add a boat");
+		System.out.println("4 : Update a boat");
+		System.out.println("5 : Remove a boat");
+		
+		
+	}
 	@Override
 	public void displayUpdateMemberDetails() throws Exception {
-		displayCompactList();
 		System.out.print("Enter the memeber's ID \n>");
 		String input = scan.next();
 		int id = Integer.parseInt(input);
@@ -79,12 +100,14 @@ public class Console implements IView {
 		System.out.println("1 : Update name");
 		System.out.println("2 : Update personal number");
 		System.out.println("3 : Update both");
-		System.out.println("r : go back");
+		System.out.println(backSequence+" : go back");
 		System.out.print(">");
 		String name = "";
 		String personalNumber = "";
 		input = scan.next();
-		if (input.equals("r")) {
+		clearConsole();
+		
+		if (input.equals(backSequence)) {
 			return;
 		}
 		if (Integer.parseInt(input) == 1 || Integer.parseInt(input) == 3) {
@@ -102,16 +125,14 @@ public class Console implements IView {
 		reg.updateMember(id, name, personalNumber);
 		displaySuccess("Member Updated");
 	}
-
 	@Override
 	public void displayDeleteMemberDetails() throws Exception {
-		displayCompactList();
 		System.out.print("Enter the memebr's ID \n>");
 		int input = scan.nextInt();
 		if (!reg.isMemberExist(input)) {
 			throw new Exception("Invalid member ID");
 		}
-		reg.deleteMember(input - 1);
+		reg.deleteMember(input);
 		displaySuccess("Member Deleted");
 	}
 
@@ -137,12 +158,28 @@ public class Console implements IView {
 		System.out.println("1 : list by compact");
 		System.out.println("2 : list by verbose");
 		System.out.print('>');
-		int userInput = scan.nextInt();
-		if (userInput == 1) {
+		String userInput = scan.next();
+		
+		clearConsole();
+		if (Integer.parseInt(userInput) == 1) {
 			displayCompactList();
-		} else if (userInput == 2) {
+		} else if (Integer.parseInt(userInput) == 2) {
 			displayVerboseList();
 		}
+		System.out.println("\nEnter ID of a member if you want to select. Otherwise enter "+backSequence+" to return");
+		System.out.print("> ");
+		userInput = scan.next();
+		
+		if(userInput.equals(backSequence)){
+			clearConsole();
+		}
+		else{
+			if (!reg.isMemberExist(Integer.parseInt(userInput))) {
+				throw new Exception("Invalid member ID");
+			}
+			displayInstructionMemberSelected(reg.lookUpMember(Integer.parseInt(userInput)));
+		}
+			
 	}
 
 	@Override
@@ -253,9 +290,30 @@ public class Console implements IView {
 	// this method does not print nice output. You can fix this. I am not good
 	// in this.
 	public void displaySpecificMemberBoats(Member m) {
-		System.out.println("#    |   Boat type        |  Length\n_____|____________________|_______________");
+		System.out.println("#    |   Boat type        |  Length"
+				+ "\n_____|____________________|_______________");
 		int i = 0;
 		for (Boat b : m.getBoatdata())
 			System.out.println(++i + "    |   " + b.getType().toString() + "         |  " + b.getLength());
+	}
+	private void clearConsole()
+	{
+	    try
+	    {
+	        final String os = System.getProperty("os.name");
+
+	        if (os.contains("Windows"))
+	        {
+	            Runtime.getRuntime().exec("cls");
+	        }
+	        else
+	        {
+	            Runtime.getRuntime().exec("clear");
+	        }
+	    }
+	    catch (final Exception e)
+	    {
+	        //  Handle any exceptions.
+	    }
 	}
 }
