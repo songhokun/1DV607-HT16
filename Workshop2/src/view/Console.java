@@ -6,7 +6,7 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 
-public class Console implements IView {
+public class Console {
 
 	private model.Registry reg;
 	private String quitSequence = "q";
@@ -28,7 +28,6 @@ public class Console implements IView {
 		}
 	}
 
-	@Override
 	public void startProgram() {
 		System.out.println("Boat club programme.");
 		while (displayMainInstructions())
@@ -36,7 +35,6 @@ public class Console implements IView {
 		scan.close();
 	}
 
-	@Override
 	public boolean displayMainInstructions() {
 		System.out.println("Please select following options:");
 		System.out.println("1 : List all members");
@@ -161,7 +159,6 @@ public class Console implements IView {
 		displaySuccess("Member Created");
 	}
 
-	@Override
 	public void displayMemberListType() throws Exception {
 		if (!(reg.getRegistry().size() > 0))
 			throw new Exception("Member does not exist!\n");
@@ -193,7 +190,6 @@ public class Console implements IView {
 			
 	}
 
-	@Override
 	public void displayCompactList() {
 		System.out.println("+ id |  name of a member  | # boats+");
 		for (Member m : reg.getRegistry())
@@ -201,7 +197,6 @@ public class Console implements IView {
 		System.out.println("+----|--------------------|--------+");
 	}
 
-	@Override
 	public void displayVerboseList() {
 		for (Member m : reg.getRegistry()) {
 			System.out.printf("[%d] %s, personal number %s ", m.getMemberID(), m.getName(),

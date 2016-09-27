@@ -9,15 +9,13 @@ import model.Boat.BoatType;
  * @author songhokun
  *
  */
-public class Registry implements IMemberUpdateObserver {
+public class Registry {
 
 	private ArrayList<Member> registry = new ArrayList<Member>();
 	private int maxID = 0;
 
 	public Registry() throws FileNotFoundException {
 		new ReadFile(this);
-		for (Member m : registry)
-			m.addSubscriber(this);
 	}
 
 	public Registry(ArrayList<Member> memberList) {
@@ -36,14 +34,8 @@ public class Registry implements IMemberUpdateObserver {
 		this.maxID = maxID;
 	}
 	
-	@Override
-	public void memberInformationChanged() {
-		new WriteFile(this);
-	}
-
 	public void createMember(String name, String personalNumber) {
 		this.registry.add(new Member(name, personalNumber, ++maxID));
-		this.memberInformationChanged();
 	}
 
 	public void updateMember(Member m) {
@@ -52,12 +44,10 @@ public class Registry implements IMemberUpdateObserver {
 				member = m;
 				break;
 			}
-		this.memberInformationChanged();
 	}
 	
 	public void deleteMember(Member m) {
 		this.registry.remove(m);
-		this.memberInformationChanged();
 	}
 	
 	public void registerBoat(Member m, double length, BoatType type) {
@@ -80,7 +70,6 @@ public class Registry implements IMemberUpdateObserver {
 	
 	public void deleteMember(int ID) {
 		this.registry.remove(lookUpMember(ID));
-		this.memberInformationChanged();
 	}
 
 	public void updateMember(Member inMember, String name, String personalNumber) {
@@ -88,8 +77,6 @@ public class Registry implements IMemberUpdateObserver {
 			inMember.setName(name);
 		if (!personalNumber.isEmpty())
 			inMember.setPersonalnumber(personalNumber);
-
-		this.memberInformationChanged();
 	}
 
 	private Member lookUpMember(String personalNumber) {
