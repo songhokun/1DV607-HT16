@@ -39,7 +39,6 @@ public class GUI implements Initializable {
 	@FXML private TableColumn<Member, Member> boatDetailColumn;
 	@FXML private TableColumn<Member, Member> memberEditColumn;
 	@FXML private TableColumn<Member, Member> memberDeleteColumn;
-	@FXML private Button compactListButton;
 	private TextField memberNameField;
 	private TextField memberPersonalNumberField;
 	
@@ -54,6 +53,7 @@ public class GUI implements Initializable {
 	private TextField boatLengthField;
 	private ChoiceBox <BoatType>boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
 	
+	@FXML private Button compactListButton;
 	@FXML private Button verboListButton;
 	@FXML private Button addMemberButton;
 	private GridPane alertDialogePane;
@@ -124,6 +124,7 @@ public class GUI implements Initializable {
 	}
 
 	public void displayAddBoatNotification(Boat boat, AlertType type, String header, String button1Name, boolean addDialogPane) {
+		boatTypeChoiceBox.getSelectionModel().select(BoatType.Motorsailer);
 		Alert alert = getBoatAlertBox(boat, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
@@ -157,7 +158,7 @@ public class GUI implements Initializable {
 	}
 	
 	public void showBoatList(Member member) {
-		setMemberTableView();
+		//setMemberTableView();
 		setBoatTableView(member);
 		memberTableView.setVisible(false);
 		boatTableViewPane.setVisible(true);
