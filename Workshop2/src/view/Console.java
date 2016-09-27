@@ -241,7 +241,7 @@ public class Console {
 		return null;
 	}
 	public void displayAddBoat(Member inMember) throws Exception {
-		System.out.print("Length?\n>");
+		System.out.print("Length:\n>");
 		double length = scan.nextDouble();
 		
 		reg.registerBoat(inMember, length, displayBoatTypes());

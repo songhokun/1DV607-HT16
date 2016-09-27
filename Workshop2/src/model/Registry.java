@@ -57,8 +57,11 @@ public class Registry {
 	}
 	
 	public void registerBoat(Member m, double length, BoatType type) throws Exception {
-		if(m==null || length==0 || type==null)
-			throw new Exception("Empty field!"); 
+		if(length<=0)
+			throw new Exception("Incorrect length!");
+		if(type==null)
+			throw new Exception("Incorrect BoatType!");
+		
 		
 		m.getBoatdata().add(new Boat(length, type));
 		readWriteFile.writeFile(this);
