@@ -186,7 +186,7 @@ public class Console {
 			if(selected==null)
 				throw new Exception("Invalid member ID!");
 				
-			displayInstructionMemberSelected(reg.lookUpMember(Integer.parseInt(userInput)));
+			displayInstructionMemberSelected(selected);
 		}
 			
 	}
