@@ -29,6 +29,5 @@ public class Authentication {
 	
 	public boolean isLoggedIn() {
 		return loggedIn;
-	}
-	
+	}	
 }

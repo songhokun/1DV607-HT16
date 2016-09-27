@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,11 +57,14 @@ public class GUI implements Initializable {
 	@FXML private Button compactListButton;
 	@FXML private Button verboListButton;
 	@FXML private Button addMemberButton;
+	@FXML private Button loginButton;
 	private GridPane alertDialogePane;
 
 	private Registry registry;
 	private Member presentMember;
 	private Authentication authentication;
+	
+	
 
 	
 	public GUI() {
@@ -81,9 +83,10 @@ public class GUI implements Initializable {
 		verboListButton.setOnAction(e -> displayVerboList());
 		addMemberButton.setOnAction(e -> showAddMemberNotification(null, AlertType.INFORMATION, "New Member", "Save", true));
 		addBoatButton.setOnAction(e -> displayAddBoatNotification(null, AlertType.INFORMATION, "New Boat", "Save", true));
+		loginButton.setOnAction(e -> showLogIn());
 		closeBoatListButton.setOnAction(e -> closeBoatList());
 	}
-
+	
 	public void displayCompactList() {
 		setMemberTableView();
 		boatDetailColumn.setVisible(false);
@@ -95,6 +98,10 @@ public class GUI implements Initializable {
 	}
 
 	public void showAddMemberNotification(Member member, AlertType type, String header, String button1Name, boolean addDialogPane) {
+		if (!authentication.isLoggedIn()) {
+			displayAlert(AlertType.ERROR, "Please Log in to use this function.");
+			return;
+		}
 		Alert alert = getMemberAlertBox(member, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
@@ -105,10 +112,13 @@ public class GUI implements Initializable {
 	}
 
 	public void showEditMemberNotification(Member member, AlertType type, String header, String button1Name, boolean addDialogPane) {
+		if (!authentication.isLoggedIn()) {
+			displayAlert(AlertType.ERROR, "Please Log in to use this function.");
+			return;
+		}
 		Alert alert = getMemberAlertBox(member, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			System.out.println();
 			registry.updateMember(member, memberNameField.getText(), memberPersonalNumberField.getText());
 			setMemberTableView();
 		} else
@@ -116,6 +126,10 @@ public class GUI implements Initializable {
 	}
 
 	public void showDeleteMemberNotification(Member member, AlertType type, String header, String button1Name, boolean addDialogPane) {
+		if (!authentication.isLoggedIn()) {
+			displayAlert(AlertType.ERROR, "Please Log in to use this function.");
+			return;
+		}
 		Alert alert = getMemberAlertBox(null, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
@@ -126,33 +140,43 @@ public class GUI implements Initializable {
 	}
 
 	public void displayAddBoatNotification(Boat boat, AlertType type, String header, String button1Name, boolean addDialogPane) {
-		if(!authentication.isLoggedIn()){
-			Alert alert = new Alert(AlertType.ERROR, "You are not logged In.");
-			alert.close();
+		if (!authentication.isLoggedIn()) {
+			displayAlert(AlertType.ERROR, "Please Log in to use this function.");
+			return;
 		}
 		boatTypeChoiceBox.getSelectionModel().select(BoatType.Motorsailer);
 		Alert alert = getBoatAlertBox(boat, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			registry.registerBoat(presentMember, Double.valueOf(boatLengthField.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
+			registry.registerBoat(presentMember, Double.valueOf(boatLengthField.getText()),
+					boatTypeChoiceBox.getSelectionModel().getSelectedItem());
 			setBoatTableView(presentMember);
 		} else
 			alert.close();
 	}
 
 	public void displayEditBoatNotification(Boat boat, AlertType type, String header, String button1Name, boolean addDialogPane) {
+		if (!authentication.isLoggedIn()) {
+			displayAlert(AlertType.ERROR, "Please Log in to use this function.");
+			return;
+		}
 		boatTypeChoiceBox.getSelectionModel().select(boat.getType());
 		Alert alert = getBoatAlertBox(boat, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			registry.updateBoat(Double.valueOf(boatLengthField.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
+			registry.updateBoat(Double.valueOf(boatLengthField.getText()),
+					boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 			setBoatTableView(presentMember);
 		} else
 			alert.close();
 	}
 
 	public void displayDeleteBoatNotification(Boat boat, AlertType type, String header, String button1Name, boolean addDialogPane) {
-		Alert alert = getBoatAlertBox(null, type, header, button1Name, addDialogPane);	
+		if (!authentication.isLoggedIn()) {
+			displayAlert(AlertType.ERROR, "Please Log in to use this function.");
+			return;
+		}
+		Alert alert = getBoatAlertBox(null, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			registry.deleteBoat(presentMember, boat);
@@ -160,7 +184,7 @@ public class GUI implements Initializable {
 		} else
 			alert.close();
 	}
-	
+
 	public void showBoatList(Member member) {
 		setBoatTableView(member);
 		memberTableView.setVisible(false);
@@ -168,7 +192,7 @@ public class GUI implements Initializable {
 		compactListButton.setVisible(false);
 		verboListButton.setVisible(false);
 		addMemberButton.setVisible(false);
-		presentMember = member;	
+		presentMember = member;
 	}
 
 	public void closeBoatList() {
@@ -178,6 +202,41 @@ public class GUI implements Initializable {
 		verboListButton.setVisible(true);
 		addMemberButton.setVisible(true);
 		setMemberTableView();
+	}
+
+	public void showLogIn() {
+		Alert alert = getMemberAlertBox(null, AlertType.NONE, "Authentication", "Log In", true);
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == alert.getButtonTypes().get(0)) {
+			authentication.logIn(memberNameField.getText(), memberPersonalNumberField.getText());
+			if (!authentication.isLoggedIn()) {
+				displayAlert(AlertType.ERROR, "Incorrect Username or Password!!");
+			} else {
+				displayAlert(AlertType.INFORMATION, "Logged In Successfully!!");
+				loginButton.setText("Log Out");
+				loginButton.setOnAction(e -> showLogOut());
+			}
+		} else
+			alert.close();
+	}
+
+	private void showLogOut() {
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure?");
+		ButtonType yes = new ButtonType("Yes");
+		ButtonType no = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(yes, no);
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == alert.getButtonTypes().get(0)) {
+			authentication.logOut();
+			loginButton.setText("Log In");
+			loginButton.setOnAction(e -> showLogIn());
+		} else
+			alert.close();
+	}
+
+	private void displayAlert(AlertType type, String header) {
+		Alert alert = new Alert(type, header);
+		alert.show();
 	}
 
 	private Alert getBoatAlertBox(Boat boat, AlertType type, String header, String button1Name, boolean addDialogPane) {
@@ -243,8 +302,7 @@ public class GUI implements Initializable {
 					return;
 				} else {
 					setGraphic(boatEditButton);
-					boatEditButton.setOnAction(event -> displayEditBoatNotification(boat, AlertType.CONFIRMATION,
-							"Edit Boat", "Save", true));
+					boatEditButton.setOnAction(event -> displayEditBoatNotification(boat, AlertType.CONFIRMATION, "Edit Boat", "Save", true));
 				}
 			}
 		});
@@ -260,8 +318,7 @@ public class GUI implements Initializable {
 					return;
 				} else {
 					setGraphic(boatDeleteButton);
-					boatDeleteButton.setOnAction(event -> displayDeleteBoatNotification(boat, AlertType.CONFIRMATION,
-							"Are you sure?", "Yes", false));
+					boatDeleteButton.setOnAction(event -> displayDeleteBoatNotification(boat, AlertType.CONFIRMATION, "Are you sure?", "Yes", false));
 				}
 			}
 		});
@@ -302,7 +359,8 @@ public class GUI implements Initializable {
 					return;
 				} else {
 					setGraphic(editButton);
-					editButton.setOnAction(event -> showEditMemberNotification(member, AlertType.NONE, "Edit Member", "Save", true));
+					editButton.setOnAction(
+							event -> showEditMemberNotification(member, AlertType.NONE, "Edit Member", "Save", true));
 				}
 			}
 		});
@@ -318,8 +376,7 @@ public class GUI implements Initializable {
 					return;
 				} else {
 					setGraphic(deleteButton);
-					deleteButton.setOnAction(event -> showDeleteMemberNotification(member, AlertType.CONFIRMATION,
-							"Are you sure?", "Yes", false));
+					deleteButton.setOnAction(event -> showDeleteMemberNotification(member, AlertType.CONFIRMATION, "Are you sure?", "Yes", false));
 				}
 			}
 		});

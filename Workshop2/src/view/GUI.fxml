@@ -25,9 +25,9 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <Button fx:id="verboListButton" layoutX="183.0" layoutY="16.0" mnemonicParsing="false" text="Verbo List" />
-            <Button fx:id="addMemberButton" layoutX="642.0" layoutY="15.0" mnemonicParsing="false" text="Add Member" />
-            <Button fx:id="compactListButton" layoutX="67.0" layoutY="16.0" mnemonicParsing="false" text="Compact List" />
+            <Button fx:id="verboListButton" layoutX="119.0" layoutY="16.0" mnemonicParsing="false" text="Verbo List" />
+            <Button fx:id="addMemberButton" layoutX="611.0" layoutY="16.0" mnemonicParsing="false" text="Add Member" />
+            <Button fx:id="compactListButton" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" text="Compact List" />
             <AnchorPane fx:id="boatTableViewPane" layoutX="200.0" layoutY="80.0" prefHeight="366.0" prefWidth="399.0" visible="false">
                <children>
                   <TableView fx:id="boatTableView" layoutY="-15.0" prefHeight="313.0" prefWidth="399.0">
@@ -42,6 +42,9 @@
                   <Button fx:id="closeBoatListButton" layoutX="319.0" layoutY="325.0" mnemonicParsing="false" text="Close" />
                </children>
             </AnchorPane>
+            <Button fx:id="loginButton" layoutX="720.0" layoutY="16.0" mnemonicParsing="false" text="Log In" />
+            <TextField layoutX="255.0" layoutY="16.0" />
+            <Button layoutX="422.0" layoutY="16.0" mnemonicParsing="false" text="Search" />
          </children></AnchorPane>
   </content>
 </ScrollPane>
