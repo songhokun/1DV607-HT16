@@ -195,7 +195,6 @@ public class Console implements IView {
 
 	@Override
 	public void displayCompactList() {
-		int i = 0;
 		System.out.println("+ id |  name of a member  | # boats+");
 		for (Member m : reg.getRegistry())
 			System.out.printf("%5d|%20s|%8d|\n",m.getMemberID(), m.getName(), m.getNumberOfBoats());
@@ -204,7 +203,6 @@ public class Console implements IView {
 
 	@Override
 	public void displayVerboseList() {
-		int i = 0;
 		for (Member m : reg.getRegistry()) {
 			System.out.printf("[%d] %s, personal number %s ", m.getMemberID(), m.getName(),
 					m.getPersonalnumber());
