@@ -105,9 +105,8 @@ public class GUI implements Initializable {
 		Alert alert = getMemberAlertBox(member, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			member.setName(memberNameField.getText());
-			member.setPersonalnumber(memberPersonalNumberField.getText());
-			registry.updateMember(member);
+			System.out.println();
+			registry.updateMember(member, memberNameField.getText(), memberPersonalNumberField.getText());
 			setMemberTableView();
 		} else
 			alert.close();
@@ -128,7 +127,7 @@ public class GUI implements Initializable {
 		Alert alert = getBoatAlertBox(boat, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			presentMember.registerBoat(Double.valueOf(boatLengthField.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
+			registry.registerBoat(presentMember, Double.valueOf(boatLengthField.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
 			setBoatTableView(presentMember);
 		} else
 			alert.close();
@@ -139,9 +138,7 @@ public class GUI implements Initializable {
 		Alert alert = getBoatAlertBox(boat, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			boat.setLength(Double.valueOf(boatLengthField.getText()));
-			boat.setType(boatTypeChoiceBox.getSelectionModel().getSelectedItem());
-			presentMember.updateBoat(boat);
+			registry.updateBoat(Double.valueOf(boatLengthField.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 			setBoatTableView(presentMember);
 		} else
 			alert.close();
@@ -151,14 +148,13 @@ public class GUI implements Initializable {
 		Alert alert = getBoatAlertBox(null, type, header, button1Name, addDialogPane);	
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			presentMember.deleteBoat(boat);
+			registry.deleteBoat(presentMember, boat);
 			setBoatTableView(presentMember);
 		} else
 			alert.close();
 	}
 	
 	public void showBoatList(Member member) {
-		//setMemberTableView();
 		setBoatTableView(member);
 		memberTableView.setVisible(false);
 		boatTableViewPane.setVisible(true);

@@ -4,8 +4,6 @@
 package model;
 
 import java.util.ArrayList;
-import model.Boat.BoatType;
-
 /**
  * @author songhokun
  *
@@ -58,8 +56,6 @@ public class Member {
 	public void setBoatdata(ArrayList<Boat> boatdata) {
 		this.boatdata = boatdata;
 	}
-	// TODO : Do we still need an unique ID even when social security number is
-	// unique enough?
 
 	public int getMemberID() {
 		return this.memberID;
@@ -72,6 +68,7 @@ public class Member {
 	public Boat lookUpBoat(int index){
 		return this.getBoatdata().get(index-1);
 	}
+
 	/*
 	public void updateBoat(Boat boat) {	
 		int index = this.boatdata.indexOf(boat);
@@ -85,19 +82,16 @@ public class Member {
 	public void registerBoat(double length, BoatType type) {
 		this.boatdata.add(new Boat(length, type));
 	}
-	*/
-	
-/***********************************Below methods I am not using*************************************************************/	
-
-	public void updateBoat(double length, BoatType type, int index) {
+		public void updateBoat(double length, BoatType type, int index) {
 		if (length != -1)
 			this.getBoatdata().get(index - 1).setLength(length);
 		if (type != null)
 			this.getBoatdata().get(index - 1).setType(type);
-
 	}
-
 	public void deleteBoat(int index) {
 		this.getBoatdata().remove(index - 1);
 	}
+	*
+	*/
+
 }

@@ -6,3 +6,4 @@
 4.5;Motorsailer;3
 2.5;Kayak;5
 2.0;Kayak;5
+2.7535;Kayak;8
