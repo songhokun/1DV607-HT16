@@ -11,10 +11,11 @@ import model.Boat.BoatType;
 public class Registry {
 
 	private ArrayList<Member> registry = new ArrayList<Member>();
+	private ReadWriteFile readWriteFile = new ReadWriteFile();
 	private int maxID = 0;
 
 	public Registry() throws FileNotFoundException {
-		new ReadFile(this);
+		readWriteFile.readFile(this);
 	}
 
 	public Registry(ArrayList<Member> memberList) {
@@ -35,7 +36,7 @@ public class Registry {
 	
 	public void createMember(String name, String personalNumber) {
 		this.registry.add(new Member(name, personalNumber, ++maxID));
-		new WriteFile(this);
+		readWriteFile.writeFile(this);
 	}
 
 	public void updateMember(Member inMember, String name, String personalNumber) {
@@ -43,17 +44,17 @@ public class Registry {
 			inMember.setName(name);
 		if (!personalNumber.isEmpty())
 			inMember.setPersonalnumber(personalNumber);
-		new WriteFile(this);
+		readWriteFile.writeFile(this);
 	}
 	
 	public void deleteMember(Member m) {
 		this.registry.remove(m);
-		new WriteFile(this);
+		readWriteFile.writeFile(this);
 	}
 	
 	public void registerBoat(Member m, double length, BoatType type) {
 		m.getBoatdata().add(new Boat(length, type));
-		new WriteFile(this);
+		readWriteFile.writeFile(this);
 	}
 	
 	public void updateBoat(double length, BoatType type, Boat boat) {
@@ -61,12 +62,12 @@ public class Registry {
 			boat.setLength(length);
 		if (type != null)
 			boat.setType(type);
-		new WriteFile(this);
+		readWriteFile.writeFile(this);
 	}
 		
 	public void deleteBoat(Member m, Boat boat) {
 		m.getBoatdata().remove(boat);
-		new WriteFile(this);
+		readWriteFile.writeFile(this);
 	}
 	
 	public Member lookUpMember(int ID) {

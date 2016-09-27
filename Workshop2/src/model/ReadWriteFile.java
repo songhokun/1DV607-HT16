@@ -1,18 +1,48 @@
 package model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
+import model.Boat.BoatType;
 
-public class WriteFile {
+public class ReadWriteFile {
 
-	public WriteFile() {
+	private File memberDataFile = new File("Members.txt");
+	private File boatDataFile = new File("Boats.txt");
 
+	public ReadWriteFile(){
+		
 	}
 
-	public WriteFile(Registry r) {
-		File memberDataFile = new File("Members.txt");
-		File boatDataFile = new File("Boats.txt");
+	public void readFile(Registry r) throws FileNotFoundException{
+		Scanner scan = new Scanner(memberDataFile);
+		r.setMaxID(Integer.parseInt(scan.nextLine()));
+		
+		while(scan.hasNext()){
+			String[] temp = scan.nextLine().split(";");
+			r.getRegistry().add(new Member(temp[1],temp[2],Integer.parseInt(temp[0])));
+		}
+		scan.close();
+		scan = null;
+		
+		scan = new Scanner(boatDataFile);
+		while(scan.hasNext()){
+			String[] temp = scan.nextLine().split(";");
+			for(Member i : r.getRegistry()){
+				if(i.getMemberID()==Integer.parseInt(temp[2])){
+					i.getBoatdata().add(new Boat(Double.parseDouble(temp[0]),BoatType.valueOf(temp[1])));
+					break;
+				}
+				
+			}
+		}
+		scan.close();
+		scan = null;	
+	}
+	
+	public void writeFile(Registry r) {
 		StringBuilder members = new StringBuilder();
 		StringBuilder boats = new StringBuilder();
 
@@ -41,6 +71,5 @@ public class WriteFile {
 		} catch (IOException e) {
 
 		}
-
 	}
 }
