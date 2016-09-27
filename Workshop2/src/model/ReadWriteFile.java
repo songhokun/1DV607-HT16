@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import model.Boat.BoatType;
 
@@ -11,7 +12,8 @@ public class ReadWriteFile {
 
 	private File memberDataFile = new File("Members.txt");
 	private File boatDataFile = new File("Boats.txt");
-
+	private File authenticationFile = new File("Users.txt");
+	
 	public ReadWriteFile(){
 		
 	}
@@ -40,6 +42,32 @@ public class ReadWriteFile {
 		}
 		scan.close();
 		scan = null;	
+	}
+
+	public ArrayList<User> readFile() throws FileNotFoundException{
+		Scanner scan = new Scanner(authenticationFile);
+		ArrayList<User> toReturn = new ArrayList<User>();
+		
+		while(scan.hasNext()){
+			String[] temp = scan.nextLine().split(";");
+			toReturn.add(new User(temp[0],temp[1]));
+		}
+		scan.close();
+		return toReturn;
+	}
+	
+	public void writeFile(ArrayList<User> users) throws FileNotFoundException{
+		StringBuilder sb = new StringBuilder();
+		for(User  u: users){
+			sb.append(u.getUsername() + ";" + u.getPassword() + "\n");
+		}
+		try {
+			PrintWriter writer = new PrintWriter(authenticationFile.getAbsolutePath());
+			authenticationFile.createNewFile();
+			writer.print(sb.toString());
+			writer.close();
+		} catch (IOException e) {
+		}	
 	}
 	
 	public void writeFile(Registry r) {

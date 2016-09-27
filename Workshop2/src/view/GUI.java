@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import model.Authentication;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
@@ -60,12 +62,13 @@ public class GUI implements Initializable {
 
 	private Registry registry;
 	private Member presentMember;
+	private Authentication authentication;
 
-	
 	
 	public GUI() {
 		try {
 			registry = new Registry();
+			authentication = new Authentication();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -123,6 +126,10 @@ public class GUI implements Initializable {
 	}
 
 	public void displayAddBoatNotification(Boat boat, AlertType type, String header, String button1Name, boolean addDialogPane) {
+		if(!authentication.isLoggedIn()){
+			Alert alert = new Alert(AlertType.ERROR, "You are not logged In.");
+			alert.close();
+		}
 		boatTypeChoiceBox.getSelectionModel().select(BoatType.Motorsailer);
 		Alert alert = getBoatAlertBox(boat, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();

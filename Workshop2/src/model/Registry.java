@@ -18,10 +18,6 @@ public class Registry {
 		readWriteFile.readFile(this);
 	}
 
-	public Registry(ArrayList<Member> memberList) {
-		this.registry = memberList;
-	}
-
 	public ArrayList<Member> getRegistry() {
 		return registry;
 	}
