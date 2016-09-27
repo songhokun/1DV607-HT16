@@ -71,7 +71,7 @@ public class GUI implements Initializable {
 		try {
 			registry = new Registry();
 			authentication = new Authentication();
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -97,7 +97,7 @@ public class GUI implements Initializable {
 		boatDetailColumn.setVisible(true);
 	}
 
-	public void showAddMemberNotification(Member member, AlertType type, String header, String button1Name, boolean addDialogPane) {
+	public void showAddMemberNotification(Member member, AlertType type, String header, String button1Name, boolean addDialogPane){
 		if (!authentication.isLoggedIn()) {
 			displayAlert(AlertType.ERROR, "Please Log in to use this function.");
 			return;
@@ -105,7 +105,12 @@ public class GUI implements Initializable {
 		Alert alert = getMemberAlertBox(member, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			registry.createMember(memberNameField.getText(), memberPersonalNumberField.getText());
+			try {
+				registry.createMember(memberNameField.getText(), memberPersonalNumberField.getText());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			setMemberTableView();
 		} else
 			alert.close();
@@ -119,7 +124,12 @@ public class GUI implements Initializable {
 		Alert alert = getMemberAlertBox(member, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			registry.updateMember(member, memberNameField.getText(), memberPersonalNumberField.getText());
+			try {
+				registry.updateMember(member, memberNameField.getText(), memberPersonalNumberField.getText());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			setMemberTableView();
 		} else
 			alert.close();
@@ -148,8 +158,10 @@ public class GUI implements Initializable {
 		Alert alert = getBoatAlertBox(boat, type, header, button1Name, addDialogPane);
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			registry.registerBoat(presentMember, Double.valueOf(boatLengthField.getText()),
-					boatTypeChoiceBox.getSelectionModel().getSelectedItem());
+			try {
+				registry.registerBoat(presentMember, Double.valueOf(boatLengthField.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
+			} catch (Exception e) {
+			}
 			setBoatTableView(presentMember);
 		} else
 			alert.close();
