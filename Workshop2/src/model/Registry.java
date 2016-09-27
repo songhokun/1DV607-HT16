@@ -66,11 +66,11 @@ public class Registry implements IMemberUpdateObserver {
 		this.memberInformationChanged();
 	}
 
-	public void updateMember(int memberID, String name, String personalNumber) {
+	public void updateMember(Member inMember, String name, String personalNumber) {
 		if (!name.isEmpty())
-			lookUpMember(memberID).setName(name);
+			inMember.setName(name);
 		if (!personalNumber.isEmpty())
-			lookUpMember(memberID).setPersonalnumber(personalNumber);
+			inMember.setPersonalnumber(personalNumber);
 
 		this.memberInformationChanged();
 	}
