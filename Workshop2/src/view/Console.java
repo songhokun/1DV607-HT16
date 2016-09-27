@@ -182,9 +182,10 @@ public class Console {
 			clearConsole();
 		}
 		else{
-			if (!reg.isMemberExist(Integer.parseInt(userInput))) {
-				throw new Exception("Invalid member ID");
-			}
+			Member selected = reg.lookUpMember(Integer.parseInt(userInput));
+			if(selected==null)
+				throw new Exception("Invalid member ID!");
+				
 			displayInstructionMemberSelected(reg.lookUpMember(Integer.parseInt(userInput)));
 		}
 			
@@ -232,15 +233,13 @@ public class Console {
 		System.out.print("Length?\n>");
 		double length = scan.nextDouble();
 		
-		inMember.registerBoat(length, displayBoatTypes());		
+		reg.registerBoat(inMember, length, displayBoatTypes());
+		//inMember.registerBoat(length, displayBoatTypes());		
 		displaySuccess("Boat added");
 	}
 
 	public void displayUpdateBoat(Member inMember) throws Exception {
-		if(inMember.getNumberOfBoats() == 0)
-			throw new Exception("Member have no boat.");
-		System.out.print("\nEnter Boat # to Update\n>");
-		int index = scan.nextInt();
+		Boat selectedBoat = selectBoat(inMember);
 		
 		System.out.println("Choose one of the following options:");
 		System.out.println("1: Update length");
@@ -257,8 +256,9 @@ public class Console {
 			type = displayBoatTypes();
 		} else if (choice < 1 || choice > 3)
 			throw new Exception("Invalid option");
-		
-		inMember.updateBoat(length, type, index);
+
+		reg.updateBoat(length, type, selectedBoat);
+		//inMember.updateBoat(length, type, index);
 		displaySuccess("Boat Updated");
 	}
 
@@ -266,13 +266,18 @@ public class Console {
 		if(inMember.getNumberOfBoats() == 0)
 			throw new Exception("Member have no boat.");
 		
-		System.out.print("\nEnter Boat # to delete\n>");
-		int index = scan.nextInt();
-		if (index <= 0 || index > inMember.getNumberOfBoats())
-			throw new Exception("Invalid Boat #");
+		reg.deleteBoat(inMember, selectBoat(inMember));
 		
-		inMember.deleteBoat(index);
+		//inMember.deleteBoat(index);
 		displaySuccess("Boat deleted");
+	}
+	private Boat selectBoat(Member inMember) throws Exception{
+		if(inMember.getNumberOfBoats() == 0)
+			throw new Exception("Member have no boat.");
+		System.out.print("\nEnter Boat # to Update\n>");
+		int index = scan.nextInt();
+		
+		return inMember.lookUpBoat(index);
 	}
 
 	// this method does not print nice output. You can fix this. I am not good

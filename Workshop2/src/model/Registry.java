@@ -36,40 +36,7 @@ public class Registry {
 	
 	public void createMember(String name, String personalNumber) {
 		this.registry.add(new Member(name, personalNumber, ++maxID));
-	}
-
-	public void updateMember(Member m) {
-		for (Member member : registry)
-			if (member.getMemberID() == m.getMemberID()) {
-				member = m;
-				break;
-			}
-	}
-	
-	public void deleteMember(Member m) {
-		this.registry.remove(m);
-	}
-	
-	public void registerBoat(Member m, double length, BoatType type) {
-		m.getBoatdata().add(new Boat(length, type));
-	}
-		
-	public void updateBoat(Member m, Boat boat) {	
-		int index = m.getBoatdata().indexOf(boat);
-		m.getBoatdata().get(index).setLength(boat.getLength());
-		m.getBoatdata().get(index).setType(boat.getType());
-		
-	}
-	
-	public void deleteBoat(Member m, Boat boat) {
-		m.getBoatdata().remove(boat);
-		
-	}
-	/********************Below methods I am not using**************************************************************************/
-	
-	
-	public void deleteMember(int ID) {
-		this.registry.remove(lookUpMember(ID));
+		new WriteFile(this);
 	}
 
 	public void updateMember(Member inMember, String name, String personalNumber) {
@@ -78,7 +45,47 @@ public class Registry {
 		if (!personalNumber.isEmpty())
 			inMember.setPersonalnumber(personalNumber);
 	}
-
+	/*
+	public void updateMember(Member m) {
+		for (Member member : registry)
+			if (member.getMemberID() == m.getMemberID()) {
+				member = m;
+				break;
+			}
+		new WriteFile(this);
+	}
+	*/
+	public void deleteMember(Member m) {
+		this.registry.remove(m);
+		new WriteFile(this);
+	}
+	
+	public void registerBoat(Member m, double length, BoatType type) {
+		m.getBoatdata().add(new Boat(length, type));
+		new WriteFile(this);
+	}
+	public void updateBoat(double length, BoatType type, Boat boat) {
+		if (length != -1)
+			boat.setLength(length);
+		if (type != null)
+			boat.setType(type);
+		new WriteFile(this);
+		
+	}
+		
+	public void updateBoat(Member m, Boat boat) {	
+		int index = m.getBoatdata().indexOf(boat);
+		m.getBoatdata().get(index).setLength(boat.getLength());
+		m.getBoatdata().get(index).setType(boat.getType());
+		new WriteFile(this);
+	}
+	
+	public void deleteBoat(Member m, Boat boat) {
+		m.getBoatdata().remove(boat);
+		new WriteFile(this);
+	}
+	/********************Below methods I am not using**************************************************************************/
+	
 	private Member lookUpMember(String personalNumber) {
 		for (Member m : this.registry) {
 			if (m.getPersonalnumber().equals(personalNumber))
@@ -94,7 +101,7 @@ public class Registry {
 		}
 		return null;
 	}
-
+	/*
 	public boolean isMemberExist(String personalNumber) {
 		return lookUpMember(personalNumber) != null;
 	}
@@ -102,4 +109,5 @@ public class Registry {
 	public boolean isMemberExist(int ID) {
 		return lookUpMember(ID) != null;
 	}
+	*/
 }

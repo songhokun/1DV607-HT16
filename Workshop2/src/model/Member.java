@@ -68,10 +68,11 @@ public class Member {
 	public void setMemberID(int memberID) {
 		this.memberID = memberID;
 	}
-	public void registerBoat(double length, BoatType type) {
-		this.boatdata.add(new Boat(length, type));
+	
+	public Boat lookUpBoat(int index){
+		return this.getBoatdata().get(index-1);
 	}
-		
+	/*
 	public void updateBoat(Boat boat) {	
 		int index = this.boatdata.indexOf(boat);
 		this.boatdata.get(index).setLength(boat.getLength());
@@ -81,6 +82,10 @@ public class Member {
 	public void deleteBoat(Boat boat) {
 		this.boatdata.remove(boat);
 	}
+	public void registerBoat(double length, BoatType type) {
+		this.boatdata.add(new Boat(length, type));
+	}
+	*/
 	
 /***********************************Below methods I am not using*************************************************************/	
 
