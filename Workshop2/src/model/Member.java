@@ -18,14 +18,14 @@ public class Member {
 
 	}
 
-	public Member(String name, String personalnumber) {
-		this.name = name;
-		this.personalnumber = personalnumber;
+	public Member(String name, String personalnumber) throws Exception{
+		this.setName(name);
+		this.setPersonalnumber(personalnumber);
 	}
 
-	public Member(String name, String personalnumber, int memberID) {
-		this.name = name;
-		this.personalnumber = personalnumber;
+	public Member(String name, String personalnumber, int memberID) throws Exception {
+		this.setName(name);
+		this.setPersonalnumber(personalnumber);
 		this.memberID = memberID;
 	}
 
@@ -37,7 +37,9 @@ public class Member {
 		return personalnumber;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) throws Exception {
+		if(name.matches(".*\\d+.*"))
+			throw new Exception("Do not contain numbers!");
 		this.name = name;
 	}
 

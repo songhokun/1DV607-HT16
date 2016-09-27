@@ -14,7 +14,7 @@ public class Registry {
 	private ReadWriteFile readWriteFile = new ReadWriteFile();
 	private int maxID = 0;
 
-	public Registry() throws FileNotFoundException {
+	public Registry() throws FileNotFoundException,Exception {
 		readWriteFile.readFile(this);
 	}
 
@@ -30,17 +30,25 @@ public class Registry {
 		this.maxID = maxID;
 	}
 	
-	public void createMember(String name, String personalNumber) {
+	public void createMember(String name, String personalNumber) throws Exception {
+		if(name==null || personalNumber == null)
+			throw new Exception("Empty field!");
 		this.registry.add(new Member(name, personalNumber, ++maxID));
 		readWriteFile.writeFile(this);
 	}
 
-	public void updateMember(Member inMember, String name, String personalNumber) {
-		if (!name.isEmpty())
+	public void updateMember(Member inMember, String name, String personalNumber) throws Exception {
+		boolean isChanged=false;
+		if (!name.isEmpty()){
 			inMember.setName(name);
-		if (!personalNumber.isEmpty())
+			isChanged = true;
+		}
+		if (!personalNumber.isEmpty()){
 			inMember.setPersonalnumber(personalNumber);
-		readWriteFile.writeFile(this);
+			isChanged = true;
+		}
+		if(isChanged)
+			readWriteFile.writeFile(this);
 	}
 	
 	public void deleteMember(Member m) {
@@ -48,17 +56,27 @@ public class Registry {
 		readWriteFile.writeFile(this);
 	}
 	
-	public void registerBoat(Member m, double length, BoatType type) {
+	public void registerBoat(Member m, double length, BoatType type) throws Exception {
+		if(m==null || length==0 || type==null)
+			throw new Exception("Empty field!"); 
+		
 		m.getBoatdata().add(new Boat(length, type));
 		readWriteFile.writeFile(this);
 	}
 	
 	public void updateBoat(double length, BoatType type, Boat boat) {
-		if (length != -1)
+		boolean isChanged=false;
+		
+		if (length != -1){
 			boat.setLength(length);
-		if (type != null)
+			isChanged=true;
+		}
+		if (type != null){
 			boat.setType(type);
-		readWriteFile.writeFile(this);
+			isChanged = true;
+		}
+		if(isChanged)
+			readWriteFile.writeFile(this);
 	}
 		
 	public void deleteBoat(Member m, Boat boat) {
@@ -66,6 +84,12 @@ public class Registry {
 		readWriteFile.writeFile(this);
 	}
 	
+	/**
+	 * This method is used for console based application to hold a refernece to a member class.
+	 * 
+	 * @param ID
+	 * @return Member if it exists
+	 */
 	public Member lookUpMember(int ID) {
 		for (Member m : this.registry) {
 			if (m.getMemberID() == ID)

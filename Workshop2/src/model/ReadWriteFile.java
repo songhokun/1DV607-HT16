@@ -18,7 +18,7 @@ public class ReadWriteFile {
 		
 	}
 
-	public void readFile(Registry r) throws FileNotFoundException{
+	public void readFile(Registry r) throws FileNotFoundException,Exception{
 		Scanner scan = new Scanner(memberDataFile);
 		r.setMaxID(Integer.parseInt(scan.nextLine()));
 		

@@ -9,6 +9,7 @@ import model.Member;
 public class Console {
 
 	private model.Registry reg;
+	private model.Authentication auth;
 	private String quitSequence = "q";
 	private String backSequence = "r";
 	private Scanner scan = new Scanner(System.in);
@@ -16,18 +17,20 @@ public class Console {
 	public Console() {
 		try {
 			reg = new model.Registry();
-		} catch (FileNotFoundException e) {
+			auth = new model.Authentication();
+		} catch (Exception e) {
+			System.out.print(e.getLocalizedMessage());
 			System.out.println("There was a problem in loading a file becuase it did not exist!\n");
 		}
 	}
-	public Console(String path) {
+	/*public Console(String path) {
 		try {
 			reg = new model.Registry();
 		} catch (FileNotFoundException e) {
 			System.out.println("There was a problem in loading a file becuase it did not exist!\n");
 		}
 	}
-
+*/
 	public void startProgram() {
 		System.out.println("Boat club programme.");
 		while (displayMainInstructions())
@@ -39,6 +42,8 @@ public class Console {
 		System.out.println("Please select following options:");
 		System.out.println("1 : List all members");
 		System.out.println("2 : Create a member");
+		if(auth.isLoggedIn())
+			System.out.println("3 : Log out");
 		System.out.print(quitSequence+" : quit\n>");
 
 		String userInput = scan.next();
@@ -50,6 +55,8 @@ public class Console {
 					displayMemberListType();
 				else if (userInput.equals("2"))
 					displayAddMember();
+				else if (userInput.equals("3"))
+					auth.logOut();
 
 			} catch (Exception e) {
 				System.out.println(e.getLocalizedMessage());
@@ -66,33 +73,37 @@ public class Console {
 		displaySpecificMemberBoats(m);
 		
 		String options[] = {"","Delete the member","Update the member","Add a boat", "Update a boat", "Remove a boat"};
-		
-		System.out.println("\nSelect following options:");
-		for(int i=1;i<options.length;i++)
-			System.out.printf("%d: %s\n",i,options[i]);
-		
-		System.out.print(">");
-		int userInput = scan.nextInt();
-		
-		switch(userInput){
-		case 1:
-			controlDeleteMember(m);
-			break;
-		case 2:
-			displayUpdateMember(m);
-			break;
-		case 3:
-			displayAddBoat(m);
-			break;
-		case 4:
-			displayUpdateBoat(m);
-			break;
-		case 5:
-			displayRemoveBoat(m);
-			break;
-		default:
-			System.out.println("Invalid choice");
-			break;
+		if(!auth.isLoggedIn())
+			displayInstructionsLogin();
+		if(auth.isLoggedIn())
+		{
+			System.out.println("\nSelect following options:");
+			for(int i=1;i<options.length;i++)
+				System.out.printf("%d: %s\n",i,options[i]);
+			
+			System.out.print(">");
+			int userInput = scan.nextInt();
+			
+			switch(userInput){
+			case 1:
+				controlDeleteMember(m);
+				break;
+			case 2:
+				displayUpdateMember(m);
+				break;
+			case 3:
+				displayAddBoat(m);
+				break;
+			case 4:
+				displayUpdateBoat(m);
+				break;
+			case 5:
+				displayRemoveBoat(m);
+				break;
+			default:
+				System.out.println("Invalid choice");
+				break;
+			}
 		}
 		
 	}
@@ -146,7 +157,7 @@ public class Console {
 	}
 
 	
-	public void displayAddMember() {
+	public void displayAddMember() throws Exception {
 		System.out.print("Name \n>");
 		String name = scan.next();
 		while (scan.hasNext()) {
@@ -161,7 +172,7 @@ public class Console {
 
 	public void displayMemberListType() throws Exception {
 		if (!(reg.getRegistry().size() > 0))
-			throw new Exception("Member does not exist!\n");
+			throw new Exception("Member does not exist!");
 
 		System.out.println("1 : list by compact");
 		System.out.println("2 : list by verbose");
@@ -294,6 +305,36 @@ public class Console {
 		else
 			System.out.println("This member does not have any boat.");
 		
+	}
+	private boolean displayInstructionsLogin(){
+		System.out.println("The member is not logged in!");
+		System.out.println("Proceed to log in? Enter y for continue. Anything else to return");
+		
+		String userInput = scan.next();
+		if(userInput.equals("y"))
+		{
+			while(!auth.isLoggedIn()){
+				System.out.print("Username? >");
+				String inUserName = scan.next();
+				
+				if(inUserName.equals(backSequence))
+					return false;
+				
+				System.out.print("Passsword? >");
+				String inPassword = scan.next();
+				
+				auth.logIn(inUserName, inPassword);
+				if(!auth.isLoggedIn())
+				{
+					System.out.println("The provided username and password is not correct!");
+					System.out.println("Enter "+backSequence+" to return");
+				}
+			}
+			
+			if(auth.isLoggedIn())
+				return true;
+		}
+		return false;
 	}
 	private void clearConsole()
 	{
