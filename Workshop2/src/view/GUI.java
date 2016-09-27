@@ -295,8 +295,7 @@ public class GUI implements Initializable {
 					return;
 				} else {
 					setGraphic(editButton);
-					editButton.setOnAction(
-							event -> showEditMemberNotification(member, AlertType.NONE, "Edit Member", "Save", true));
+					editButton.setOnAction(event -> showEditMemberNotification(member, AlertType.NONE, "Edit Member", "Save", true));
 				}
 			}
 		});

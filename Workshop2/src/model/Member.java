@@ -68,30 +68,4 @@ public class Member {
 	public Boat lookUpBoat(int index){
 		return this.getBoatdata().get(index-1);
 	}
-
-	/*
-	public void updateBoat(Boat boat) {	
-		int index = this.boatdata.indexOf(boat);
-		this.boatdata.get(index).setLength(boat.getLength());
-		this.boatdata.get(index).setType(boat.getType());
-	}
-	
-	public void deleteBoat(Boat boat) {
-		this.boatdata.remove(boat);
-	}
-	public void registerBoat(double length, BoatType type) {
-		this.boatdata.add(new Boat(length, type));
-	}
-		public void updateBoat(double length, BoatType type, int index) {
-		if (length != -1)
-			this.getBoatdata().get(index - 1).setLength(length);
-		if (type != null)
-			this.getBoatdata().get(index - 1).setType(type);
-	}
-	public void deleteBoat(int index) {
-		this.getBoatdata().remove(index - 1);
-	}
-	*
-	*/
-
 }
