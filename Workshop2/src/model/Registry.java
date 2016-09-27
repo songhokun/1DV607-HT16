@@ -3,6 +3,8 @@ package model;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import model.Boat.BoatType;
+
 /**
  * @author songhokun
  *
@@ -58,6 +60,21 @@ public class Registry implements IMemberUpdateObserver {
 		this.memberInformationChanged();
 	}
 	
+	public void registerBoat(Member m, double length, BoatType type) {
+		m.getBoatdata().add(new Boat(length, type));
+	}
+		
+	public void updateBoat(Member m, Boat boat) {	
+		int index = m.getBoatdata().indexOf(boat);
+		m.getBoatdata().get(index).setLength(boat.getLength());
+		m.getBoatdata().get(index).setType(boat.getType());
+		
+	}
+	
+	public void deleteBoat(Member m, Boat boat) {
+		m.getBoatdata().remove(boat);
+		
+	}
 	/********************Below methods I am not using**************************************************************************/
 	
 	
