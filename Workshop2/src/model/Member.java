@@ -68,6 +68,6 @@ public class Member {
 	}
 	
 	public Boat lookUpBoat(int index){
-		return this.getBoatdata().get(index-1);
+		return this.getBoatdata().get(index);
 	}
 }

@@ -1,6 +1,5 @@
 package view;
-
-import java.io.FileNotFoundException;
+ 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;

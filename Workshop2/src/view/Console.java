@@ -1,6 +1,5 @@
 package view;
 
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 import model.Boat;
 import model.Boat.BoatType;
@@ -288,7 +287,7 @@ public class Console {
 		System.out.print("\nEnter Boat # to Update\n>");
 		int index = scan.nextInt();
 		
-		return inMember.lookUpBoat(index);
+		return inMember.lookUpBoat(index-1);
 	}
 
 	// this method does not print nice output. You can fix this. I am not good
