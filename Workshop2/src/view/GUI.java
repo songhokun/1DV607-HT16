@@ -88,11 +88,13 @@ public class GUI implements Initializable {
 	
 	public void displayCompactList() {
 		setMemberTableView();
+		memberPersonalNumberColumn.setVisible(false);
 		boatDetailColumn.setVisible(false);
 	}
 
 	public void displayVerboList() {
 		setMemberTableView();
+		memberPersonalNumberColumn.setVisible(true);
 		boatDetailColumn.setVisible(true);
 	}
 
