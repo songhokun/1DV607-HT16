@@ -10,25 +10,18 @@ import model.Boat.BoatType;
  */
 public class Registry {
 
-	private ArrayList<Member> registry = new ArrayList<Member>();
-	private ReadWriteFile readWriteFile = new ReadWriteFile();
+	private ArrayList<Member> registry;
+	private ReadWriteFile readWriteFile;
 	private int maxID = 0;
 
 	public Registry() throws FileNotFoundException,Exception {
+		readWriteFile = new ReadWriteFile();
 		registry = readWriteFile.readFile();
 		maxID = readWriteFile.getMaxID();
 	}
 
 	public ArrayList<Member> getRegistry() {
 		return registry;
-	}
-
-	public int getMaxID() {
-		return maxID;
-	}
-
-	public void setMaxID(int maxID) {
-		this.maxID = maxID;
 	}
 	
 	public void createMember(String name, String personalNumber) throws Exception {
