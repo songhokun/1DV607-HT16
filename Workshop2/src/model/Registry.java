@@ -15,7 +15,8 @@ public class Registry {
 	private int maxID = 0;
 
 	public Registry() throws FileNotFoundException,Exception {
-		readWriteFile.readFile(this);
+		registry = readWriteFile.readFile();
+		maxID = readWriteFile.getMaxID();
 	}
 
 	public ArrayList<Member> getRegistry() {
@@ -34,7 +35,7 @@ public class Registry {
 		if(name==null || personalNumber == null)
 			throw new Exception("Empty field!");
 		this.registry.add(new Member(name, personalNumber, ++maxID));
-		readWriteFile.writeFile(this);
+		readWriteFile.writeFile(registry,maxID);
 	}
 
 	public void updateMember(Member inMember, String name, String personalNumber) throws Exception {
@@ -48,12 +49,12 @@ public class Registry {
 			isChanged = true;
 		}
 		if(isChanged)
-			readWriteFile.writeFile(this);
+			readWriteFile.writeFile(registry,maxID);
 	}
 	
 	public void deleteMember(Member m) {
 		this.registry.remove(m);
-		readWriteFile.writeFile(this);
+		readWriteFile.writeFile(registry,maxID);
 	}
 	
 	public void registerBoat(Member m, double length, BoatType type) throws Exception {
@@ -64,7 +65,7 @@ public class Registry {
 		
 		
 		m.getBoatdata().add(new Boat(length, type));
-		readWriteFile.writeFile(this);
+		readWriteFile.writeFile(registry,maxID);
 	}
 	
 	public void updateBoat(double length, BoatType type, Boat boat) {
@@ -79,12 +80,12 @@ public class Registry {
 			isChanged = true;
 		}
 		if(isChanged)
-			readWriteFile.writeFile(this);
+			readWriteFile.writeFile(registry,maxID);
 	}
 		
 	public void deleteBoat(Member m, Boat boat) {
 		m.getBoatdata().remove(boat);
-		readWriteFile.writeFile(this);
+		readWriteFile.writeFile(registry,maxID);
 	}
 	
 	/**

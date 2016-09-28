@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import model.Boat.BoatType;
 
@@ -11,18 +12,23 @@ public class ReadWriteFile {
 
 	private File memberDataFile = new File("Members.txt");
 	private File boatDataFile = new File("Boats.txt");
+	private int maxID;
+	
 	
 	public ReadWriteFile(){
 		
 	}
 
-	public void readFile(Registry r) throws FileNotFoundException,Exception{
+	public ArrayList<Member> readFile() throws FileNotFoundException,Exception{
+		
+		ArrayList<Member> toReturn = new ArrayList<Member>();
+		
 		Scanner scan = new Scanner(memberDataFile);
-		r.setMaxID(Integer.parseInt(scan.nextLine()));
+		this.maxID=(Integer.parseInt(scan.nextLine()));
 		
 		while(scan.hasNext()){
 			String[] temp = scan.nextLine().split(";");
-			r.getRegistry().add(new Member(temp[1],temp[2],Integer.parseInt(temp[0])));
+			toReturn.add(new Member(temp[1],temp[2],Integer.parseInt(temp[0])));
 		}
 		scan.close();
 		scan = null;
@@ -30,7 +36,7 @@ public class ReadWriteFile {
 		scan = new Scanner(boatDataFile);
 		while(scan.hasNext()){
 			String[] temp = scan.nextLine().split(";");
-			for(Member i : r.getRegistry()){
+			for(Member i : toReturn){
 				if(i.getMemberID()==Integer.parseInt(temp[2])){
 					i.getBoatdata().add(new Boat(Double.parseDouble(temp[0]),BoatType.valueOf(temp[1])));
 					break;
@@ -39,27 +45,38 @@ public class ReadWriteFile {
 			}
 		}
 		scan.close();
-		scan = null;	
+		
+		return toReturn;
+	}
+	
+	public int getMaxID() {
+		return maxID;
 	}
 
-	public void writeFile(Registry r) {
+
+	public void writeFile(ArrayList<Member> registry, int maxID) {
+		//this.maxID=maxID;
 		StringBuilder members = new StringBuilder();
 		StringBuilder boats = new StringBuilder();
 
-		members.append(r.getMaxID() + "\n");
-		for (int i = 0; i < r.getRegistry().size(); i++) {
-			members.append(r.getRegistry().get(i).getMemberID() + ";");
-			members.append(r.getRegistry().get(i).getName() + ";");
-			members.append(r.getRegistry().get(i).getPersonalnumber() + "\n");
+		members.append(maxID + "\n");
 
-			for (int j = 0; j < r.getRegistry().get(i).getBoatdata().size(); j++) {
-				boats.append(r.getRegistry().get(i).getBoatdata().get(j).getLength() + ";");
-				boats.append(r.getRegistry().get(i).getBoatdata().get(j).getType().toString() + ";");
-				boats.append(r.getRegistry().get(i).getMemberID() + "\n");
+		for (int i = 0; i < registry.size(); i++) {
+			members.append(registry.get(i).getMemberID() + ";");
+			members.append(registry.get(i).getName() + ";");
+			members.append(registry.get(i).getPersonalnumber() + "\n");
+			
+			for (int j = 0; j < registry.get(i).getBoatdata().size(); j++) {
+				boats.append(registry.get(i).getBoatdata().get(j).getLength() + ";");
+				boats.append(registry.get(i).getBoatdata().get(j).getType().toString() + ";");
+				boats.append(registry.get(i).getMemberID() + "\n");
+
 			}
+
 		}
 
 		try {
+
 			PrintWriter writer = new PrintWriter(memberDataFile.getAbsolutePath());
 			memberDataFile.createNewFile();
 			writer.print(members.toString());
@@ -68,6 +85,7 @@ public class ReadWriteFile {
 			boatDataFile.createNewFile();
 			writer.print(boats.toString());
 			writer.close();
+
 		} catch (IOException e) {
 
 		}
