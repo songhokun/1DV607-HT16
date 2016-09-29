@@ -4,10 +4,19 @@ based on the literatures which we used during reviewing others' work.
 
 The final version of the grade 2 assignment can be found in 'Grade-2-Final.pdf', and for grade 3 assigmnent please refer to 'Grade-3-Final.pdf'.
 
-** Changes we made after 'peer review' submission
-1. Change of association name in 'ClassName-VerbPhrase-ClassName' format [1 CH.9.13].
-
+** Changes we made after 'peer review' submission **
+(1) Change of association name in 'ClassName-VerbPhrase-ClassName' format [1 CH.9.13].
 ** End of Changes **
 
+
+** Changes we made after we got email from Ioseff to improve the model diagram grade 2 **
+1. Change relationship's name using arrows.
+2. A username and password from a member is removed.
+3. Calendar is introduced.
+4. Removed relationship between member and event
+5. Relationship between member and boat is now 'owns.'
+** End of Changes **
+
+
 Reference
-1. Larman C. , Applying UML and Patterns 3rd Ed, 2004, ISBN: 0131489062
+(1) Larman C. , Applying UML and Patterns 3rd Ed, 2004, ISBN: 0131489062
