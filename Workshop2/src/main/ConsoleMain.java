@@ -1,9 +1,11 @@
 package main;
 
+import view.IView;
+
 public class ConsoleMain {
 
 	public static void main(String[] args) {
-		view.Console start = new view.Console();
+		IView start = new view.Console();
 		start.startProgram();
 	}
 }

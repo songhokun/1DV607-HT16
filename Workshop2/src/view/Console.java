@@ -47,35 +47,32 @@ public class Console implements IView {
 	@Override
 	public void displayMainInstructions() {
 		while (input != quitSequence) {
-			System.out.println("SELECT THE OPTION");
+			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: DISPLAY COMPACT LIST");
 			System.out.println("2: DISPLAY VERBOSE LIST");
 			System.out.println("3: CREATE A MEMBER");
 			System.out.print(quitSequence + ": QUIT\n>");
 
 			input = scan.next();
+			if (registry.getMemberList().isEmpty()){
+				if(input.equals("1") || input.equals("2")){
+					System.out.println("NO MEMBER IN THE LIST\n");
+					displayMainInstructions(); 
+				}
+			}
 			switch (input) {
 			case ("1"):
-				if (registry.getMemberList().isEmpty()) {
-					System.out.println("NO MEMBER IN THE LIST\n");
-				} else {
 					displayCompactList();
 					displayMemberInstructions();
-				}
 				break;
 			case ("2"):
-				if (registry.getMemberList().isEmpty()) {
-					System.out.println("NO MEMBER IN THE LIST\n");
-				} else {
 					displayVerboseList();
 					displayMemberInstructions();
-				}
 				break;
 			case ("3"):
 				getMemberNameFromUser();
 				getMemberPersonalnumberFromUser();
 				registerMember(memberName, memberPN);
-				displayMainInstructions();
 				break;
 			case (quitSequence):
 				quitProgram();
@@ -89,57 +86,62 @@ public class Console implements IView {
 
 	@Override
 	public void displayCompactList() {
-		System.out.println("+ id |  name of a member  | # boats+");
+		System.out.println("+ ID |  NAME OF A MEMBER  | TOTAL BOATS +");
 		for (Member m : registry.getMemberList())
-			System.out.printf("%5d|%20s|%8d|\n", m.getMemberID(), m.getName(), m.getNumberOfBoats());
-		System.out.println("+----|--------------------|--------+");
+			System.out.printf("%5d|%20s|%13d|\n", m.getMemberID(), m.getName(), m.getNumberOfBoats());
+		System.out.println("+----|--------------------|-------------+");
 	}
 
 	@Override
 	public void displayVerboseList() {
 		for (Member m : registry.getMemberList()) {
-			System.out.printf("[%d] %s, personal number %s ", m.getMemberID(), m.getName(), m.getPersonalnumber());
-			if (m.getNumberOfBoats() != 0) {
-				System.out.println("has following boats: ");
+			System.out.println("\nMEMBER ID: " + m.getMemberID());
+			System.out.println("NAME: " + m.getName());
+			System.out.println("PERSONAL NUMBER: " + m.getPersonalnumber());
+			if (m.getNumberOfBoats() > 0) {
+				System.out.println("THIS MEMBER HAS FOLLOWING BOATS:");
+				System.out.println("+ # |  BOAT TYPE  | LENGTH (m) +");
+				int i = 0;
 				for (Boat b : m.getBoatList())
-					System.out.printf("\t%.2f m length, %s\n", b.getLength(), b.getType());
+					System.out.printf("%4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
+				System.out.printf("+---|-------------|------------+\n");
 			} else
-				System.out.println("does not have any boat.");
+				System.out.println("THIS MEMBER DOES NOT HAVE ANY BOAT.");
 		}
 	}
 
 	@Override
 	public void registerMember(String name, String personalnumber) {
 		registry.createMember(name, personalnumber);
-		displaySuccess("*** MEMBER CREATED SUCCESSFULLY !! ***");
+		displaySuccess("MEMBER CREATED SUCCESSFULLY !!");
 	}
 
 	@Override
 	public void updateMember(Member m, String name, String personalnumber) {
 		registry.updateMember(m, name, personalnumber);
-		displaySuccess("*** MEMBER UPDATED SUCCESSFULLY !! ***");
+		displaySuccess("MEMBER UPDATED SUCCESSFULLY !!");
 	}
 
 	@Override
 	public void deleteMember(Member m) {
 		registry.deleteMember(m);
-		displaySuccess("*** MEMBER DELETED SUCCESSFULLY !! ***");
+		displaySuccess("MEMBER DELETED SUCCESSFULLY !!");
 	}
 
 	@Override
 	public void displaySelectedMember(Member m) {
-		System.out.println("ID: " + m.getMemberID());
+		System.out.println("\nMEMBER ID: " + m.getMemberID());
 		System.out.println("NAME: " + m.getName());
 		System.out.println("PERSONAL NUMBER: " + m.getPersonalnumber());
 		System.out.println("NUMBER OF BOATS: " + m.getNumberOfBoats());
 		if (m.getNumberOfBoats() > 0) {
-			System.out.println("+ # |  Boat Type  | Length +");
+			System.out.println("+ # |  BOAT TYPE  | LENGTH (m) +");
 			int i = 0;
 			for (Boat b : m.getBoatList())
-				System.out.printf("%4d|%13s|%6.2f  |\n", ++i, b.getType(), b.getLength());
-			System.out.printf("+---|-------------|--------+\n");
+				System.out.printf("%4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
+			System.out.printf("+---|-------------|------------+\n");
 		} else
-			System.out.println("This member does not have any boat.");
+			System.out.println("THIS MEMBER DOES NOT HAVE ANY BOAT.");
 	}
 
 	@Override
@@ -162,12 +164,12 @@ public class Console implements IView {
 
 	@Override
 	public void displayError(String error) {
-		System.err.println(error + "\n");
+		System.err.println("*** " + error + " ***\n");
 	}
 
 	@Override
 	public void displaySuccess(String success) {
-		System.out.println(success + "\n");
+		System.out.println("*** " + success + " ***\n");
 	}
 
 	@Override
@@ -180,7 +182,7 @@ public class Console implements IView {
 	/***************** CONSOLE NAVIGATION *********************************/
 	public void displayMemberInstructions() {
 		while (input != quitSequence || input != returnSequence) {
-			System.out.println("SELECT THE OPTION");
+			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: CREATE A MEMBER");
 			System.out.println("2: UPDATE A MEMBER");
 			System.out.println("3: DELETE A MEMBER");
@@ -220,9 +222,8 @@ public class Console implements IView {
 	}
 
 	public void displayUpdateMemberInstructions() {
-
 		while (input != quitSequence) {
-			System.out.println("SELECT THE OPTION");
+			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: UPDATE NAME");
 			System.out.println("2: UPDATE PERSONAL NUMBER");
 			System.out.println("3: UPDATE NAME & PERSONAL NUMBER");
@@ -230,10 +231,9 @@ public class Console implements IView {
 			System.out.println("5: UPDATE A BOAT");
 			System.out.println("6: DELETE A BOAT");
 			System.out.println(returnSequence + ": RETURN");
-			System.out.print(quitSequence + ": QUIT \n");
-			System.out.print(">");
+			System.out.print(quitSequence + ": QUIT \n>");
+			
 			input = scan.next();
-
 			switch (input) {
 			case ("1"):
 				getMemberNameFromUser();
@@ -282,12 +282,13 @@ public class Console implements IView {
 	}
 
 	public void displayUpdateBoatInstructions() {
-		System.out.println("SELECT THE OPTION");
+		System.out.println("\nSELECT THE OPTION");
 		System.out.println("1: UPDATE LENGTH");
 		System.out.println("2: UPDATE BOAT TYPE");
 		System.out.println("3: UPDATE LENGTH & BOAT TYPE");
 		System.out.println(returnSequence + ": RETURN");
 		System.out.print(quitSequence + ": QUIT\n>");
+
 		input = scan.next();
 		switch (input) {
 		case ("1"):
@@ -356,7 +357,7 @@ public class Console implements IView {
 	}
 
 	public void getBoatLengthFromUser() {
-		System.out.print("LENGTH\n>");
+		System.out.print("LENGTH(m)\n>");
 		input = scan.next();
 		while (!checkBoatLength(input)) {
 			displayError("INCORRECT LENGTH!! PLEASE WRITE AGAIN");
@@ -371,7 +372,7 @@ public class Console implements IView {
 		for (BoatType b : BoatType.values())
 			System.out.printf("%5d|%11s|\n", b.getCode(), b.toString());
 		System.out.println("+----|-----------+");
-		System.out.print("\nEnter Boat type ID\n>");
+		System.out.print("\nENTER BOAT TYPE ID\n>");
 		input = scan.next();
 		while (!checkBoatType(input, BoatType.values().length)) {
 			displayError("INVALID ID");
@@ -391,7 +392,7 @@ public class Console implements IView {
 			displayUpdateMemberInstructions();
 			return;
 		}
-		System.out.print("PLEASE TYPE THE BOAT #\n>");
+		System.out.print("PLEASE ENTER THE BOAT #\n>");
 		input = scan.next();
 		while (!checkBoatIndex(input, registry.lookUpMember(memberID))) {
 			displayError("INVALID #");

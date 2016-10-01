@@ -86,7 +86,7 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void displayWelcomeMessage() {
-		welcomeText.setVisible(true);
+		welcomeText.setText("** WELCOME TO MEMBER REGISTERY PROGRAM **");
 	}
 
 	@Override
@@ -124,9 +124,8 @@ public class GUI implements Initializable, IView {
 			if(checkName(memberName) && checkPN(memberPN)){
 				registry.createMember(memberName.getText(), memberPN.getText());
 				displaySuccess("Member Registered !!");
-				setMemberTable(registry.getMemberList());
 				registry.saveRegistry();
-				alert.close();
+				setMemberTable(registry.getMemberList());
 			}
 			else
 				displayError("INCORRECT DATA!!");
@@ -148,10 +147,9 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkName(memberName) && checkPN(memberPN)){
 				registry.updateMember(m, memberName.getText(), memberPN.getText());
-				setMemberTable(registry.getMemberList());
 				displaySuccess("Member Updated !!");
 				registry.saveRegistry();
-				alert.close();
+				setMemberTable(registry.getMemberList());
 			}
 			else
 				displayError("INCORRECT DATA!!");
@@ -193,20 +191,17 @@ public class GUI implements Initializable, IView {
 		Alert alert =  new Alert(AlertType.NONE, "Register Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(new ButtonType("Cancel"));
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Length"), this.boatLength , new Label("Type"), null, boatTypeChoiceBox));
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), this.boatLength , new Label("Type"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkLength(this.boatLength)){
 				registry.registerBoat(m, Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
-				setBoatTable(m);
 				displaySuccess("Boat Registerd !!");
 				registry.saveRegistry();
-				alert.close();
+				setBoatTable(m);
 			}
-			else{
+			else
 				displayError("INCORRECT DATA!!");
-				alert.close();
-			}
 		}
 		else
 			alert.close();
@@ -224,15 +219,12 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkLength(boatLength)){
 				registry.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
-				setBoatTable(registry.lookUpMember(memberID));
 				displaySuccess("Boat Updated !!");
 				registry.saveRegistry();
-				alert.close();
+				setBoatTable(registry.lookUpMember(memberID));
 			}
-			else{
+			else
 				displayError("INCORRECT DATA!!");
-				alert.close();
-			}
 		}
 		else alert.close();
 	}
@@ -244,10 +236,11 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			registry.deleteBoat(m, b);
 			displaySuccess("Boat Deleted !!");
-			setBoatTable(m); 
 			registry.saveRegistry();
+			setBoatTable(m); 
 		}
-		else alert.close();
+		else 
+			alert.close();
 	}
 
 	@Override

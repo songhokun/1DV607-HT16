@@ -11,13 +11,13 @@
    <content>
       <AnchorPane prefHeight="497.0" prefWidth="798.0">
          <children>
-            <Text fx:id="welcomeText" layoutX="230.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" WELCOME TO MEMBER REGISTERY PROGRAM">
+            <Text fx:id="welcomeText" layoutX="230.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Text>
             <Button fx:id="compactListButton" layoutX="4.0" layoutY="19.0" mnemonicParsing="false" text="Compact List" />
-            <Button fx:id="verboListButton" layoutX="116.0" layoutY="18.0" mnemonicParsing="false" text="Verbo List" />
+            <Button fx:id="verboListButton" layoutX="116.0" layoutY="18.0" mnemonicParsing="false" text="Verbose List" />
             <Button fx:id="createMemberButton" layoutX="676.0" layoutY="20.0" mnemonicParsing="false" text="Create Member" />
             <AnchorPane layoutX="6.0" layoutY="87.0" prefHeight="391.0" prefWidth="785.0">
                <children>
