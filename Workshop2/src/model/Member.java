@@ -1,31 +1,25 @@
-/**
- * 
- */
 package model;
 
 import java.util.ArrayList;
-/**
- * @author songhokun
- *
- */
+
 public class Member {
 	private String name;
 	private String personalnumber;
 	private int memberID;
-	private ArrayList<Boat> boatdata = new ArrayList<Boat>();
+	private ArrayList<Boat> boatList = new ArrayList<Boat>();
 
 	public Member() {
 
 	}
 
-	public Member(String name, String personalnumber) throws Exception{
-		this.setName(name);
-		this.setPersonalnumber(personalnumber);
+	public Member(String name, String personalnumber) {
+		this.name = name;
+		this.personalnumber = personalnumber;
 	}
 
-	public Member(String name, String personalnumber, int memberID) throws Exception {
-		this.setName(name);
-		this.setPersonalnumber(personalnumber);
+	public Member(String name, String personalnumber, int memberID) {
+		this.name = name;
+		this.personalnumber = personalnumber;
 		this.memberID = memberID;
 	}
 
@@ -37,9 +31,9 @@ public class Member {
 		return personalnumber;
 	}
 
-	public void setName(String name) throws Exception {
-		if(name.matches(".*\\d+.*"))
-			throw new Exception("Do not contain numbers!");
+	public void setName(String name) {
+		/*if(name.matches(".*\\d+.*"))
+			throw new Exception("Do not contain numbers");*/
 		this.name = name;
 	}
 
@@ -48,26 +42,20 @@ public class Member {
 	}
 
 	public int getNumberOfBoats() {
-		return boatdata.size();
+		return boatList.size();
 	}
 
-	public ArrayList<Boat> getBoatdata() {
-		return boatdata;
-	}
-
-	public void setBoatdata(ArrayList<Boat> boatdata) {
-		this.boatdata = boatdata;
+	public ArrayList<Boat> getBoatList() {
+		return boatList;
 	}
 
 	public int getMemberID() {
 		return this.memberID;
 	}
 
-	public void setMemberID(int memberID) {
-		this.memberID = memberID;
-	}
-	
-	public Boat lookUpBoat(int index){
-		return this.getBoatdata().get(index);
+	public Boat lookUpBoat(int index) throws IndexOutOfBoundsException {
+		if (index < 0 || index >= this.boatList.size())
+			throw new IndexOutOfBoundsException();
+		return this.boatList.get(index);
 	}
 }

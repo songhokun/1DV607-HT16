@@ -4,77 +4,62 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import model.Boat.BoatType;
 
-/**
- * @author songhokun
- *
- */
 public class Registry {
 
-	private ArrayList<Member> registry;
+	private ArrayList<Member> memberList;
 	private ReadWriteFile readWriteFile;
 	private int maxID = 0;
 
-	public Registry() throws FileNotFoundException,Exception {
+	public Registry() throws FileNotFoundException{
 		readWriteFile = new ReadWriteFile();
-		registry = readWriteFile.readFile();
+		memberList = readWriteFile.readFile();
 		maxID = readWriteFile.getMaxID();
 	}
 
-	public ArrayList<Member> getRegistry() {
-		return registry;
-	}
-	
-	public void createMember(String name, String personalNumber) throws Exception {
-		this.registry.add(new Member(name, personalNumber, ++maxID));
+	public ArrayList<Member> getMemberList() {
+		return memberList;
 	}
 
-	public void updateMember(Member inMember, String name, String personalNumber) throws Exception {
-		if (!name.isEmpty()){
+	public void createMember(String name, String personalNumber) {
+		
+		this.memberList.add(new Member(name, personalNumber, ++maxID));
+	}
+
+	public void updateMember(Member inMember, String name, String personalNumber) {
+		if (!name.isEmpty())
 			inMember.setName(name);
-		}
-		if (!personalNumber.isEmpty()){
+		if (!personalNumber.isEmpty())
 			inMember.setPersonalnumber(personalNumber);
-		}
 	}
-	
+
 	public void deleteMember(Member m) {
-		this.registry.remove(m);
+		this.memberList.remove(m);
 	}
-	
-	public void registerBoat(Member m, double length, BoatType type) throws Exception {
-		if(length<=0)
-			throw new Exception("Incorrect length!");
-		
-		m.getBoatdata().add(new Boat(length, type));
+
+	public void registerBoat(Member m, double length, BoatType type) {
+		m.getBoatList().add(new Boat(length, type));
 	}
-	
+
 	public void updateBoat(double length, BoatType type, Boat boat) {
-		if (length != -1){
+		if (length != 0)
 			boat.setLength(length);
-		}
-		if (type != null){
+		if (type != null)
 			boat.setType(type);
-		}
 	}
-		
+
 	public void deleteBoat(Member m, Boat boat) {
-		m.getBoatdata().remove(boat);
+		m.getBoatList().remove(boat);
 	}
-	
-	/**
-	 * This method is used for console based application to hold a reference to a member class.
-	 * 
-	 * @param ID
-	 * @return Member if it exists
-	 */
+
 	public Member lookUpMember(int ID) {
-		for (Member m : this.registry) {
+		for (Member m : this.memberList) {
 			if (m.getMemberID() == ID)
 				return m;
 		}
 		return null;
 	}
-	public void saveChanges(){
-		readWriteFile.writeFile(registry,maxID);
+
+	public void saveRegistry() {
+		readWriteFile.writeFile(memberList, maxID);
 	}
 }

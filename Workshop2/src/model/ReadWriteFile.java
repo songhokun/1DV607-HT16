@@ -18,7 +18,7 @@ public class ReadWriteFile {
 
 	}
 
-	public ArrayList<Member> readFile() throws FileNotFoundException, Exception {
+	public ArrayList<Member> readFile() throws FileNotFoundException{
 		ArrayList<Member> toReturn = new ArrayList<Member>();
 		Scanner scan = new Scanner(memberDataFile);
 		this.maxID = (Integer.parseInt(scan.nextLine()));
@@ -35,7 +35,7 @@ public class ReadWriteFile {
 			String[] temp = scan.nextLine().split(";");
 			for (Member i : toReturn) {
 				if (i.getMemberID() == Integer.parseInt(temp[2])) {
-					i.getBoatdata().add(new Boat(Double.parseDouble(temp[0]), BoatType.valueOf(temp[1])));
+					i.getBoatList().add(new Boat(Double.parseDouble(temp[0]), BoatType.valueOf(temp[1])));
 					break;
 				}
 			}
@@ -50,7 +50,6 @@ public class ReadWriteFile {
 	}
 
 	public void writeFile(ArrayList<Member> registry, int maxID) {
-		// this.maxID=maxID;
 		StringBuilder members = new StringBuilder();
 		StringBuilder boats = new StringBuilder();
 		members.append(maxID + "\n");
@@ -60,9 +59,9 @@ public class ReadWriteFile {
 			members.append(registry.get(i).getName() + ";");
 			members.append(registry.get(i).getPersonalnumber() + "\n");
 
-			for (int j = 0; j < registry.get(i).getBoatdata().size(); j++) {
-				boats.append(registry.get(i).getBoatdata().get(j).getLength() + ";");
-				boats.append(registry.get(i).getBoatdata().get(j).getType().toString() + ";");
+			for (int j = 0; j < registry.get(i).getBoatList().size(); j++) {
+				boats.append(registry.get(i).getBoatList().get(j).getLength() + ";");
+				boats.append(registry.get(i).getBoatList().get(j).getType().toString() + ";");
 				boats.append(registry.get(i).getMemberID() + "\n");
 			}
 		}
