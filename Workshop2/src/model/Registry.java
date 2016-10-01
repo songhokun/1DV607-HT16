@@ -20,7 +20,6 @@ public class Registry {
 	}
 	
 	public void createMember(String name, String personalNumber) {
-		
 		this.memberList.add(new Member(name, personalNumber, ++maxID));
 	}
 

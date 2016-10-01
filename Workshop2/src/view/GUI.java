@@ -1,6 +1,7 @@
 package view;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -97,14 +98,14 @@ public class GUI implements Initializable, IView {
 	
 	@Override
 	public void displayCompactList() {
-		setMemberTable();
+		setMemberTable(registry.getMemberList());
 		memberPersonalnumberColumn.setVisible(false);
 		memberBoatsInformationColumn.setVisible(false);
 	}
 
 	@Override
 	public void displayVerboseList() {
-		setMemberTable();
+		setMemberTable(registry.getMemberList());
 		memberPersonalnumberColumn.setVisible(true);
 		memberBoatsInformationColumn.setVisible(true);
 	}
@@ -123,7 +124,7 @@ public class GUI implements Initializable, IView {
 			if(checkName(memberName) && checkPN(memberPN)){
 				registry.createMember(memberName.getText(), memberPN.getText());
 				displaySuccess("Member Registered !!");
-				setMemberTable();
+				setMemberTable(registry.getMemberList());
 				registry.saveRegistry();
 				alert.close();
 			}
@@ -147,7 +148,7 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkName(memberName) && checkPN(memberPN)){
 				registry.updateMember(m, memberName.getText(), memberPN.getText());
-				setMemberTable();
+				setMemberTable(registry.getMemberList());
 				displaySuccess("Member Updated !!");
 				registry.saveRegistry();
 				alert.close();
@@ -167,7 +168,7 @@ public class GUI implements Initializable, IView {
 			registry.deleteMember(m);
 			displaySuccess("Member Deleted !!");
 			registry.saveRegistry();
-			setMemberTable();
+			setMemberTable(registry.getMemberList());
 		}
 		else 
 			alert.close();
@@ -273,7 +274,7 @@ public class GUI implements Initializable, IView {
 		compactListButton.setVisible(true);
 		verboListButton.setVisible(true);
 		createMemberButton.setVisible(true);
-		setMemberTable();
+		setMemberTable(registry.getMemberList());
 		memberTable.setVisible(true);
 	}
 	
@@ -330,8 +331,8 @@ public class GUI implements Initializable, IView {
 		boatTable.setItems(data);
 	}
 	
-	private void setMemberTable(){
-		ObservableList<Member> data = FXCollections.observableArrayList(registry.getMemberList());
+	private void setMemberTable(ArrayList<Member> m){
+		ObservableList<Member> data = FXCollections.observableArrayList(m);
 		memberNameColumn.setCellValueFactory(new PropertyValueFactory<Member, String>("name"));
 		memberPersonalnumberColumn.setCellValueFactory(new PropertyValueFactory<Member, String>("personalnumber"));
 		memberIDColumn.setCellValueFactory(new PropertyValueFactory<Member, String>("memberID"));
