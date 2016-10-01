@@ -73,8 +73,7 @@ public class GUI implements Initializable, IView {
 		startProgram();
 		compactListButton.setOnAction(e -> displayCompactList());
 		verboListButton.setOnAction(e -> displayVerboseList());
-		createMemberButton.setOnAction(e -> registerMember("", ""));
-		//createMemberButton.setOnAction(e -> registerMember(memberName.getText(), memberPN.getText()));
+		createMemberButton.setOnAction(e -> registerMember(memberName.getText(), memberPN.getText()));
 		closeBoatLisButton.setOnAction(e -> changeView());
 	}
 	
@@ -101,7 +100,6 @@ public class GUI implements Initializable, IView {
 		setMemberTable();
 		memberPersonalnumberColumn.setVisible(false);
 		memberBoatsInformationColumn.setVisible(false);
-		memberTable.setVisible(true);
 	}
 
 	@Override
@@ -109,7 +107,6 @@ public class GUI implements Initializable, IView {
 		setMemberTable();
 		memberPersonalnumberColumn.setVisible(true);
 		memberBoatsInformationColumn.setVisible(true);
-		memberTable.setVisible(true);
 	}
 
 	@Override
@@ -130,12 +127,11 @@ public class GUI implements Initializable, IView {
 				registry.saveRegistry();
 				alert.close();
 			}
-			else{
+			else
 				displayError("INCORRECT DATA!!");
-				alert.close();
-			}
 		}
-		else alert.close();
+		else 
+			alert.close();
 	}
 
 	@Override
@@ -156,12 +152,11 @@ public class GUI implements Initializable, IView {
 				registry.saveRegistry();
 				alert.close();
 			}
-			else{
+			else
 				displayError("INCORRECT DATA!!");
-				alert.close();
-			}
 		}
-		else alert.close();
+		else 
+			alert.close();
 	}
 
 	@Override
@@ -171,10 +166,11 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			registry.deleteMember(m);
 			displaySuccess("Member Deleted !!");
-			setMemberTable();
 			registry.saveRegistry();
+			setMemberTable();
 		}
-		else alert.close();
+		else 
+			alert.close();
 	}
 
 	@Override
@@ -390,6 +386,7 @@ public class GUI implements Initializable, IView {
 		});
 
 		memberTable.setItems(data);
+		memberTable.setVisible(true);
 	}
 	
 /******************FOR CHECKING INPUT*************************************************/	

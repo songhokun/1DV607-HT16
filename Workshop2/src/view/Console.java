@@ -49,7 +49,7 @@ public class Console implements IView {
 		while (input != quitSequence) {
 			System.out.println("SELECT THE OPTION");
 			System.out.println("1: DISPLAY COMPACT LIST");
-			System.out.println("2: DISPLAY VERBO LIST");
+			System.out.println("2: DISPLAY VERBOSE LIST");
 			System.out.println("3: CREATE A MEMBER");
 			System.out.print(quitSequence + ": QUIT\n>");
 
