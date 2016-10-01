@@ -46,22 +46,30 @@ public class Console implements IView {
 
 	@Override
 	public void displayMainInstructions() {
-		System.out.println("SELECT THE OPTION");
-		System.out.println("1: DISPLAY COMPACT LIST");
-		System.out.println("2: DISPLAY VERBO LIST");
-		System.out.println("3: CREATE A MEMBER");
-		System.out.print(quitSequence+": QUIT\n>");
-
 		while (input != quitSequence) {
+			System.out.println("SELECT THE OPTION");
+			System.out.println("1: DISPLAY COMPACT LIST");
+			System.out.println("2: DISPLAY VERBO LIST");
+			System.out.println("3: CREATE A MEMBER");
+			System.out.print(quitSequence + ": QUIT\n>");
+
 			input = scan.next();
 			switch (input) {
 			case ("1"):
-				displayCompactList();
-				displayMemberInstructions();
+				if (registry.getMemberList().isEmpty()) {
+					System.out.println("NO MEMBER IN THE LIST\n");
+				} else {
+					displayCompactList();
+					displayMemberInstructions();
+				}
 				break;
 			case ("2"):
-				displayVerboseList();
-				displayMemberInstructions();
+				if (registry.getMemberList().isEmpty()) {
+					System.out.println("NO MEMBER IN THE LIST\n");
+				} else {
+					displayVerboseList();
+					displayMemberInstructions();
+				}
 				break;
 			case ("3"):
 				getMemberNameFromUser();
@@ -176,8 +184,8 @@ public class Console implements IView {
 			System.out.println("1: CREATE A MEMBER");
 			System.out.println("2: UPDATE A MEMBER");
 			System.out.println("3: DELETE A MEMBER");
-			System.out.println(returnSequence+": RETURN");
-			System.out.print(quitSequence+": QUIT\n>");
+			System.out.println(returnSequence + ": RETURN");
+			System.out.print(quitSequence + ": QUIT\n>");
 
 			input = scan.next();
 			switch (input) {
@@ -186,20 +194,17 @@ public class Console implements IView {
 				getMemberPersonalnumberFromUser();
 				registerMember(memberName, memberPN);
 				displayCompactList();
-//				displayMemberInstructions();
 				break;
 			case ("2"):
 				getMemberIDFromUser();
 				displaySelectedMember(registry.lookUpMember(memberID));
 				displayUpdateMemberInstructions();
 				displayCompactList();
-//				displayMemberInstructions();
 				break;
 			case ("3"):
 				getMemberIDFromUser();
 				deleteMember(registry.lookUpMember(memberID));
 				displayCompactList();
-//				displayMemberInstructions();
 				break;
 			case (returnSequence):
 				displayMainInstructions();
@@ -224,8 +229,8 @@ public class Console implements IView {
 			System.out.println("4: REGISTER A BOAT");
 			System.out.println("5: UPDATE A BOAT");
 			System.out.println("6: DELETE A BOAT");
-			System.out.println(returnSequence+": RETURN");
-			System.out.print(quitSequence+": QUIT \n");
+			System.out.println(returnSequence + ": RETURN");
+			System.out.print(quitSequence + ": QUIT \n");
 			System.out.print(">");
 			input = scan.next();
 
@@ -281,8 +286,8 @@ public class Console implements IView {
 		System.out.println("1: UPDATE LENGTH");
 		System.out.println("2: UPDATE BOAT TYPE");
 		System.out.println("3: UPDATE LENGTH & BOAT TYPE");
-		System.out.println(returnSequence+": RETURN");
-		System.out.print(quitSequence+": QUIT\n>");
+		System.out.println(returnSequence + ": RETURN");
+		System.out.print(quitSequence + ": QUIT\n>");
 		input = scan.next();
 		switch (input) {
 		case ("1"):
@@ -311,7 +316,7 @@ public class Console implements IView {
 			displayUpdateMemberInstructions();
 			break;
 		case (quitSequence):
-			System.exit(1);
+			quitProgram();
 			break;
 		default:
 			displayError("INVALID OPTION");
@@ -421,7 +426,7 @@ public class Console implements IView {
 			if (Integer.parseInt(input) <= 0)
 				return false;
 
-			else if (registry.lookUpMember(Integer.parseInt(input))!=null)
+			else if (registry.lookUpMember(Integer.parseInt(input)) != null)
 				return true;
 		}
 		return false;
@@ -443,12 +448,6 @@ public class Console implements IView {
 	}
 
 	private boolean checkBoatType(String input, int size) {
-		/*try{
-			Integer.parseInt(input)
-		}
-		catch(Exception e){
-			return false;
-		}*/
 		if (input.isEmpty() || containsLetter(input))
 			return false;
 		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > size)

@@ -1,6 +1,5 @@
 package model;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import model.Boat.BoatType;
 
@@ -10,7 +9,7 @@ public class Registry {
 	private ReadWriteFile readWriteFile;
 	private int maxID = 0;
 
-	public Registry() throws FileNotFoundException{
+	public Registry() throws Exception{
 		readWriteFile = new ReadWriteFile();
 		memberList = readWriteFile.readFile();
 		maxID = readWriteFile.getMaxID();
@@ -19,7 +18,7 @@ public class Registry {
 	public ArrayList<Member> getMemberList() {
 		return memberList;
 	}
-
+	
 	public void createMember(String name, String personalNumber) {
 		
 		this.memberList.add(new Member(name, personalNumber, ++maxID));

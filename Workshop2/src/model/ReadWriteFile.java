@@ -1,7 +1,6 @@
 package model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,10 +17,17 @@ public class ReadWriteFile {
 
 	}
 
-	public ArrayList<Member> readFile() throws FileNotFoundException{
+	public ArrayList<Member> readFile() throws Exception {
 		ArrayList<Member> toReturn = new ArrayList<Member>();
+		if (!memberDataFile.exists() && !boatDataFile.exists()) {
+			memberDataFile.createNewFile();
+			boatDataFile.createNewFile();
+			return toReturn;
+		}
 		Scanner scan = new Scanner(memberDataFile);
-		this.maxID = (Integer.parseInt(scan.nextLine()));
+		if (scan.hasNext()) {
+			this.maxID = (Integer.parseInt(scan.nextLine()));
+		}
 
 		while (scan.hasNext()) {
 			String[] temp = scan.nextLine().split(";");
