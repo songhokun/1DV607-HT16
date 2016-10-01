@@ -4,355 +4,471 @@ import java.util.Scanner;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
+import model.Registry;
 
-public class Console {
+public class Console implements IView {
 
-	private model.Registry reg;
-	private model.Authentication auth;
-	private String quitSequence = "q";
-	private String backSequence = "r";
+	private String input;
+	private String memberName;
+	private String memberPN;
+	private int memberID = 0;
+	private double boatLength = 0;
+	private BoatType boattype;
+	private int boatIndex = 0;
 	private Scanner scan = new Scanner(System.in);
+	private Registry registry;
+	private final String quitSequence = "q";
+	private final String returnSequence = "r";
 
 	public Console() {
+		input = "";
+		memberName = "";
+		memberPN = "";
 		try {
-			reg = new model.Registry();
-			auth = new model.Authentication();
+			registry = new Registry();
 		} catch (Exception e) {
-			System.out.print(e.getLocalizedMessage());
-			System.out.println("There was a problem in loading a file becuase it did not exist!\n");
+			System.err.println(e.getLocalizedMessage());
 		}
 	}
-	/*public Console(String path) {
-		try {
-			reg = new model.Registry();
-		} catch (FileNotFoundException e) {
-			System.out.println("There was a problem in loading a file becuase it did not exist!\n");
-		}
-	}
-*/
+
+	@Override
 	public void startProgram() {
-		System.out.println("Boat club programme.");
-		while (displayMainInstructions())
-			;
-		scan.close();
+		displayWelcomeMessage();
+		displayMainInstructions();
 	}
 
-	public boolean displayMainInstructions() {
-		System.out.println("Please select following options:");
-		System.out.println("1 : List all members");
-		System.out.println("2 : Create a member");
-		if(auth.isLoggedIn())
-			System.out.println("3 : Log out");
-		System.out.print(quitSequence+" : quit\n>");
-
-		String userInput = scan.next();
-		if (userInput.equals(quitSequence))
-			return false;
-		else {
-			try {
-				if (userInput.equals("1"))
-					displayMemberListType();
-				else if (userInput.equals("2"))
-					displayAddMember();
-				else if (userInput.equals("3"))
-					auth.logOut();
-
-			} catch (Exception e) {
-				System.out.println(e.getLocalizedMessage());
-			}
-		}
-		return true;
+	@Override
+	public void displayWelcomeMessage() {
+		System.out.println("***************************************");
+		System.out.println("* WELCOME TO MEMBER REGISTERY PROGRAM *");
+		System.out.println("***************************************\n");
 	}
 
-	public void displayInstructionMemberSelected(Member m) throws Exception{
-		clearConsole();
-		
-		System.out.println("Selected member "+m.getName()+";"
-				+ "\nPersonal number: "+m.getPersonalnumber());
-		displaySpecificMemberBoats(m);
-		
-		String options[] = {"","Delete the member","Update the member","Add a boat", "Update a boat", "Remove a boat"};
-		if(!auth.isLoggedIn())
-			displayInstructionsLogin();
-		if(auth.isLoggedIn())
-		{
-			System.out.println("\nSelect following options:");
-			for(int i=1;i<options.length;i++)
-				System.out.printf("%d: %s\n",i,options[i]);
-			
-			System.out.print(">");
-			int userInput = scan.nextInt();
-			
-			switch(userInput){
-			case 1:
-				controlDeleteMember(m);
+	@Override
+	public void displayMainInstructions() {
+		System.out.println("SELECT THE OPTION");
+		System.out.println("1: DISPLAY COMPACT LIST");
+		System.out.println("2: DISPLAY VERBO LIST");
+		System.out.println("3: CREATE A MEMBER");
+		System.out.print(quitSequence+": QUIT\n>");
+
+		while (input != quitSequence) {
+			input = scan.next();
+			switch (input) {
+			case ("1"):
+				displayCompactList();
+				displayMemberInstructions();
 				break;
-			case 2:
-				displayUpdateMember(m);
+			case ("2"):
+				displayVerboseList();
+				displayMemberInstructions();
 				break;
-			case 3:
-				displayAddBoat(m);
+			case ("3"):
+				getMemberNameFromUser();
+				getMemberPersonalnumberFromUser();
+				registerMember(memberName, memberPN);
+				displayMainInstructions();
 				break;
-			case 4:
-				displayUpdateBoat(m);
-				break;
-			case 5:
-				displayRemoveBoat(m);
+			case (quitSequence):
+				quitProgram();
 				break;
 			default:
-				System.out.println("Invalid choice");
+				System.out.println("INVALID OPTION");
 				break;
 			}
 		}
-		
-	}
-	
-	public void displayUpdateMember(Member m) throws Exception {
-		/*System.out.print("Enter the memeber's ID \n>");
-		String input = scan.next();
-		int id = Integer.parseInt(input);
-		if (!reg.isMemberExist(id))
-			throw new Exception("Invalid member ID");
-		*/
-
-		System.out.println("Please select following options:");
-		System.out.println("1 : Update name");
-		System.out.println("2 : Update personal number");
-		System.out.println("3 : Update both");
-		System.out.println(backSequence+" : go back");
-		System.out.print(">");
-		String name = "";
-		String personalNumber = "";
-		String input = scan.next();
-		clearConsole();
-		
-		if (input.equals(backSequence)) {
-			return;
-		}
-		if (Integer.parseInt(input) == 1 || Integer.parseInt(input) == 3) {
-			System.out.print("Enter name\n>");
-			name = scan.next();
-			while (scan.hasNext()) {
-				name = name + scan.nextLine();
-				break;
-			}
-		}
-		if (Integer.parseInt(input) == 2 || Integer.parseInt(input) == 3) {
-			System.out.print("Enter Personal number\n>");
-			personalNumber = scan.next();
-		}
-		reg.updateMember(m, name, personalNumber);
-		displaySuccess("Member Updated");
-	}
-	
-	public void controlDeleteMember(Member inMember){
-		try{
-			reg.deleteMember(inMember);
-			displaySuccess("Member Deleted!!");
-		}
-		catch(Exception e){
-			System.out.println(e.getMessage());
-		}
 	}
 
-	
-	public void displayAddMember() throws Exception {
-		System.out.print("Name \n>");
-		String name = scan.next();
-		while (scan.hasNext()) {
-			name = name + scan.nextLine();
-			break;
-		}
-		System.out.print("Personal Number\n>");
-		String personalNumber = scan.next();
-		reg.createMember(name, personalNumber);
-		displaySuccess("Member Created");
-	}
-
-	public void displayMemberListType() throws Exception {
-		if (!(reg.getRegistry().size() > 0))
-			throw new Exception("Member does not exist!");
-
-		System.out.println("1 : list by compact");
-		System.out.println("2 : list by verbose");
-		System.out.print('>');
-		String userInput = scan.next();
-		
-		clearConsole();
-		if (Integer.parseInt(userInput) == 1) {
-			displayCompactList();
-		} else if (Integer.parseInt(userInput) == 2) {
-			displayVerboseList();
-		}
-		System.out.println("\nEnter ID of a member if you want to select. Otherwise enter "+backSequence+" to return");
-		System.out.print("> ");
-		userInput = scan.next();
-		
-		if(userInput.equals(backSequence)){
-			clearConsole();
-		}
-		else{
-			Member selected = reg.lookUpMember(Integer.parseInt(userInput));
-			if(selected==null)
-				throw new Exception("Invalid member ID!");
-				
-			displayInstructionMemberSelected(selected);
-		}
-			
-	}
-
+	@Override
 	public void displayCompactList() {
 		System.out.println("+ id |  name of a member  | # boats+");
-		for (Member m : reg.getRegistry())
-			System.out.printf("%5d|%20s|%8d|\n",m.getMemberID(), m.getName(), m.getNumberOfBoats());
+		for (Member m : registry.getMemberList())
+			System.out.printf("%5d|%20s|%8d|\n", m.getMemberID(), m.getName(), m.getNumberOfBoats());
 		System.out.println("+----|--------------------|--------+");
 	}
 
+	@Override
 	public void displayVerboseList() {
-		for (Member m : reg.getRegistry()) {
-			System.out.printf("[%d] %s, personal number %s ", m.getMemberID(), m.getName(),
-					m.getPersonalnumber());
+		for (Member m : registry.getMemberList()) {
+			System.out.printf("[%d] %s, personal number %s ", m.getMemberID(), m.getName(), m.getPersonalnumber());
 			if (m.getNumberOfBoats() != 0) {
 				System.out.println("has following boats: ");
-				for (Boat b : m.getBoatdata())
+				for (Boat b : m.getBoatList())
 					System.out.printf("\t%.2f m length, %s\n", b.getLength(), b.getType());
 			} else
 				System.out.println("does not have any boat.");
 		}
 	}
 
-	private void displaySuccess(String message) {
-		System.out.println("****** " + message + "!! *******");
-	}
-	private BoatType displayBoatTypes(){
-		
-		System.out.println("+ ID | Boat type +");
-		for (BoatType b : BoatType.values())
-			System.out.printf("%5d|%11s|\n", b.getCode(),b.toString());
-		System.out.println("+----|-----------+");
-		
-		System.out.print("\nEnter Boat type ID\n>");
-		int type = scan.nextInt();
-		for(BoatType b : BoatType.values())
-			if(b.getCode()==type)
-				return b;
-		
-		return null;
-	}
-	public void displayAddBoat(Member inMember) throws Exception {
-		System.out.print("Length:\n>");
-		double length = scan.nextDouble();
-		
-		reg.registerBoat(inMember, length, displayBoatTypes());
-		//inMember.registerBoat(length, displayBoatTypes());		
-		displaySuccess("Boat added");
+	@Override
+	public void registerMember(String name, String personalnumber) {
+		registry.createMember(name, personalnumber);
+		displaySuccess("*** MEMBER CREATED SUCCESSFULLY !! ***");
 	}
 
-	public void displayUpdateBoat(Member inMember) throws Exception {
-		Boat selectedBoat = selectBoat(inMember);
-		
-		System.out.println("Choose one of the following options:");
-		System.out.println("1: Update length");
-		System.out.println("2: Update type");
-		System.out.println("3: Update both");
-		int choice = scan.nextInt();
-		double length = -1;
-		BoatType type = null;
-		if (choice == 1 || choice == 3) {
-			System.out.print("Length\n>");
-			length = scan.nextDouble();
-		}
-		if (choice == 2 || choice == 3) {
-			type = displayBoatTypes();
-		} else if (choice < 1 || choice > 3)
-			throw new Exception("Invalid option");
-
-		reg.updateBoat(length, type, selectedBoat);
-		//inMember.updateBoat(length, type, index);
-		displaySuccess("Boat Updated");
+	@Override
+	public void updateMember(Member m, String name, String personalnumber) {
+		registry.updateMember(m, name, personalnumber);
+		displaySuccess("*** MEMBER UPDATED SUCCESSFULLY !! ***");
 	}
 
-	public void displayRemoveBoat(Member inMember) throws Exception {
-		if(inMember.getNumberOfBoats() == 0)
-			throw new Exception("Member have no boat.");
-		
-		reg.deleteBoat(inMember, selectBoat(inMember));
-		
-		//inMember.deleteBoat(index);
-		displaySuccess("Boat deleted");
-	}
-	private Boat selectBoat(Member inMember) throws Exception{
-		if(inMember.getNumberOfBoats() == 0)
-			throw new Exception("Member have no boat.");
-		System.out.print("\nEnter Boat # to Update\n>");
-		int index = scan.nextInt();
-		
-		return inMember.lookUpBoat(index-1);
+	@Override
+	public void deleteMember(Member m) {
+		registry.deleteMember(m);
+		displaySuccess("*** MEMBER DELETED SUCCESSFULLY !! ***");
 	}
 
-	// this method does not print nice output. You can fix this. I am not good
-	// in this.
-	public void displaySpecificMemberBoats(Member m) {
-		if(m.getNumberOfBoats()>0){
+	@Override
+	public void displaySelectedMember(Member m) {
+		System.out.println("ID: " + m.getMemberID());
+		System.out.println("NAME: " + m.getName());
+		System.out.println("PERSONAL NUMBER: " + m.getPersonalnumber());
+		System.out.println("NUMBER OF BOATS: " + m.getNumberOfBoats());
+		if (m.getNumberOfBoats() > 0) {
 			System.out.println("+ # |  Boat Type  | Length +");
 			int i = 0;
-			for (Boat b : m.getBoatdata())
-				System.out.printf("%4d|%13s|%6.2f  |\n", ++i,b.getType(),b.getLength());
-				//System.out.println(++i + "    |   " + b.getType().toString() + "         |  " + b.getLength());
+			for (Boat b : m.getBoatList())
+				System.out.printf("%4d|%13s|%6.2f  |\n", ++i, b.getType(), b.getLength());
 			System.out.printf("+---|-------------|--------+\n");
-		}
-		else
+		} else
 			System.out.println("This member does not have any boat.");
-		
 	}
-	private boolean displayInstructionsLogin(){
-		System.out.println("The member is not logged in!");
-		System.out.println("Proceed to log in? Enter y for continue. Anything else to return");
-		
-		String userInput = scan.next();
-		if(userInput.equals("y"))
-		{
-			while(!auth.isLoggedIn()){
-				System.out.print("Username? >");
-				String inUserName = scan.next();
-				
-				if(inUserName.equals(backSequence))
-					return false;
-				
-				System.out.print("Passsword? >");
-				String inPassword = scan.next();
-				
-				auth.logIn(inUserName, inPassword);
-				if(!auth.isLoggedIn())
-				{
-					System.out.println("The provided username and password is not correct!");
-					System.out.println("Enter "+backSequence+" to return");
-				}
+
+	@Override
+	public void registerBoat(Member m, double boatLength, BoatType boattype) {
+		registry.registerBoat(m, boatLength, boattype);
+		displaySuccess("BOAT REGISTERD SUCCESSFULLY !!");
+	}
+
+	@Override
+	public void updateBoat(double length, BoatType type, Boat boat) {
+		registry.updateBoat(length, type, boat);
+		displaySuccess("BOAT UPDATED SUCCESSFULLY !!");
+	}
+
+	@Override
+	public void deleteBoat(Member m, Boat b) {
+		registry.deleteBoat(m, b);
+		displaySuccess("BOAT DELETED SUCCESSFULLY !!");
+	}
+
+	@Override
+	public void displayError(String error) {
+		System.err.println(error + "\n");
+	}
+
+	@Override
+	public void displaySuccess(String success) {
+		System.out.println(success + "\n");
+	}
+
+	@Override
+	public void quitProgram() {
+		registry.saveRegistry();
+		scan.close();
+		System.exit(1);
+	}
+
+	/***************** CONSOLE NAVIGATION *********************************/
+	public void displayMemberInstructions() {
+		while (input != quitSequence || input != returnSequence) {
+			System.out.println("SELECT THE OPTION");
+			System.out.println("1: CREATE A MEMBER");
+			System.out.println("2: UPDATE A MEMBER");
+			System.out.println("3: DELETE A MEMBER");
+			System.out.println(returnSequence+": RETURN");
+			System.out.print(quitSequence+": QUIT\n>");
+
+			input = scan.next();
+			switch (input) {
+			case ("1"):
+				getMemberNameFromUser();
+				getMemberPersonalnumberFromUser();
+				registerMember(memberName, memberPN);
+				displayCompactList();
+//				displayMemberInstructions();
+				break;
+			case ("2"):
+				getMemberIDFromUser();
+				displaySelectedMember(registry.lookUpMember(memberID));
+				displayUpdateMemberInstructions();
+				displayCompactList();
+//				displayMemberInstructions();
+				break;
+			case ("3"):
+				getMemberIDFromUser();
+				deleteMember(registry.lookUpMember(memberID));
+				displayCompactList();
+//				displayMemberInstructions();
+				break;
+			case (returnSequence):
+				displayMainInstructions();
+				break;
+			case (quitSequence):
+				quitProgram();
+				break;
+			default:
+				System.err.println("INVALID OPTION");
+				break;
 			}
-			
-			if(auth.isLoggedIn())
+		}
+	}
+
+	public void displayUpdateMemberInstructions() {
+
+		while (input != quitSequence) {
+			System.out.println("SELECT THE OPTION");
+			System.out.println("1: UPDATE NAME");
+			System.out.println("2: UPDATE PERSONAL NUMBER");
+			System.out.println("3: UPDATE NAME & PERSONAL NUMBER");
+			System.out.println("4: REGISTER A BOAT");
+			System.out.println("5: UPDATE A BOAT");
+			System.out.println("6: DELETE A BOAT");
+			System.out.println(returnSequence+": RETURN");
+			System.out.print(quitSequence+": QUIT \n");
+			System.out.print(">");
+			input = scan.next();
+
+			switch (input) {
+			case ("1"):
+				getMemberNameFromUser();
+				updateMember(registry.lookUpMember(memberID), memberName, "");
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("2"):
+				getMemberPersonalnumberFromUser();
+				updateMember(registry.lookUpMember(memberID), "", memberPN);
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("3"):
+				getMemberNameFromUser();
+				getMemberPersonalnumberFromUser();
+				updateMember(registry.lookUpMember(memberID), memberName, memberPN);
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("4"):
+				getBoatLengthFromUser();
+				getBoatTypeFromUser();
+				registerBoat(registry.lookUpMember(memberID), boatLength, boattype);
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("5"):
+				getBoatIndexFromUser();
+				displayUpdateBoatInstructions();
+				break;
+			case ("6"):
+				getBoatIndexFromUser();
+				deleteBoat(registry.lookUpMember(memberID), registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case (returnSequence):
+				displayCompactList();
+				displayMemberInstructions();
+				break;
+			case (quitSequence):
+				quitProgram();
+				break;
+			default:
+				System.out.println("INVALID OPTION!");
+				break;
+			}
+		}
+
+	}
+
+	public void displayUpdateBoatInstructions() {
+		System.out.println("SELECT THE OPTION");
+		System.out.println("1: UPDATE LENGTH");
+		System.out.println("2: UPDATE BOAT TYPE");
+		System.out.println("3: UPDATE LENGTH & BOAT TYPE");
+		System.out.println(returnSequence+": RETURN");
+		System.out.print(quitSequence+": QUIT\n>");
+		input = scan.next();
+		switch (input) {
+		case ("1"):
+			getBoatLengthFromUser();
+			updateBoat(boatLength, null, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			displaySelectedMember(registry.lookUpMember(memberID));
+			displayUpdateMemberInstructions();
+			break;
+		case ("2"):
+			getBoatTypeFromUser();
+			updateBoat(0, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			displaySelectedMember(registry.lookUpMember(memberID));
+			displayUpdateMemberInstructions();
+			break;
+		case ("3"):
+			getBoatLengthFromUser();
+			getBoatTypeFromUser();
+			updateBoat(boatLength, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			displaySelectedMember(registry.lookUpMember(memberID));
+			displayUpdateMemberInstructions();
+			break;
+		case (returnSequence):
+			displaySelectedMember(registry.lookUpMember(memberID));
+			displayUpdateMemberInstructions();
+			displaySelectedMember(registry.lookUpMember(memberID));
+			displayUpdateMemberInstructions();
+			break;
+		case (quitSequence):
+			System.exit(1);
+			break;
+		default:
+			displayError("INVALID OPTION");
+			break;
+		}
+	}
+
+	/***************************** CONSOLE VIEW HANDLER ************/
+	public void getMemberNameFromUser() {
+		System.out.print("NAME (Only Letters)\n>");
+		input = scan.next() + scan.nextLine();
+		while (!checkName(input)) {
+			displayError("INCORRECT NAME!! PLEASE WRITE AGAIN");
+			input = scan.next() + scan.nextLine();
+		}
+		memberName = input;
+	}
+
+	public void getMemberPersonalnumberFromUser() {
+		System.out.print("PERSONAL NUMBER (YYMMDDXXXX)\n>");
+		input = scan.next();
+		while (!checkPersonalnumber(input)) {
+			displayError("INCORRECT PERSONAL NUMBER!! PLEASE WRITE AGAIN");
+			input = scan.next();
+		}
+		memberPN = input;
+	}
+
+	public void getMemberIDFromUser() {
+		System.out.print("PLEASE TYPE THE MEMBER ID\n>");
+		input = scan.next();
+		while (!checkMemberID(input)) {
+			displayError("INVALID ID");
+			input = scan.next();
+		}
+		memberID = Integer.parseInt(input);
+	}
+
+	public void getBoatLengthFromUser() {
+		System.out.print("LENGTH\n>");
+		input = scan.next();
+		while (!checkBoatLength(input)) {
+			displayError("INCORRECT LENGTH!! PLEASE WRITE AGAIN");
+			input = scan.next();
+		}
+		boatLength = Double.parseDouble(input);
+	}
+
+	public void getBoatTypeFromUser() {
+		System.out.println("BOAT TYPE");
+		System.out.println("+ ID | Boat type +");
+		for (BoatType b : BoatType.values())
+			System.out.printf("%5d|%11s|\n", b.getCode(), b.toString());
+		System.out.println("+----|-----------+");
+		System.out.print("\nEnter Boat type ID\n>");
+		input = scan.next();
+		while (!checkBoatType(input, BoatType.values().length)) {
+			displayError("INVALID ID");
+			input = scan.next();
+		}
+		for (BoatType b : BoatType.values())
+			if (b.getCode() == Integer.parseInt(input)) {
+				boattype = b;
+				return;
+			}
+	}
+
+	public void getBoatIndexFromUser() {
+		if (registry.lookUpMember(memberID).getNumberOfBoats() == 0) {
+			displayError("THIS MEMBER HAVE NO BOAT CURRENTLY!!");
+			displaySelectedMember(registry.lookUpMember(memberID));
+			displayUpdateMemberInstructions();
+			return;
+		}
+		System.out.print("PLEASE TYPE THE BOAT #\n>");
+		input = scan.next();
+		while (!checkBoatIndex(input, registry.lookUpMember(memberID))) {
+			displayError("INVALID #");
+			input = scan.next();
+		}
+		boatIndex = Integer.parseInt(input);
+	}
+
+	/****************** HELPER METHODS FOR CORRECT INPUT *********/
+	private boolean checkName(String name) {
+		if (name.isEmpty())
+			return false;
+		for (int i = 0; i < name.length(); i++) {
+			if (Character.isDigit(name.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean checkPersonalnumber(String personalnumber) {
+		if (personalnumber.isEmpty() || personalnumber.length() != 10)
+			return false;
+		else if (containsLetter(personalnumber))
+			return false;
+		return true;
+	}
+
+	private boolean checkMemberID(String input) {
+		if (input.isEmpty() || containsLetter(input))
+			return false;
+		else {
+			if (Integer.parseInt(input) <= 0)
+				return false;
+
+			else if (registry.lookUpMember(Integer.parseInt(input))!=null)
 				return true;
 		}
 		return false;
 	}
-	private void clearConsole()
-	{
-	    try
-	    {
-	        final String os = System.getProperty("os.name");
 
-	        if (os.contains("Windows"))
-	        {
-	            Runtime.getRuntime().exec("cls");
-	        }
-	        else
-	        {
-	            Runtime.getRuntime().exec("clear");
-	        }
-	    }
-	    catch (final Exception e)
-	    {
-	        //  Handle any exceptions.
-	    }
+	private boolean checkBoatLength(String length) {
+		if (length.isEmpty())
+			return false;
+		else {
+			for (int i = 0; i < length.length(); i++) {
+				char c = length.charAt(i);
+				if (!Character.isDigit(c) && c != '.')
+					return false;
+			}
+			if (Double.parseDouble(length) <= 0)
+				return false;
+		}
+		return true;
+	}
+
+	private boolean checkBoatType(String input, int size) {
+		/*try{
+			Integer.parseInt(input)
+		}
+		catch(Exception e){
+			return false;
+		}*/
+		if (input.isEmpty() || containsLetter(input))
+			return false;
+		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > size)
+			return false;
+		return true;
+	}
+
+	private boolean checkBoatIndex(String input, Member m) {
+		if (input.isEmpty() || containsLetter(input))
+			return false;
+		else if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getBoatList().size())
+			return false;
+		return true;
+	}
+
+	private boolean containsLetter(String input) {
+		for (int i = 0; i < input.length(); i++) {
+			if (Character.isLetter(input.charAt(i)))
+				return true;
+		}
+		return false;
 	}
 }
