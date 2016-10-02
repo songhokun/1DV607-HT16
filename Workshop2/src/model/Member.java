@@ -32,8 +32,6 @@ public class Member {
 	}
 
 	public void setName(String name) {
-		/*if(name.matches(".*\\d+.*"))
-			throw new Exception("Do not contain numbers");*/
 		this.name = name;
 	}
 

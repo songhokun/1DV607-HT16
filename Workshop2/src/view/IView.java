@@ -13,9 +13,9 @@ public interface IView {
 	void displayMainInstructions();
 
 	void displayCompactList();
-	//void displayCompactList(ArrayList<Member> m);
+
 	void displayVerboseList();
-	//void displayVerboseList(ArrayList<Member> m);
+	
 	void registerMember(String name, String personalnumber);
 
 	void updateMember(Member m, String name, String personalnumber);
