@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Member {
+	
 	private String name;
 	private String personalnumber;
 	private int memberID;
@@ -51,9 +52,7 @@ public class Member {
 		return this.memberID;
 	}
 
-	public Boat lookUpBoat(int index) throws IndexOutOfBoundsException {
-		if (index < 0 || index >= this.boatList.size())
-			throw new IndexOutOfBoundsException();
+	public Boat lookUpBoat(int index){
 		return this.boatList.get(index);
 	}
 }

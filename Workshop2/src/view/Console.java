@@ -7,7 +7,7 @@ import model.Member;
 import model.Registry;
 
 public class Console implements IView {
-
+	
 	private String input;
 	private String memberName;
 	private String memberPN;
@@ -180,7 +180,7 @@ public class Console implements IView {
 	}
 
 	/***************** CONSOLE NAVIGATION *********************************/
-	public void displayMemberInstructions() {
+	private void displayMemberInstructions() {
 		while (input != quitSequence || input != returnSequence) {
 			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: CREATE A MEMBER");
@@ -221,7 +221,7 @@ public class Console implements IView {
 		}
 	}
 
-	public void displayUpdateMemberInstructions() {
+	private void displayUpdateMemberInstructions() {
 		while (input != quitSequence) {
 			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: UPDATE NAME");
@@ -281,7 +281,7 @@ public class Console implements IView {
 
 	}
 
-	public void displayUpdateBoatInstructions() {
+	private void displayUpdateBoatInstructions() {
 		System.out.println("\nSELECT THE OPTION");
 		System.out.println("1: UPDATE LENGTH");
 		System.out.println("2: UPDATE BOAT TYPE");
@@ -326,7 +326,7 @@ public class Console implements IView {
 	}
 
 	/***************************** CONSOLE VIEW HANDLER ************/
-	public void getMemberNameFromUser() {
+	private void getMemberNameFromUser() {
 		System.out.print("NAME (Only Letters)\n>");
 		input = scan.next() + scan.nextLine();
 		while (!checkName(input)) {
@@ -336,7 +336,7 @@ public class Console implements IView {
 		memberName = input;
 	}
 
-	public void getMemberPersonalnumberFromUser() {
+	private void getMemberPersonalnumberFromUser() {
 		System.out.print("PERSONAL NUMBER (YYMMDDXXXX)\n>");
 		input = scan.next();
 		while (!checkPersonalnumber(input)) {
@@ -346,7 +346,7 @@ public class Console implements IView {
 		memberPN = input;
 	}
 
-	public void getMemberIDFromUser() {
+	private void getMemberIDFromUser() {
 		System.out.print("PLEASE TYPE THE MEMBER ID\n>");
 		input = scan.next();
 		while (!checkMemberID(input)) {
@@ -356,7 +356,7 @@ public class Console implements IView {
 		memberID = Integer.parseInt(input);
 	}
 
-	public void getBoatLengthFromUser() {
+	private void getBoatLengthFromUser() {
 		System.out.print("LENGTH(m)\n>");
 		input = scan.next();
 		while (!checkBoatLength(input)) {
@@ -366,7 +366,7 @@ public class Console implements IView {
 		boatLength = Double.parseDouble(input);
 	}
 
-	public void getBoatTypeFromUser() {
+	private void getBoatTypeFromUser() {
 		System.out.println("BOAT TYPE");
 		System.out.println("+ ID | Boat type +");
 		for (BoatType b : BoatType.values())
@@ -385,7 +385,7 @@ public class Console implements IView {
 			}
 	}
 
-	public void getBoatIndexFromUser() {
+	private void getBoatIndexFromUser() {
 		if (registry.lookUpMember(memberID).getNumberOfBoats() == 0) {
 			displayError("THIS MEMBER HAVE NO BOAT CURRENTLY!!");
 			displaySelectedMember(registry.lookUpMember(memberID));
@@ -404,7 +404,8 @@ public class Console implements IView {
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
 	private boolean checkName(String name) {
 		for (int i = 0; i < name.length(); i++) {
-			if (!Character.isAlphabetic((name.charAt(i))))
+			char c = name.charAt(i);
+			if (!Character.isAlphabetic(c) && !Character.isWhitespace(c) )
 				return false;
 		}
 		return true;

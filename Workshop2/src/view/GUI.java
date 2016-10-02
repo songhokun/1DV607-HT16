@@ -399,7 +399,8 @@ public class GUI implements Initializable, IView {
 		if(name.getText().isEmpty())
 			return false;
 		for (int i = 0; i < name.getText().length(); i++) {
-			if (!Character.isAlphabetic((name.getText().charAt(i))))
+			char c = name.getText().charAt(i);
+			if (!Character.isAlphabetic(c) && !Character.isWhitespace(c) )
 				return false;
 		}
 		return true;
