@@ -17,6 +17,7 @@ public class Registry {
 
 	public ArrayList<Member> getMemberList() {
 		return memberList;
+		// return new ArrayList<Member>(memberList);
 	}
 	
 	public void createMember(String name, String personalNumber) {

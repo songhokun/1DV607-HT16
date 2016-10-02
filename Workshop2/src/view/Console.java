@@ -54,20 +54,20 @@ public class Console implements IView {
 			System.out.print(quitSequence + ": QUIT\n>");
 
 			input = scan.next();
-			if (registry.getMemberList().isEmpty()){
-				if(input.equals("1") || input.equals("2")){
+			if (registry.getMemberList().isEmpty()) {
+				if (input.equals("1") || input.equals("2")) {
 					System.out.println("NO MEMBER IN THE LIST\n");
-					displayMainInstructions(); 
+					displayMainInstructions();
 				}
 			}
 			switch (input) {
 			case ("1"):
-					displayCompactList();
-					displayMemberInstructions();
+				displayCompactList();
+				displayMemberInstructions();
 				break;
 			case ("2"):
-					displayVerboseList();
-					displayMemberInstructions();
+				displayVerboseList();
+				displayMemberInstructions();
 				break;
 			case ("3"):
 				getMemberNameFromUser();
@@ -232,7 +232,7 @@ public class Console implements IView {
 			System.out.println("6: DELETE A BOAT");
 			System.out.println(returnSequence + ": RETURN");
 			System.out.print(quitSequence + ": QUIT \n>");
-			
+
 			input = scan.next();
 			switch (input) {
 			case ("1"):
@@ -403,72 +403,62 @@ public class Console implements IView {
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
 	private boolean checkName(String name) {
-		if (name.isEmpty())
-			return false;
 		for (int i = 0; i < name.length(); i++) {
-			if (Character.isDigit(name.charAt(i)))
+			if (!Character.isAlphabetic((name.charAt(i))))
 				return false;
 		}
 		return true;
 	}
 
 	private boolean checkPersonalnumber(String personalnumber) {
-		if (personalnumber.isEmpty() || personalnumber.length() != 10)
+		if (personalnumber.length() != 10)
 			return false;
-		else if (containsLetter(personalnumber))
+		try {
+			Long.parseLong(personalnumber);
+			return true;
+		} catch (Exception e) {
 			return false;
-		return true;
+		}
 	}
 
 	private boolean checkMemberID(String input) {
-		if (input.isEmpty() || containsLetter(input))
-			return false;
-		else {
-			if (Integer.parseInt(input) <= 0)
-				return false;
-
-			else if (registry.lookUpMember(Integer.parseInt(input)) != null)
+		try {
+			if (registry.lookUpMember(Integer.parseInt(input)) != null)
 				return true;
+		} catch (Exception e) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private boolean checkBoatLength(String length) {
-		if (length.isEmpty())
-			return false;
-		else {
-			for (int i = 0; i < length.length(); i++) {
-				char c = length.charAt(i);
-				if (!Character.isDigit(c) && c != '.')
-					return false;
-			}
+		try {
 			if (Double.parseDouble(length) <= 0)
 				return false;
+		} catch (Exception e) {
+			return false;
 		}
 		return true;
 	}
 
 	private boolean checkBoatType(String input, int size) {
-		if (input.isEmpty() || containsLetter(input))
+		try {
+			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > size)
+				return false;
+		} catch (Exception e) {
 			return false;
-		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > size)
-			return false;
+		}
 		return true;
+
 	}
 
 	private boolean checkBoatIndex(String input, Member m) {
-		if (input.isEmpty() || containsLetter(input))
+		try {
+			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getBoatList().size())
+				return false;
+		} catch (Exception e) {
 			return false;
-		else if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getBoatList().size())
-			return false;
-		return true;
-	}
-
-	private boolean containsLetter(String input) {
-		for (int i = 0; i < input.length(); i++) {
-			if (Character.isLetter(input.charAt(i)))
-				return true;
 		}
-		return false;
+		return true;
 	}
 }

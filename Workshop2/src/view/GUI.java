@@ -58,9 +58,7 @@ public class GUI implements Initializable, IView {
 	private TextField memberName = new TextField();
 	private TextField memberPN = new TextField();
 	private TextField boatLength = new TextField();
-
 	private Registry registry;
-	private int memberID;
 	
 	public GUI(){
 		try {
@@ -114,7 +112,8 @@ public class GUI implements Initializable, IView {
 	public void registerMember(String name, String personalnumber) {
 		memberName.clear();
 		memberPN.clear();
-		Alert alert =  new Alert(AlertType.NONE, "Update Member");
+		Alert alert =  new Alert(AlertType.NONE);
+		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(new ButtonType("Cancel"));
 		memberPN.setPromptText("YYMMDDXXXX");
@@ -138,7 +137,8 @@ public class GUI implements Initializable, IView {
 	public void updateMember(Member m, String name, String personalnumber) {
 		memberName.setText(name);
 		memberPN.setText(personalnumber);
-		Alert alert =  new Alert(AlertType.NONE, "Update Member");
+		Alert alert =  new Alert(AlertType.NONE);
+		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(new ButtonType("Cancel"));
 		memberPN.setPromptText("YYMMDDXXXX");
@@ -180,7 +180,6 @@ public class GUI implements Initializable, IView {
 		createMemberButton.setVisible(false);
 		setBoatTable(m);
 		boatTablePane.setVisible(true);	
-		memberID = m.getMemberID();
 		addBoatButton.setOnAction(e -> registerBoat(m, 0, null));
 	}
 	
@@ -188,7 +187,8 @@ public class GUI implements Initializable, IView {
 	public void registerBoat(Member m, double boatLength, BoatType boattype) {
 		this.boatLength.clear();
 		boatTypeChoiceBox.getSelectionModel().select(BoatType.Sailboat);
-		Alert alert =  new Alert(AlertType.NONE, "Register Boat");
+		Alert alert =  new Alert(AlertType.NONE);
+		alert.setHeaderText("Register Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(new ButtonType("Cancel"));
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), this.boatLength , new Label("Type"), null, boatTypeChoiceBox));
@@ -201,7 +201,7 @@ public class GUI implements Initializable, IView {
 				setBoatTable(m);
 			}
 			else
-				displayError("INCORRECT DATA!!");
+				displayError("INCORRECT BOAT LENGTH!!");
 		}
 		else
 			alert.close();
@@ -211,20 +211,20 @@ public class GUI implements Initializable, IView {
 	public void updateBoat(double length, BoatType type, Boat boat) {
 		boatLength.setText("" + length);
 		boatTypeChoiceBox.getSelectionModel().select(type);
-		Alert alert =  new Alert(AlertType.NONE, "Update Boat");
+		Alert alert =  new Alert(AlertType.NONE);
+		alert.setHeaderText("Update Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(new ButtonType("Cancel"));
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Length"), boatLength , new Label("Type"), null, boatTypeChoiceBox));
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), boatLength , new Label("Type"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkLength(boatLength)){
 				registry.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 				displaySuccess("Boat Updated !!");
 				registry.saveRegistry();
-				setBoatTable(registry.lookUpMember(memberID));
 			}
 			else
-				displayError("INCORRECT DATA!!");
+				displayError("INCORRECT BOAT LENGTH!!");
 		}
 		else alert.close();
 	}
@@ -302,6 +302,7 @@ public class GUI implements Initializable, IView {
 				} else {
 					setGraphic(boatEditButton);
 					boatEditButton.setOnAction(event -> updateBoat(boat.getLength(), boat.getType(), boat));
+					displaySelectedMember(member);
 				}
 			}
 		});
@@ -384,39 +385,34 @@ public class GUI implements Initializable, IView {
 	}
 	
 /******************FOR CHECKING INPUT*************************************************/	
-	private boolean checkLength(TextField length){
-		if (length.getText().isEmpty())
-			return false;
-		else {
-			for (int i = 0; i < length.getText().length(); i++) {
-				char c = length.getText().charAt(i);
-				if (!Character.isDigit(c) && c != '.')
-					return false;
-			}
+	private boolean checkLength(TextField length) {
+		try {
 			if (Double.parseDouble(length.getText()) <= 0)
+				return false;
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkName(TextField name) {
+		if(name.getText().isEmpty())
+			return false;
+		for (int i = 0; i < name.getText().length(); i++) {
+			if (!Character.isAlphabetic((name.getText().charAt(i))))
 				return false;
 		}
 		return true;
 	}
-	private boolean checkName(TextField name){
-		if(name.getText().isEmpty())
+
+	private boolean checkPN(TextField name) {
+		if (name.getText().length() != 10)
 			return false;
-			String s = name.getText();
-			for(int i = 0; i < s.length(); i++){
-				if(Character.isDigit(s.charAt(i)))
-					return false;
-			}
-		return true;
-	}
-	
-	private boolean checkPN(TextField name){
-		if(name.getText().isEmpty() || name.getText().length() != 10)
+		try {
+			Long.parseLong(name.getText());
+			return true;
+		} catch (Exception e) {
 			return false;
-			String s = name.getText();
-			for(int i = 0; i < s.length(); i++){
-				if(Character.isLetter(s.charAt(i)))
-					return false;
-			}
-		return true;
+		}
 	}
 }
