@@ -34,6 +34,5 @@ public interface IView {
 
 	void displaySuccess(String success);
 	
-
 	void quitProgram();
 }

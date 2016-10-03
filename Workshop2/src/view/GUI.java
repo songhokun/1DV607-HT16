@@ -222,6 +222,7 @@ public class GUI implements Initializable, IView {
 				registry.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 				displaySuccess("Boat Updated !!");
 				registry.saveRegistry();
+				boatTable.refresh();
 			}
 			else
 				displayError("INCORRECT BOAT LENGTH!!");
@@ -302,7 +303,6 @@ public class GUI implements Initializable, IView {
 				} else {
 					setGraphic(boatEditButton);
 					boatEditButton.setOnAction(event -> updateBoat(boat.getLength(), boat.getType(), boat));
-					displaySelectedMember(member);
 				}
 			}
 		});
@@ -318,7 +318,7 @@ public class GUI implements Initializable, IView {
 					return;
 				} else {
 					setGraphic(boatDeleteButton);
-					boatDeleteButton.setOnAction(event ->deleteBoat(member, boat));
+					boatDeleteButton.setOnAction(event -> deleteBoat(member, boat));
 				}
 			}
 		});

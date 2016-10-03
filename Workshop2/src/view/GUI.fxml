@@ -21,7 +21,7 @@
             <Button fx:id="createMemberButton" layoutX="676.0" layoutY="20.0" mnemonicParsing="false" text="Create Member" />
             <AnchorPane layoutX="6.0" layoutY="87.0" prefHeight="391.0" prefWidth="785.0">
                <children>
-                  <TableView fx:id="memberTable" layoutX="15.0" prefHeight="391.0" prefWidth="759.0" visible="false">
+                  <TableView fx:id="memberTable" layoutX="14.0" prefHeight="398.0" prefWidth="761.0" visible="false">
                     <columns>
                       <TableColumn fx:id="memberNameColumn" prefWidth="204.0" text="Name" />
                       <TableColumn fx:id="memberPersonalnumberColumn" prefWidth="124.0" text="Personal Number" />

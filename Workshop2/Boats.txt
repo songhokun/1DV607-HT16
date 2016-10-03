@@ -1,2 +1,1 @@
-1.2;Motorsailer;1
-1.3;Sailboat;1
+1.0;Sailboat;2
