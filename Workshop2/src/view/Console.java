@@ -119,17 +119,16 @@ public class Console implements IView {
 
 	@Override
 	public void displaySelectedMember(Member m) {
-		System.out.println("+ ID |  NAME OF A MEMBER  | PERSONAL NUMBER  | TOTAL BOATS +");
-		System.out.printf("%5d|%20s|%12s      |%8d     |\n", m.getMemberID(), m.getName(), m.getPersonalnumber(), m.getNumberOfBoats());
-		System.out.print("+----|--------------------|------------------|-------------+");
+		System.out.println("\nMEMBER ID: " + m.getMemberID());
+		System.out.printf("NAME:%s (PNR.%s) HAS %d BOATS\n", m.getName(),m.getPersonalnumber(),m.getNumberOfBoats());
 		if (m.getNumberOfBoats() > 0) {
-			System.out.print("\t ** BOATS WITH DETAILS **\n");
-			System.out.println("\t\t\t\t\t\t\t   + # |  BOAT TYPE  | LENGTH (m) +");
+			System.out.println("+ # |  BOAT TYPE  | LENGTH (m) +");
 			int i = 0;
 			for (Boat b : m.getBoatList())
-				System.out.printf("\t\t\t\t\t\t\t   %4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
-			System.out.print("\t\t\t\t\t\t\t   +---|-------------|------------+\n\n");
+				System.out.printf("%4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
+			System.out.printf("+---|-------------|------------+\n");
 		}
+		
 	}
 
 	@Override
