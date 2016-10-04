@@ -34,5 +34,7 @@ public interface IView {
 
 	void displaySuccess(String success);
 	
+	void logIn(String username, String password);
+	
 	void quitProgram();
 }

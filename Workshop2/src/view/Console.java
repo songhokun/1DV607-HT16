@@ -161,6 +161,12 @@ public class Console implements IView {
 	}
 
 	@Override
+	public void logIn(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void quitProgram() {
 		registry.saveRegistry();
 		scan.close();
@@ -391,12 +397,15 @@ public class Console implements IView {
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
 	private boolean checkName(String name) {
+		boolean charexists = false;
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
-			if (!Character.isAlphabetic(c) && !Character.isWhitespace(c) )
+			if (Character.isAlphabetic(c))
+				charexists = true;
+			if (!Character.isAlphabetic(c) && !Character.isWhitespace(c))
 				return false;
 		}
-		return true;
+		return charexists;
 	}
 
 	private boolean checkPersonalnumber(String personalnumber) {

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import model.Authentication;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
@@ -35,6 +38,7 @@ public class GUI implements Initializable, IView {
 	@FXML private Button compactListButton;
 	@FXML private Button verboListButton;	
 	@FXML private Button createMemberButton;
+	@FXML private Button logInButton;	
 	
 	@FXML private TableView<Member> memberTable;
 	@FXML private TableColumn<Member, String> memberNameColumn;
@@ -44,6 +48,8 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Member, Member> memberBoatsInformationColumn;
 	@FXML private TableColumn<Member, Member> memberEditColumn;
 	@FXML private TableColumn<Member, Member> memberDeleteColumn;
+	private TextField memberName = new TextField();
+	private TextField memberPN = new TextField();
 	
 	@FXML private AnchorPane boatTablePane;
 	@FXML private TableView<Boat> boatTable;
@@ -53,14 +59,15 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Boat, Boat> boatDeleteColumn;
 	private ChoiceBox <BoatType>boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
 	@FXML private Button addBoatButton;
-	@FXML private Button closeBoatLisButton;	
-	
-	private TextField memberName = new TextField();
-	private TextField memberPN = new TextField();
+	@FXML private Button closeBoatListButton;	
 	private TextField boatLength = new TextField();
-	private Registry registry;
 	
-	public GUI(){
+	private Registry registry;
+	private Authentication authentication;
+
+	
+	public GUI() {
+		authentication = new Authentication();
 		try {
 			registry = new Registry();
 		} catch (Exception e) {
@@ -75,8 +82,10 @@ public class GUI implements Initializable, IView {
 		boatLength.setPromptText("Eg: 14.65");
 		compactListButton.setOnAction(e -> displayCompactList());
 		verboListButton.setOnAction(e -> displayVerboseList());
+		createMemberButton.setDisable(!authentication.isLoggedIn());
 		createMemberButton.setOnAction(e -> registerMember(memberName.getText(), memberPN.getText()));
-		closeBoatLisButton.setOnAction(e -> changeView());
+		closeBoatListButton.setOnAction(e -> changeView());
+		logInButton.setOnAction(e -> logIn("", ""));
 	}
 	
 	@Override
@@ -193,6 +202,7 @@ public class GUI implements Initializable, IView {
 		createMemberButton.setVisible(false);
 		setBoatTable(m);
 		boatTablePane.setVisible(true);	
+		addBoatButton.setDisable(!authentication.isLoggedIn());
 		addBoatButton.setOnAction(e -> registerBoat(m, 0, null));
 	}
 	
@@ -278,11 +288,38 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
+	public void logIn(String username, String password){
+		TextField usernameField = new TextField();
+		PasswordField passwordField = new PasswordField();
+		Alert alert =  new Alert(AlertType.NONE);
+		alert.setHeaderText("Log In");
+		alert.getButtonTypes().add(new ButtonType("Login"));
+		alert.getButtonTypes().add(ButtonType.CANCEL);
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Username"), usernameField , new Label("Password"), passwordField, null));
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == alert.getButtonTypes().get(0)) { 	//index 0 of a button refers  to the log-in button.
+				authentication.logIn(usernameField.getText(), passwordField.getText());
+				if(authentication.isLoggedIn()){
+					displaySuccess("Logged in successfully!!");
+					memberTable.refresh();
+					boatTable.refresh();
+					createMemberButton.setDisable(false);
+					addBoatButton.setDisable(false);
+					logInButton.setDisable(true);
+				}	
+				else
+					displayError("Please check the username and password!!");
+			}
+		else 
+			alert.close();
+	}
+	
+	@Override
 	public void quitProgram() {
 		registry.saveRegistry();
 	}
 
-	/**********************FOR CREATING VIEW*****************************************************************/
+/**********************FOR CREATING VIEW*****************************************************************/
 	
 	private void changeView() {
 		boatTablePane.setVisible(false);
@@ -323,6 +360,7 @@ public class GUI implements Initializable, IView {
 					return;
 				} else {
 					setGraphic(boatEditButton);
+					boatEditButton.setDisable(!authentication.isLoggedIn());
 					boatEditButton.setOnAction(event -> updateBoat(boat.getLength(), boat.getType(), boat));
 				}
 			}
@@ -339,6 +377,7 @@ public class GUI implements Initializable, IView {
 					return;
 				} else {
 					setGraphic(boatDeleteButton);
+					boatDeleteButton.setDisable(!authentication.isLoggedIn());
 					boatDeleteButton.setOnAction(event -> deleteBoat(member, boat));
 				}
 			}
@@ -380,6 +419,7 @@ public class GUI implements Initializable, IView {
 					return;
 				} else {
 					setGraphic(editButton);
+					editButton.setDisable(!authentication.isLoggedIn());
 					editButton.setOnAction(e -> updateMember(member, member.getName(), member.getPersonalnumber()));
 				}
 			}
@@ -396,6 +436,7 @@ public class GUI implements Initializable, IView {
 					return;
 				} else {
 					setGraphic(deleteButton);
+					deleteButton.setDisable(!authentication.isLoggedIn());
 					deleteButton.setOnAction(event -> deleteMember(member));
 				}
 			}
@@ -417,14 +458,17 @@ public class GUI implements Initializable, IView {
 	}
 
 	private boolean checkName(TextField name) {
-		if(name.getText().isEmpty())
+		boolean charexists = false;
+		if (name.getText().isEmpty())
 			return false;
 		for (int i = 0; i < name.getText().length(); i++) {
 			char c = name.getText().charAt(i);
-			if (!Character.isAlphabetic(c) && !Character.isWhitespace(c) )
+			if (Character.isAlphabetic(c))
+				charexists = true;
+			if (!Character.isAlphabetic(c) && !Character.isWhitespace(c))
 				return false;
 		}
-		return true;
+		return charexists;
 	}
 
 	private boolean checkPN(TextField name) {

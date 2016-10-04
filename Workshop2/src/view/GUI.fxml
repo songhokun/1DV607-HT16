@@ -11,17 +11,17 @@
    <content>
       <AnchorPane prefHeight="497.0" prefWidth="798.0">
          <children>
-            <Text fx:id="welcomeText" layoutX="230.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0">
+            <Text fx:id="welcomeText" fill="#2a306f" layoutX="149.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0">
                <font>
-                  <Font size="15.0" />
+                  <Font size="20.0" />
                </font>
             </Text>
-            <Button fx:id="compactListButton" layoutX="4.0" layoutY="19.0" mnemonicParsing="false" text="Compact List" />
-            <Button fx:id="verboListButton" layoutX="116.0" layoutY="18.0" mnemonicParsing="false" text="Verbose List" />
-            <Button fx:id="createMemberButton" layoutX="676.0" layoutY="20.0" mnemonicParsing="false" text="Create Member" />
+            <Button fx:id="compactListButton" layoutX="104.0" layoutY="41.0" mnemonicParsing="false" text="Compact List" />
+            <Button fx:id="verboListButton" layoutX="3.0" layoutY="41.0" mnemonicParsing="false" text="Verbose List" />
+            <Button fx:id="createMemberButton" layoutX="678.0" layoutY="42.0" mnemonicParsing="false" text="Create Member" />
             <AnchorPane layoutX="6.0" layoutY="87.0" prefHeight="391.0" prefWidth="785.0">
                <children>
-                  <TableView fx:id="memberTable" layoutX="14.0" prefHeight="398.0" prefWidth="761.0" visible="false">
+                  <TableView fx:id="memberTable" layoutX="8.0" layoutY="8.0" prefHeight="398.0" prefWidth="761.0">
                     <columns>
                       <TableColumn fx:id="memberNameColumn" prefWidth="204.0" text="Name" />
                       <TableColumn fx:id="memberPersonalnumberColumn" prefWidth="124.0" text="Personal Number" />
@@ -43,11 +43,12 @@
                           </columns>
                         </TableView>
                         <Button fx:id="addBoatButton" layoutX="304.0" layoutY="261.0" mnemonicParsing="false" text="Register Boat" />
-                        <Button fx:id="closeBoatLisButton" layoutX="427.0" layoutY="261.0" mnemonicParsing="false" text="Close" />
+                        <Button fx:id="closeBoatListButton" layoutX="427.0" layoutY="261.0" mnemonicParsing="false" text="Close" />
                      </children>
                   </AnchorPane>
                </children>
             </AnchorPane>
+            <Button fx:id="logInButton" layoutX="735.0" layoutY="6.0" mnemonicParsing="false" text="Log In" />
          </children>
       </AnchorPane>
    </content>
