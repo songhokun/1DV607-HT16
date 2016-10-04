@@ -70,6 +70,9 @@ public class GUI implements Initializable, IView {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		startProgram();
+		memberPN.setPromptText("YYMMDDXXXX");
+		memberName.setPromptText("Eg: John Smith");
+		boatLength.setPromptText("Eg: 14.65");
 		compactListButton.setOnAction(e -> displayCompactList());
 		verboListButton.setOnAction(e -> displayVerboseList());
 		createMemberButton.setOnAction(e -> registerMember(memberName.getText(), memberPN.getText()));
@@ -115,9 +118,8 @@ public class GUI implements Initializable, IView {
 		Alert alert =  new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
-		alert.getButtonTypes().add(new ButtonType("Cancel"));
-		memberPN.setPromptText("YYMMDDXXXX");
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Name"), memberName, new Label("Personal Number"), memberPN, null));
+		alert.getButtonTypes().add(ButtonType.CANCEL);
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkName(memberName) && checkPN(memberPN)){
@@ -126,10 +128,16 @@ public class GUI implements Initializable, IView {
 				registry.saveRegistry();
 				setMemberTable(registry.getMemberList());
 			}
-			else
-				displayError("INCORRECT DATA!!");
+			else{
+				if(memberName.getText().isEmpty() || memberPN.getText().isEmpty())
+					displayError("Please fill all the required(*) fields.");
+				else if(!checkName(memberName))
+					displayError("Please fill the correct name. Eg: John Smith!!");
+				else 
+					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
+			}
 		}
-		else 
+		else
 			alert.close();
 	}
 
@@ -140,9 +148,8 @@ public class GUI implements Initializable, IView {
 		Alert alert =  new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
-		alert.getButtonTypes().add(new ButtonType("Cancel"));
-		memberPN.setPromptText("YYMMDDXXXX");
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Name"), memberName, new Label("Personal Number"), memberPN, null));
+		alert.getButtonTypes().add(ButtonType.CANCEL);
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkName(memberName) && checkPN(memberPN)){
@@ -151,8 +158,14 @@ public class GUI implements Initializable, IView {
 				registry.saveRegistry();
 				setMemberTable(registry.getMemberList());
 			}
-			else
-				displayError("INCORRECT DATA!!");
+			else{
+				if(memberName.getText().isEmpty() || memberPN.getText().isEmpty())
+					displayError("Please fill all the required(*) fields.");
+				else if(!checkName(memberName))
+					displayError("Please fill the correct name. Eg: John Smith!!");
+				else 
+					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
+			}
 		}
 		else 
 			alert.close();
@@ -190,8 +203,8 @@ public class GUI implements Initializable, IView {
 		Alert alert =  new Alert(AlertType.NONE);
 		alert.setHeaderText("Register Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
-		alert.getButtonTypes().add(new ButtonType("Cancel"));
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), this.boatLength , new Label("Type"), null, boatTypeChoiceBox));
+		alert.getButtonTypes().add(ButtonType.CANCEL);
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)*"), this.boatLength , new Label("Type*"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if(checkLength(this.boatLength)){
@@ -200,8 +213,12 @@ public class GUI implements Initializable, IView {
 				registry.saveRegistry();
 				setBoatTable(m);
 			}
-			else
-				displayError("INCORRECT BOAT LENGTH!!");
+			else{
+				if(this.boatLength.getText().isEmpty())
+					displayError("Length field is empty!!");
+				else 	
+					displayError("Please fill the correct boat length. Eg: 14.23");
+			}
 		}
 		else
 			alert.close();
@@ -214,7 +231,7 @@ public class GUI implements Initializable, IView {
 		Alert alert =  new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
-		alert.getButtonTypes().add(new ButtonType("Cancel"));
+		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), boatLength , new Label("Type"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
@@ -224,8 +241,12 @@ public class GUI implements Initializable, IView {
 				registry.saveRegistry();
 				boatTable.refresh();
 			}
-			else
-				displayError("INCORRECT BOAT LENGTH!!");
+			else{
+				if(this.boatLength.getText().isEmpty())
+					displayError("Length field is empty!!");
+				else 	
+					displayError("Please fill the correct boat length. Eg: 14.23");
+			}
 		}
 		else alert.close();
 	}

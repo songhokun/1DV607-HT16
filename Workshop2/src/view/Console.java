@@ -95,18 +95,7 @@ public class Console implements IView {
 	@Override
 	public void displayVerboseList() {
 		for (Member m : registry.getMemberList()) {
-			System.out.println("\nMEMBER ID: " + m.getMemberID());
-			System.out.println("NAME: " + m.getName());
-			System.out.println("PERSONAL NUMBER: " + m.getPersonalnumber());
-			if (m.getNumberOfBoats() > 0) {
-				System.out.println("THIS MEMBER HAS FOLLOWING BOATS:");
-				System.out.println("+ # |  BOAT TYPE  | LENGTH (m) +");
-				int i = 0;
-				for (Boat b : m.getBoatList())
-					System.out.printf("%4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
-				System.out.printf("+---|-------------|------------+\n");
-			} else
-				System.out.println("THIS MEMBER DOES NOT HAVE ANY BOAT.");
+			displaySelectedMember(m);
 		}
 	}
 
@@ -130,18 +119,17 @@ public class Console implements IView {
 
 	@Override
 	public void displaySelectedMember(Member m) {
-		System.out.println("\nMEMBER ID: " + m.getMemberID());
-		System.out.println("NAME: " + m.getName());
-		System.out.println("PERSONAL NUMBER: " + m.getPersonalnumber());
-		System.out.println("NUMBER OF BOATS: " + m.getNumberOfBoats());
+		System.out.println("+ ID |  NAME OF A MEMBER  | PERSONAL NUMBER  | TOTAL BOATS +");
+		System.out.printf("%5d|%20s|%12s      |%8d     |\n", m.getMemberID(), m.getName(), m.getPersonalnumber(), m.getNumberOfBoats());
+		System.out.print("+----|--------------------|------------------|-------------+");
 		if (m.getNumberOfBoats() > 0) {
-			System.out.println("+ # |  BOAT TYPE  | LENGTH (m) +");
+			System.out.print("\t ** BOATS WITH DETAILS **\n");
+			System.out.println("\t\t\t\t\t\t\t   + # |  BOAT TYPE  | LENGTH (m) +");
 			int i = 0;
 			for (Boat b : m.getBoatList())
-				System.out.printf("%4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
-			System.out.printf("+---|-------------|------------+\n");
-		} else
-			System.out.println("THIS MEMBER DOES NOT HAVE ANY BOAT.");
+				System.out.printf("\t\t\t\t\t\t\t   %4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
+			System.out.print("\t\t\t\t\t\t\t   +---|-------------|------------+\n\n");
+		}
 	}
 
 	@Override
@@ -164,12 +152,12 @@ public class Console implements IView {
 
 	@Override
 	public void displayError(String error) {
-		System.err.println("*** " + error + " ***\n");
+		System.err.println("*** " + error + " ***");
 	}
 
 	@Override
 	public void displaySuccess(String success) {
-		System.out.println("*** " + success + " ***\n");
+		System.out.println("*** " + success + " ***");
 	}
 
 	@Override
@@ -325,9 +313,9 @@ public class Console implements IView {
 		}
 	}
 
-	/***************************** CONSOLE VIEW HANDLER ************/
+	/***************************** CONSOLE INPUT DATA METHODS ************/
 	private void getMemberNameFromUser() {
-		System.out.print("NAME (Only Letters)\n>");
+		System.out.print("NAME (Eg: John Smith)\n>");
 		input = scan.next() + scan.nextLine();
 		while (!checkName(input)) {
 			displayError("INCORRECT NAME!! PLEASE WRITE AGAIN");
@@ -350,7 +338,7 @@ public class Console implements IView {
 		System.out.print("PLEASE TYPE THE MEMBER ID\n>");
 		input = scan.next();
 		while (!checkMemberID(input)) {
-			displayError("INVALID ID");
+			displayError("INVALID MEMBER ID!! PLEASE WRITE AGAIN");
 			input = scan.next();
 		}
 		memberID = Integer.parseInt(input);
@@ -375,7 +363,7 @@ public class Console implements IView {
 		System.out.print("\nENTER BOAT TYPE ID\n>");
 		input = scan.next();
 		while (!checkBoatType(input, BoatType.values().length)) {
-			displayError("INVALID ID");
+			displayError("INVALID BOAT TYPE ID!! PLEASE WRITE AGAIN");
 			input = scan.next();
 		}
 		for (BoatType b : BoatType.values())
@@ -395,7 +383,7 @@ public class Console implements IView {
 		System.out.print("PLEASE ENTER THE BOAT #\n>");
 		input = scan.next();
 		while (!checkBoatIndex(input, registry.lookUpMember(memberID))) {
-			displayError("INVALID #");
+			displayError("INVALID BOAT #!! PLEASE WRITE AGAIN.");
 			input = scan.next();
 		}
 		boatIndex = Integer.parseInt(input);
@@ -424,8 +412,8 @@ public class Console implements IView {
 
 	private boolean checkMemberID(String input) {
 		try {
-			if (registry.lookUpMember(Integer.parseInt(input)) != null)
-				return true;
+			if (registry.lookUpMember(Integer.parseInt(input)) == null)
+				return false;
 		} catch (Exception e) {
 			return false;
 		}
@@ -455,7 +443,7 @@ public class Console implements IView {
 
 	private boolean checkBoatIndex(String input, Member m) {
 		try {
-			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getBoatList().size())
+			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getNumberOfBoats())
 				return false;
 		} catch (Exception e) {
 			return false;

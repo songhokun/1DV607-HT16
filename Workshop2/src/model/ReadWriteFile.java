@@ -34,8 +34,6 @@ public class ReadWriteFile {
 			toReturn.add(new Member(temp[1], temp[2], Integer.parseInt(temp[0])));
 		}
 		scan.close();
-		scan = null;
-
 		scan = new Scanner(boatDataFile);
 		while (scan.hasNext()) {
 			String[] temp = scan.nextLine().split(";");
@@ -47,7 +45,6 @@ public class ReadWriteFile {
 			}
 		}
 		scan.close();
-
 		return toReturn;
 	}
 
