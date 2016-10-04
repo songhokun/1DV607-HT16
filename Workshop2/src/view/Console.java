@@ -1,6 +1,8 @@
 package view;
 
 import java.util.Scanner;
+
+import model.Authentication;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
@@ -19,6 +21,7 @@ public class Console implements IView {
 	private Registry registry;
 	private final String quitSequence = "q";
 	private final String returnSequence = "r";
+	private Authentication auth = new Authentication();
 
 	public Console() {
 		input = "";
@@ -51,6 +54,8 @@ public class Console implements IView {
 			System.out.println("1: DISPLAY COMPACT LIST");
 			System.out.println("2: DISPLAY VERBOSE LIST");
 			System.out.println("3: CREATE A MEMBER");
+			if(!auth.isLoggedIn())
+				System.out.println("4: LOG-IN");
 			System.out.print(quitSequence + ": QUIT\n>");
 
 			input = scan.next();
@@ -74,6 +79,13 @@ public class Console implements IView {
 				getMemberPersonalnumberFromUser();
 				registerMember(memberName, memberPN);
 				break;
+			case("4"):
+				if(!auth.isLoggedIn())
+					getLoginFromUser();
+				else
+					System.out.println("INVALID OPTION");
+				break;
+				
 			case (quitSequence):
 				quitProgram();
 				break;
@@ -161,7 +173,11 @@ public class Console implements IView {
 
 	@Override
 	public void logIn(String username, String password) {
-		// TODO Auto-generated method stub
+		auth.logIn(username, password);
+		if(auth.isLoggedIn())
+			displaySuccess("LOG IN SUCCESSFUL");
+		else
+			displaySuccess("LOG IN FAILED");
 		
 	}
 	
@@ -183,6 +199,26 @@ public class Console implements IView {
 			System.out.print(quitSequence + ": QUIT\n>");
 
 			input = scan.next();
+			if(input.compareToIgnoreCase(returnSequence)!=0 && input.compareToIgnoreCase(quitSequence)!=0)
+			{
+				if(!auth.isLoggedIn()){
+					System.out.println("LOG IN TO PERFORM FURTHER COMMANDS.");
+					System.out.print("PROCEED TO LOG IN? (Y/N)\n>");
+					String logincommand = scan.next();
+					
+					if(logincommand.compareToIgnoreCase("y")==0)
+						getLoginFromUser();
+					else if(logincommand.compareToIgnoreCase("n")==0){
+						continue;
+					}
+					else
+						System.err.println("INVALID OPTION");
+						
+				}
+				if(!auth.isLoggedIn())
+					continue;
+			}
+			
 			switch (input) {
 			case ("1"):
 				getMemberNameFromUser();
@@ -215,6 +251,7 @@ public class Console implements IView {
 	}
 
 	private void displayUpdateMemberInstructions() {
+		
 		while (input != quitSequence) {
 			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: UPDATE NAME");
@@ -376,6 +413,15 @@ public class Console implements IView {
 				boattype = b;
 				return;
 			}
+	}
+	private void getLoginFromUser(){
+		System.out.print("USERNAME? >");
+		String username = scan.next();
+		System.out.print("PASSWORD? >");
+		String password = scan.next();
+			
+		this.logIn(username, password);
+			
 	}
 
 	private void getBoatIndexFromUser() {
