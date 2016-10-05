@@ -100,8 +100,32 @@ public class Registry {
 		}
 		return foundMembers;
 	}
-
-	public ArrayList<Member> complexSearch(Month month, int age) {
+	public ArrayList<Member> complexSearch(ArrayList<Member> cp1, ArrayList<Member> cp2, boolean isAnd) {
+		if (cp1.isEmpty() || cp2.isEmpty())
+			return new ArrayList<Member>();
+		
+		ArrayList<Member> foundMembers = new ArrayList<Member>();
+		if(isAnd){
+			for (int i = 0; i < cp1.size(); i++) {
+				if (cp2.indexOf(cp1.get(i)) != -1)
+					foundMembers.add(cp1.get(i));
+			}
+		}
+		else{
+			for(Member m : cp1){
+				if(foundMembers.indexOf(m)==-1)
+					foundMembers.add(m);
+				
+			}
+			for(Member m : cp2){
+				if(foundMembers.indexOf(m)==-1)
+					foundMembers.add(m);
+				
+			}
+		}
+		return foundMembers;
+	}
+	/*public ArrayList<Member> complexSearch(Month month, int age) {
 		ArrayList<Member> monthSearch = simpleSearch(month);
 		ArrayList<Member> ageSearch = simpleSearch(age);
 		if (monthSearch.isEmpty() || ageSearch.isEmpty())
@@ -112,7 +136,7 @@ public class Registry {
 				foundMembers.add(monthSearch.get(i));
 		}
 		return foundMembers;
-	}
+	}*/
 
 	public void saveRegistry() {
 		readWriteFile.writeFile(memberList, maxID);
