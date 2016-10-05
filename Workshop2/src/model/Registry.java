@@ -101,9 +101,6 @@ public class Registry {
 		return foundMembers;
 	}
 	public ArrayList<Member> complexSearch(ArrayList<Member> cp1, ArrayList<Member> cp2, boolean isAnd) {
-		if (cp1.isEmpty() || cp2.isEmpty())
-			return new ArrayList<Member>();
-		
 		ArrayList<Member> foundMembers = new ArrayList<Member>();
 		if(isAnd){
 			for (int i = 0; i < cp1.size(); i++) {
