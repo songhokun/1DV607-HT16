@@ -1,8 +1,9 @@
 package view;
 
+import java.util.ArrayList;
 import model.Boat;
-import model.Member;
 import model.Boat.BoatType;
+import model.Member;
 
 public interface IView {
 
@@ -12,9 +13,9 @@ public interface IView {
 
 	void displayMainInstructions();
 
-	void displayCompactList();
+	void displayCompactList(ArrayList<Member> m);
 
-	void displayVerboseList();
+	void displayVerboseList(ArrayList<Member> m);
 	
 	void registerMember(String name, String personalnumber);
 
@@ -35,6 +36,8 @@ public interface IView {
 	void displaySuccess(String success);
 	
 	void logIn(String username, String password);
+	
+	void simpleSearch(Object o);
 	
 	void quitProgram();
 }

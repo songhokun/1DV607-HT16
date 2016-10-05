@@ -1,10 +1,13 @@
 package view;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,7 +68,7 @@ public class GUI implements Initializable, IView {
 	private Registry registry;
 	private Authentication authentication;
 
-	
+
 	public GUI() {
 		authentication = new Authentication();
 		try {
@@ -73,24 +76,24 @@ public class GUI implements Initializable, IView {
 		} catch (Exception e) {
 		}
 	}
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		startProgram();
-		memberPN.setPromptText("YYMMDDXXXX");
+		memberPN.setPromptText("YYYYMMDDXXXX");
 		memberName.setPromptText("Eg: John Smith");
 		boatLength.setPromptText("Eg: 14.65");
-		compactListButton.setOnAction(e -> displayCompactList());
-		verboListButton.setOnAction(e -> displayVerboseList());
+		compactListButton.setOnAction(e -> displayCompactList(registry.getMemberList()));
+		verboListButton.setOnAction(e -> displayVerboseList(registry.getMemberList()));
 		createMemberButton.setDisable(!authentication.isLoggedIn());
 		createMemberButton.setOnAction(e -> registerMember(memberName.getText(), memberPN.getText()));
 		closeBoatListButton.setOnAction(e -> changeView());
 		logInButton.setOnAction(e -> logIn("", ""));
 	}
-	
+
 	@Override
 	public void startProgram() {
-		displayWelcomeMessage();	
+		displayWelcomeMessage();
 		displayMainInstructions();
 	}
 
@@ -105,16 +108,16 @@ public class GUI implements Initializable, IView {
 		verboListButton.setVisible(true);
 		createMemberButton.setVisible(true);
 	}
-	
+
 	@Override
-	public void displayCompactList() {
+	public void displayCompactList(ArrayList<Member> m) {
 		setMemberTable(registry.getMemberList());
 		memberPersonalnumberColumn.setVisible(false);
 		memberBoatsInformationColumn.setVisible(false);
 	}
 
 	@Override
-	public void displayVerboseList() {
+	public void displayVerboseList(ArrayList<Member> m) {
 		setMemberTable(registry.getMemberList());
 		memberPersonalnumberColumn.setVisible(true);
 		memberBoatsInformationColumn.setVisible(true);
@@ -124,29 +127,27 @@ public class GUI implements Initializable, IView {
 	public void registerMember(String name, String personalnumber) {
 		memberName.clear();
 		memberPN.clear();
-		Alert alert =  new Alert(AlertType.NONE);
+		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if(checkName(memberName) && checkPN(memberPN)){
+			if (checkName(memberName) && checkPN(memberPN)) {
 				registry.createMember(memberName.getText(), memberPN.getText());
 				displaySuccess("Member Registered !!");
 				registry.saveRegistry();
 				setMemberTable(registry.getMemberList());
-			}
-			else{
-				if(memberName.getText().isEmpty() || memberPN.getText().isEmpty())
+			} else {
+				if (memberName.getText().isEmpty() || memberPN.getText().isEmpty())
 					displayError("Please fill all the required(*) fields.");
-				else if(!checkName(memberName))
+				else if (!checkName(memberName))
 					displayError("Please fill the correct name. Eg: John Smith!!");
-				else 
+				else
 					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
 			}
-		}
-		else
+		} else
 			alert.close();
 	}
 
@@ -154,43 +155,40 @@ public class GUI implements Initializable, IView {
 	public void updateMember(Member m, String name, String personalnumber) {
 		memberName.setText(name);
 		memberPN.setText(personalnumber);
-		Alert alert =  new Alert(AlertType.NONE);
+		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if(checkName(memberName) && checkPN(memberPN)){
+			if (checkName(memberName) && checkPN(memberPN)) {
 				registry.updateMember(m, memberName.getText(), memberPN.getText());
 				displaySuccess("Member Updated !!");
 				registry.saveRegistry();
 				setMemberTable(registry.getMemberList());
-			}
-			else{
-				if(memberName.getText().isEmpty() || memberPN.getText().isEmpty())
+			} else {
+				if (memberName.getText().isEmpty() || memberPN.getText().isEmpty())
 					displayError("Please fill all the required(*) fields.");
-				else if(!checkName(memberName))
+				else if (!checkName(memberName))
 					displayError("Please fill the correct name. Eg: John Smith!!");
-				else 
+				else
 					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
 			}
-		}
-		else 
+		} else
 			alert.close();
 	}
 
 	@Override
 	public void deleteMember(Member m) {
-		Alert alert =  new Alert(AlertType.CONFIRMATION, "Are you sure?");
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			registry.deleteMember(m);
 			displaySuccess("Member Deleted !!");
 			registry.saveRegistry();
 			setMemberTable(registry.getMemberList());
-		}
-		else 
+		} else
 			alert.close();
 	}
 
@@ -201,36 +199,34 @@ public class GUI implements Initializable, IView {
 		verboListButton.setVisible(false);
 		createMemberButton.setVisible(false);
 		setBoatTable(m);
-		boatTablePane.setVisible(true);	
+		boatTablePane.setVisible(true);
 		addBoatButton.setDisable(!authentication.isLoggedIn());
 		addBoatButton.setOnAction(e -> registerBoat(m, 0, null));
 	}
-	
+
 	@Override
 	public void registerBoat(Member m, double boatLength, BoatType boattype) {
 		this.boatLength.clear();
 		boatTypeChoiceBox.getSelectionModel().select(BoatType.Sailboat);
-		Alert alert =  new Alert(AlertType.NONE);
+		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Register Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)*"), this.boatLength , new Label("Type*"), null, boatTypeChoiceBox));
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)*"), this.boatLength, new Label("Type*"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if(checkLength(this.boatLength)){
+			if (checkLength(this.boatLength)) {
 				registry.registerBoat(m, Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
 				displaySuccess("Boat Registerd !!");
 				registry.saveRegistry();
 				setBoatTable(m);
-			}
-			else{
-				if(this.boatLength.getText().isEmpty())
+			} else {
+				if (this.boatLength.getText().isEmpty())
 					displayError("Length field is empty!!");
-				else 	
+				else
 					displayError("Please fill the correct boat length. Eg: 14.23");
 			}
-		}
-		else
+		} else
 			alert.close();
 	}
 
@@ -238,40 +234,38 @@ public class GUI implements Initializable, IView {
 	public void updateBoat(double length, BoatType type, Boat boat) {
 		boatLength.setText("" + length);
 		boatTypeChoiceBox.getSelectionModel().select(type);
-		Alert alert =  new Alert(AlertType.NONE);
+		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), boatLength , new Label("Type"), null, boatTypeChoiceBox));
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), boatLength, new Label("Type"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if(checkLength(boatLength)){
+			if (checkLength(boatLength)) {
 				registry.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 				displaySuccess("Boat Updated !!");
 				registry.saveRegistry();
 				boatTable.refresh();
-			}
-			else{
-				if(this.boatLength.getText().isEmpty())
+			} else {
+				if (this.boatLength.getText().isEmpty())
 					displayError("Length field is empty!!");
-				else 	
+				else
 					displayError("Please fill the correct boat length. Eg: 14.23");
 			}
-		}
-		else alert.close();
+		} else
+			alert.close();
 	}
-	
+
 	@Override
 	public void deleteBoat(Member m, Boat b) {
-		Alert alert =  new Alert(AlertType.CONFIRMATION, "Are you sure?");
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			registry.deleteBoat(m, b);
 			displaySuccess("Boat Deleted !!");
 			registry.saveRegistry();
-			setBoatTable(m); 
-		}
-		else 
+			setBoatTable(m);
+		} else
 			alert.close();
 	}
 
@@ -288,30 +282,33 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public void logIn(String username, String password){
+	public void logIn(String username, String password) {
 		TextField usernameField = new TextField();
 		PasswordField passwordField = new PasswordField();
-		Alert alert =  new Alert(AlertType.NONE);
+		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Log In");
 		alert.getButtonTypes().add(new ButtonType("Login"));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
-		alert.getDialogPane().setContent(createDialogeBox(new Label("Username"), usernameField , new Label("Password"), passwordField, null));
+		alert.getDialogPane().setContent(createDialogeBox(new Label("Username"), usernameField, new Label("Password"), passwordField, null));
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == alert.getButtonTypes().get(0)) { 	//index 0 of a button refers  to the log-in button.
-				authentication.logIn(usernameField.getText(), passwordField.getText());
-				if(authentication.isLoggedIn()){
-					displaySuccess("Logged in successfully!!");
-					memberTable.refresh();
-					boatTable.refresh();
-					createMemberButton.setDisable(false);
-					addBoatButton.setDisable(false);
-					logInButton.setDisable(true);
-				}	
-				else
-					displayError("Please check the username and password!!");
-			}
-		else 
+		if (result.get() == alert.getButtonTypes().get(0)) { // index 0 is login button
+			authentication.logIn(usernameField.getText(), passwordField.getText());
+			if (authentication.isLoggedIn()) {
+				displaySuccess("Logged in successfully!!");
+				memberTable.refresh();
+				boatTable.refresh();
+				createMemberButton.setDisable(false);
+				addBoatButton.setDisable(false);
+				logInButton.setDisable(true);
+			} else
+				displayError("Please check the username and password!!");
+		} else
 			alert.close();
+	}
+
+	@Override
+	public void simpleSearch(Object o){
+		
 	}
 	
 	@Override
@@ -319,8 +316,7 @@ public class GUI implements Initializable, IView {
 		registry.saveRegistry();
 	}
 
-/**********************FOR CREATING VIEW*****************************************************************/
-	
+	/********************************** FOR CREATING VIEW ************************/
 	private void changeView() {
 		boatTablePane.setVisible(false);
 		compactListButton.setVisible(true);
@@ -329,8 +325,8 @@ public class GUI implements Initializable, IView {
 		setMemberTable(registry.getMemberList());
 		memberTable.setVisible(true);
 	}
-	
-	private GridPane createDialogeBox(Label l1, TextField first, Label l2, TextField second, ChoiceBox<BoatType> box){
+
+	private GridPane createDialogeBox(Label l1, TextField first, Label l2, TextField second, ChoiceBox<BoatType> box) {
 		GridPane pane = new GridPane();
 		pane.setHgap(10);
 		pane.setVgap(10);
@@ -338,12 +334,13 @@ public class GUI implements Initializable, IView {
 		pane.add(l1, 0, 0);
 		pane.add(first, 1, 0);
 		pane.add(l2, 0, 1);
-		if(second == null)
-		pane.add(box, 1, 1);
-		else pane.add(second, 1, 1);
+		if (second == null)
+			pane.add(box, 1, 1);
+		else
+			pane.add(second, 1, 1);
 		return pane;
 	}
-	
+
 	private void setBoatTable(Member member) {
 		ObservableList<Boat> data = FXCollections.observableArrayList(member.getBoatList());
 		boatLengthColumn.setCellValueFactory(new PropertyValueFactory<Boat, String>("length"));
@@ -384,8 +381,8 @@ public class GUI implements Initializable, IView {
 		});
 		boatTable.setItems(data);
 	}
-	
-	private void setMemberTable(ArrayList<Member> m){
+
+	private void setMemberTable(ArrayList<Member> m) {
 		ObservableList<Member> data = FXCollections.observableArrayList(m);
 		memberNameColumn.setCellValueFactory(new PropertyValueFactory<Member, String>("name"));
 		memberPersonalnumberColumn.setCellValueFactory(new PropertyValueFactory<Member, String>("personalnumber"));
@@ -445,8 +442,8 @@ public class GUI implements Initializable, IView {
 		memberTable.setItems(data);
 		memberTable.setVisible(true);
 	}
-	
-/******************FOR CHECKING INPUT*************************************************/	
+
+	/*************************** FOR CHECKING INPUT *************************************************/
 	private boolean checkLength(TextField length) {
 		try {
 			if (Double.parseDouble(length.getText()) <= 0)
@@ -458,9 +455,9 @@ public class GUI implements Initializable, IView {
 	}
 
 	private boolean checkName(TextField name) {
-		boolean charexists = false;
 		if (name.getText().isEmpty())
 			return false;
+		boolean charexists = false;
 		for (int i = 0; i < name.getText().length(); i++) {
 			char c = name.getText().charAt(i);
 			if (Character.isAlphabetic(c))
@@ -471,11 +468,14 @@ public class GUI implements Initializable, IView {
 		return charexists;
 	}
 
-	private boolean checkPN(TextField name) {
-		if (name.getText().length() != 10)
+	private boolean checkPN(TextField personalnumber) {
+		if (personalnumber.getText().length() != 12 || personalnumber.getText().isEmpty())
 			return false;
 		try {
-			Long.parseLong(name.getText());
+			String pn = personalnumber.getText().substring(0, 8);
+			DateFormat df = new SimpleDateFormat("yyyyMMdd");
+			df.setLenient(false);
+			df.parse(pn);
 			return true;
 		} catch (Exception e) {
 			return false;

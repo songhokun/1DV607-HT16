@@ -1,13 +1,17 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Member {
-	
+
 	private String name;
 	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatList = new ArrayList<Boat>();
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd");
 
 	public Member() {
 
@@ -52,7 +56,23 @@ public class Member {
 		return this.memberID;
 	}
 
-	public Boat lookUpBoat(int index){
+	public int getBirthYear() {
+		return LocalDate.parse(personalnumber.substring(0, 8), formatter).getYear();
+	}
+
+	public int getBirthMonth() {
+		return LocalDate.parse(personalnumber.substring(0, 8), formatter).getMonthValue();
+	}
+
+	public int getBirthDate() {
+		return LocalDate.parse(personalnumber.substring(0, 8), formatter).getDayOfMonth();
+	}
+
+	public int getAge() {
+		return Year.now().getValue() - getBirthYear();
+	}
+
+	public Boat lookUpBoat(int index) {
 		return this.boatList.get(index);
 	}
 }
