@@ -9,7 +9,7 @@ public class Registry {
 	private ArrayList<Member> memberList;
 	private ReadWriteFile readWriteFile;
 	private int maxID = 0;
-	public enum SimpleSearchMode {ByName, OlderThanAge, ByMonth, ByBoatType, GreaterThanBoatLength};
+	public enum SimpleSearchMode {BY_NAME, OLD_THAN_AGE, BY_MONTH, BY_BOAT_TYPE, GRT_THAN_BOAT_LENGTH};
 	
 	public Registry() throws Exception {
 		readWriteFile = new ReadWriteFile();
@@ -126,16 +126,6 @@ public class Registry {
 		return foundMembers;
 	}
 	
-	/*
-	 * public ArrayList<Member> complexSearch(Month month, int age) {
-	 * ArrayList<Member> monthSearch = simpleSearch(month); ArrayList<Member>
-	 * ageSearch = simpleSearch(age); if (monthSearch.isEmpty() ||
-	 * ageSearch.isEmpty()) return new ArrayList<Member>(); ArrayList<Member>
-	 * foundMembers = new ArrayList<Member>(); for (int i = 0; i <
-	 * monthSearch.size(); i++) { if (ageSearch.indexOf(monthSearch.get(i)) !=
-	 * -1) foundMembers.add(monthSearch.get(i)); } return foundMembers; }
-	 */
-
 	public void saveRegistry() {
 		readWriteFile.writeFile(memberList, maxID);
 	}

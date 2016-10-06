@@ -1,7 +1,6 @@
 package view;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Month;
 import java.util.ArrayList;
@@ -34,9 +33,7 @@ public class Console implements IView {
 		try {
 			registry = new Registry();
 		} catch (Exception e) {
-			displayError("WE HAD ERROR IN READING FILE");
-			displayError(e.getLocalizedMessage());
-			
+
 		}
 	}
 
@@ -60,14 +57,8 @@ public class Console implements IView {
 			System.out.println("1: DISPLAY COMPACT LIST");
 			System.out.println("2: DISPLAY VERBOSE LIST");
 			System.out.println("3: CREATE A MEMBER");
-<<<<<<< HEAD
-			System.out.println("4: SIMPLE SEARCH A MEMBER");
-			System.out.println("5: COMPLEX SEARCH A MEMBER");
-	
-=======
 			System.out.println("4: SIMPLE SEARCH");
 			System.out.println("5: COMPLEX SEARCH");
->>>>>>> 3ae8068d9bc18f6d6165870af6b0c87733c987d5
 			if (!authentication.isLoggedIn())
 				System.out.println("6: LOG IN");
 			System.out.print(quitSequence + ": QUIT\n>");
@@ -75,42 +66,8 @@ public class Console implements IView {
 			input = scan.next();
 			if (!authentication.isLoggedIn() && input.equals("3")) {
 				displayError("ACCESS DENIED!! PLEASE LOG IN");
-				continue;
+				displayMainInstructions();
 			}
-<<<<<<< HEAD
-			try{
-				switch (input) {
-				case ("1"):
-					displayCompactList(registry.getMemberList());
-					displayMemberInstructions();
-					break;
-				case ("2"):
-					displayVerboseList(registry.getMemberList());
-					displayMemberInstructions();
-					break;
-				case ("3"):
-					getMemberNameFromUser();
-					getMemberPersonalnumberFromUser();
-					registerMember(memberName, memberPN);
-					break;
-				case ("4"):
-					displaySimpleSearchInstructions(true);
-					break;
-				case ("5"):
-					displayComplexSearchInstructions();
-					break;
-					
-				case ("6"):
-					if (!authentication.isLoggedIn())
-						logIn(getUsernameFromUser(), getPasswordFromUser());
-					else
-						displayError("INVALID OPTION");
-					break;
-				case (quitSequence):
-					quitProgram();
-					break;
-				default:
-=======
 
 			switch (input) {
 			case ("1"):
@@ -136,16 +93,14 @@ public class Console implements IView {
 				if (!authentication.isLoggedIn())
 					logIn(getUsernameFromUser(), getPasswordFromUser());
 				else
->>>>>>> 3ae8068d9bc18f6d6165870af6b0c87733c987d5
 					displayError("INVALID OPTION");
-					break;
-				}
-			}
-			catch(NumberFormatException e){
-				displayError("ENTER NUMBER! "+e.getLocalizedMessage());
-			}
-			catch(ParseException e){
-				displayError("ERRNEOUS INPUT! " + e.getLocalizedMessage());	
+				break;
+			case (quitSequence):
+				quitProgram();
+				break;
+			default:
+				displayError("INVALID OPTION");
+				break;
 			}
 		}
 	}
@@ -154,6 +109,7 @@ public class Console implements IView {
 	public void displayCompactList(ArrayList<Member> m) {
 		if (m.isEmpty()) {
 			displayError("LIST IS EMPTY");
+			displayMainInstructions();
 			return;
 		}
 		System.out.println("+ ID |  NAME OF A MEMBER  | TOTAL BOATS +");
@@ -166,6 +122,7 @@ public class Console implements IView {
 	public void displayVerboseList(ArrayList<Member> m) {
 		if (m.isEmpty()) {
 			displayError("LIST IS EMPTY");
+			displayMainInstructions();
 			return;
 		}
 		for (Member member : m) {
@@ -245,23 +202,13 @@ public class Console implements IView {
 	@Override
 	public void simpleSearch(Object o) {
 		searchedMemberList = registry.simpleSearch(o);
+		if (!searchedMemberList.isEmpty()) {
+			displaySuccess(searchedMemberList.size() + " RESULT(S) FOUND");
+			displayVerboseList(searchedMemberList);
+			displayMemberInstructions();
+		} else
+			displayError("NO RESULT FOUND");
 	}
-
-<<<<<<< HEAD
-	public void complexSearch(ArrayList<Member> previousResult, boolean isAnd) {
-		searchedMemberList = registry.complexSearch(previousResult, searchedMemberList, isAnd);
-	}
-=======
-	// public void complexSearch(Month m, int age) {
-	// searchedMemberList = registry.complexSearch(m, age);
-	// if (!searchedMemberList.isEmpty()) {
-	// displaySuccess(searchedMemberList.size() + " RESULT(S) FOUND");
-	// displayVerboseList(searchedMemberList);
-	// displayMemberInstructions();
-	// } else
-	// displayError("NO RESULT FOUND");
-	// }
->>>>>>> 3ae8068d9bc18f6d6165870af6b0c87733c987d5
 
 	@Override
 	public void quitProgram() {
@@ -272,6 +219,8 @@ public class Console implements IView {
 
 	/***************** CONSOLE NAVIGATION *********************************/
 	private void displayMemberInstructions() {
+		if (registry.getMemberList().isEmpty())
+			return;
 		while (input != quitSequence || input != returnSequence) {
 			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: CREATE A MEMBER");
@@ -288,54 +237,45 @@ public class Console implements IView {
 				displayError("ACCESS DENIED!! PLEASE LOG IN");
 				continue;
 			}
-			try{
-				switch (input) {
-				case ("1"):
-					getMemberNameFromUser();
-					getMemberPersonalnumberFromUser();
-					registerMember(memberName, memberPN);
-					displayCompactList(registry.getMemberList());
-					break;
-				case ("2"):
-					getMemberIDFromUser();
-					displaySelectedMember(registry.lookUpMember(memberID));
-					displayUpdateMemberInstructions();
-					displayCompactList(registry.getMemberList());
-					break;
-				case ("3"):
-					getMemberIDFromUser();
-					deleteMember(registry.lookUpMember(memberID));
-					displayCompactList(registry.getMemberList());
-					break;
-				case ("4"):
-					if (!authentication.isLoggedIn()) {
-						logIn(getUsernameFromUser(), getPasswordFromUser());
-						if (!searchedMemberList.isEmpty())
-							displayVerboseList(searchedMemberList);
-						else
-							displayCompactList(registry.getMemberList());
-					} else
-						displayError("INVALID OPTION");
-					break;
-				case (returnSequence):
-					displayMainInstructions();
-					break;
-				case (quitSequence):
-					quitProgram();
-					break;
-				default:
+
+			switch (input) {
+			case ("1"):
+				getMemberNameFromUser();
+				getMemberPersonalnumberFromUser();
+				registerMember(memberName, memberPN);
+				displayCompactList(registry.getMemberList());
+				break;
+			case ("2"):
+				getMemberIDFromUser();
+				displaySelectedMember(registry.lookUpMember(memberID));
+				displayUpdateMemberInstructions();
+				displayCompactList(registry.getMemberList());
+				break;
+			case ("3"):
+				getMemberIDFromUser();
+				deleteMember(registry.lookUpMember(memberID));
+				displayCompactList(registry.getMemberList());
+				break;
+			case ("4"):
+				if (!authentication.isLoggedIn()) {
+					logIn(getUsernameFromUser(), getPasswordFromUser());
+					if (!searchedMemberList.isEmpty())
+						displayVerboseList(searchedMemberList);
+					else
+						displayCompactList(registry.getMemberList());
+				} else
 					displayError("INVALID OPTION");
-					break;
-				}
+				break;
+			case (returnSequence):
+				displayMainInstructions();
+				break;
+			case (quitSequence):
+				quitProgram();
+				break;
+			default:
+				displayError("INVALID OPTION");
+				break;
 			}
-			catch(NumberFormatException e){
-				displayError("ENTER NUMBER! "+e.getLocalizedMessage());
-			}
-			catch(ParseException e){
-				displayError("ERRNEOUS INPUT! " + e.getLocalizedMessage());	
-			}
-			
-			
 		}
 	}
 
@@ -352,60 +292,48 @@ public class Console implements IView {
 			System.out.print(quitSequence + ": QUIT \n>");
 
 			input = scan.next();
-			try{
-				switch (input) {
-				case ("1"):
-					getMemberNameFromUser();
-					updateMember(registry.lookUpMember(memberID), memberName, "");
-					displaySelectedMember(registry.lookUpMember(memberID));
-					break;
-				case ("2"):
-					getMemberPersonalnumberFromUser();
-					updateMember(registry.lookUpMember(memberID), "", memberPN);
-					displaySelectedMember(registry.lookUpMember(memberID));
-					break;
-				case ("3"):
-					getMemberNameFromUser();
-					getMemberPersonalnumberFromUser();
-					updateMember(registry.lookUpMember(memberID), memberName, memberPN);
-					displaySelectedMember(registry.lookUpMember(memberID));
-					break;
-				case ("4"):
-					getBoatLengthFromUser();
-					getBoatTypeFromUser();
-					registerBoat(registry.lookUpMember(memberID), boatLength, boattype);
-					displaySelectedMember(registry.lookUpMember(memberID));
-					break;
-				case ("5"):
-					getBoatIndexFromUser();
-					displayUpdateBoatInstructions();
-					break;
-				case ("6"):
-					getBoatIndexFromUser();
-					deleteBoat(registry.lookUpMember(memberID), registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
-					displaySelectedMember(registry.lookUpMember(memberID));
-					break;
-				case (returnSequence):
-					displayCompactList(registry.getMemberList());
-					displayMemberInstructions();
-					break;
-				case (quitSequence):
-					quitProgram();
-					break;
-				default:
-					displayError("INVALID OPTION");
-					break;
-				}
-			}
-			catch(NumberFormatException e){
-				displayError("ENTER NUMBER! "+e.getLocalizedMessage());
-			}
-			catch(ParseException e){
-				displayError("ERRNEOUS INPUT! " + e.getLocalizedMessage());
-				
-			}
-			catch(IndexOutOfBoundsException e){
-				displayError(e.getLocalizedMessage());
+			switch (input) {
+			case ("1"):
+				getMemberNameFromUser();
+				updateMember(registry.lookUpMember(memberID), memberName, "");
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("2"):
+				getMemberPersonalnumberFromUser();
+				updateMember(registry.lookUpMember(memberID), "", memberPN);
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("3"):
+				getMemberNameFromUser();
+				getMemberPersonalnumberFromUser();
+				updateMember(registry.lookUpMember(memberID), memberName, memberPN);
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("4"):
+				getBoatLengthFromUser();
+				getBoatTypeFromUser();
+				registerBoat(registry.lookUpMember(memberID), boatLength, boattype);
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case ("5"):
+				getBoatIndexFromUser();
+				displayUpdateBoatInstructions();
+				break;
+			case ("6"):
+				getBoatIndexFromUser();
+				deleteBoat(registry.lookUpMember(memberID), registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+				displaySelectedMember(registry.lookUpMember(memberID));
+				break;
+			case (returnSequence):
+				displayCompactList(registry.getMemberList());
+				displayMemberInstructions();
+				break;
+			case (quitSequence):
+				quitProgram();
+				break;
+			default:
+				displayError("INVALID OPTION");
+				break;
 			}
 		}
 
@@ -425,26 +353,26 @@ public class Console implements IView {
 			getBoatLengthFromUser();
 			updateBoat(boatLength, null, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-			//displayUpdateMemberInstructions();
+		//	displayUpdateMemberInstructions();
 			break;
 		case ("2"):
 			getBoatTypeFromUser();
 			updateBoat(0, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-			//displayUpdateMemberInstructions();
+		//	displayUpdateMemberInstructions();
 			break;
 		case ("3"):
 			getBoatLengthFromUser();
 			getBoatTypeFromUser();
 			updateBoat(boatLength, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-			//displayUpdateMemberInstructions();
+		//	displayUpdateMemberInstructions();
 			break;
 		case (returnSequence):
 			displaySelectedMember(registry.lookUpMember(memberID));
 			displayUpdateMemberInstructions();
 			displaySelectedMember(registry.lookUpMember(memberID));
-			//displayUpdateMemberInstructions();
+		//	displayUpdateMemberInstructions();
 			break;
 		case (quitSequence):
 			quitProgram();
@@ -454,70 +382,7 @@ public class Console implements IView {
 			break;
 		}
 	}
-	private void displaySimpleSearchInstructions(boolean isPrintingResult){
-		input = scan.next();
-		try{
-			while (input != quitSequence) {
-				System.out.println("\nSELECT THE OPTION");
-				System.out.println("1: " + SimpleSearchMode.ByName);
-				System.out.println("2: " + SimpleSearchMode.OlderThanAge);
-				System.out.println("3: " + SimpleSearchMode.GreaterThanBoatLength);
-				System.out.println("4: " + SimpleSearchMode.ByMonth);
-				System.out.println("5: " + SimpleSearchMode.ByBoatType);
-				System.out.println(returnSequence+": RETURN");
-				System.out.println(quitSequence+": QUIT");
 
-				input = scan.next();
-
-				switch (input) {
-				case ("1"):
-					getMemberNameFromUser();
-					simpleSearch(input);
-					break;
-				case ("2"):
-					getSearchAgeFromUser();
-					simpleSearch(input);
-					break;
-				case ("3"):
-					getBoatLengthFromUser();
-					simpleSearch(input);
-					break;
-				case ("4"):
-					getSearchMonthFromUser();
-					simpleSearch(input);
-					break;
-				case ("5"):
-					getBoatTypeFromUser();
-					simpleSearch(boattype);
-					break;
-				case (returnSequence):
-					displayMainInstructions();
-					break;
-				case (quitSequence):
-					quitProgram();
-					break;
-				default:
-					displayError("INVALID OPTION");
-					break;
-				}
-			}
-
-<<<<<<< HEAD
-		}catch(NumberFormatException e){
-			displayError("INCORRECT INPUT. ENTER NUMBER! "+e.getLocalizedMessage());
-			return;
-		}
-		
-		if(isPrintingResult){
-			if (!searchedMemberList.isEmpty()) {
-				displaySuccess(searchedMemberList.size() + " RESULT(S) FOUND");
-				displayVerboseList(searchedMemberList);
-				displayMemberInstructions();
-			} else
-				displayError("NO RESULT FOUND");
-		}
-	}
-=======
 	// NEED TO FIX. NOT WORKING SO FAR
 	private void displayComplexSearchInstructions() {
 		System.out.println("\nNOT WORKING YET");
@@ -526,50 +391,32 @@ public class Console implements IView {
 		System.out.println("2: MEMBER NAME STARTS WITH CERTAIN CHARACTERS AND OLDER THAN CERTAIN AGE");
 		System.out.println(returnSequence + ": RETURN");
 		System.out.print(quitSequence + ": QUIT\n>");
->>>>>>> 3ae8068d9bc18f6d6165870af6b0c87733c987d5
 
-	private void displayComplexSearchInstructions() {
-		ArrayList<Member> previousResult = new ArrayList<Member>(registry.getMemberList());
-		boolean isAnd=true;
-		
-		while(true){
-			
-			System.out.println("PERFORMING COMPLEX SEARCH");
-			displaySimpleSearchInstructions(false);
-			complexSearch(previousResult, isAnd);
-			previousResult = searchedMemberList;
-			System.out.println("ENTER OR / AND TO OPERATE FURTHER SEARCH");
-			System.out.print("ENTER ANYTHING ELSE TO FINISH SEARCH\n>");
-			input = scan.next();
-			
-			if(input.compareToIgnoreCase("AND")==0){
-				isAnd=true;
-			}
-			else if(input.compareToIgnoreCase("OR")==0)
-				isAnd=false;
-			else
-				break;
-					
-		}
-		if (!previousResult.isEmpty()) {
-			displaySuccess(previousResult.size() + " RESULT(S) FOUND");
-			displayVerboseList(previousResult);
-		}
-		else{
-			displayError("NO RESULT FOUND");
+		input = scan.next();
+		switch (input) {
+		case ("1"):
+			getSearchMonthFromUser();
+			getSearchAgeFromUser();
+			break;
+		case ("2"):
+			break;
+		case (returnSequence):
+			displayMainInstructions();
+			break;
+		case (quitSequence):
+			quitProgram();
+			break;
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	private void displaySimpleSearchInstructions() {
 		while (input != quitSequence) {
 			System.out.println("\nSELECT THE OPTION");
-			System.out.println("1: " + SimpleSearchMode.ByName);
-			System.out.println("2: " + SimpleSearchMode.OlderThanAge);
-			System.out.println("3: " + SimpleSearchMode.GreaterThanBoatLength);
-			System.out.println("4: " + SimpleSearchMode.ByMonth);
-			System.out.println("5: " + SimpleSearchMode.ByBoatType);
+			System.out.println("1: " + SimpleSearchMode.BY_NAME);
+			System.out.println("2: " + SimpleSearchMode.OLD_THAN_AGE);
+			System.out.println("3: " + SimpleSearchMode.GRT_THAN_BOAT_LENGTH);
+			System.out.println("4: " + SimpleSearchMode.BY_MONTH);
+			System.out.println("5: " + SimpleSearchMode.BY_BOAT_TYPE);
 			System.out.println("r: RETURN");
 			System.out.println("q: QUIT");
 
@@ -608,7 +455,6 @@ public class Console implements IView {
 			}
 		}
 	}
->>>>>>> 3ae8068d9bc18f6d6165870af6b0c87733c987d5
 
 	/***************************** CONSOLE INPUT DATA METHODS ************/
 	private void getMemberNameFromUser() {
@@ -621,23 +467,21 @@ public class Console implements IView {
 		memberName = input;
 	}
 
-	private void getMemberPersonalnumberFromUser() throws NumberFormatException, ParseException {
+	private void getMemberPersonalnumberFromUser() {
 		System.out.print("PERSONAL NUMBER (YYYYMMDDXXXX)\n>");
 		input = scan.next();
-		checkPersonalnumber(input);
-		/*
 		while (!checkPersonalnumber(input)) {
 			displayError("INCORRECT PERSONAL NUMBER!! PLEASE WRITE AGAIN");
 			input = scan.next();
 		}
-		*/
 		memberPN = input;
 	}
 
 	private void getMemberIDFromUser() {
-		if (registry.getMemberList().isEmpty())
-			throw new IndexOutOfBoundsException("List is empty!");
-		
+		if (registry.getMemberList().isEmpty()) {
+			displayError("LIST IS EMPTY");
+			displayMemberInstructions();
+		}
 		System.out.print("PLEASE TYPE THE MEMBER ID\n>");
 		input = scan.next();
 		while (!checkMemberID(input)) {
@@ -660,12 +504,10 @@ public class Console implements IView {
 	private void getBoatTypeFromUser() {
 		System.out.println("BOAT TYPE");
 		System.out.println("+ ID | Boat type +");
-		
 		for (BoatType b : BoatType.values())
 			System.out.printf("%5d|%11s|\n", b.getCode(), b.toString());
 		System.out.println("+----|-----------+");
 		System.out.print("\nENTER BOAT TYPE ID\n>");
-		
 		input = scan.next();
 		while (!checkBoatType(input, BoatType.values().length)) {
 			displayError("INVALID BOAT TYPE ID!! PLEASE WRITE AGAIN");
@@ -680,10 +522,10 @@ public class Console implements IView {
 
 	private void getBoatIndexFromUser() {
 		if (registry.lookUpMember(memberID).getNumberOfBoats() == 0) {
-			throw new IndexOutOfBoundsException("THIS MEMBER HAVE NO BOAT CURRENTLY");
-			//displaySelectedMember(registry.lookUpMember(memberID));
-			//displayUpdateMemberInstructions();
-			//return;
+			displayError("THIS MEMBER HAVE NO BOAT CURRENTLY");
+			displaySelectedMember(registry.lookUpMember(memberID));
+			displayUpdateMemberInstructions();
+			return;
 		}
 		System.out.print("PLEASE ENTER THE BOAT #\n>");
 		input = scan.next();
@@ -742,25 +584,37 @@ public class Console implements IView {
 		return charexists;
 	}
 
-	private boolean checkPersonalnumber(String personalnumber) throws ParseException, NumberFormatException {
-		if (personalnumber.length() != 12){
-			throw new NumberFormatException("INCORRECT PERSONAL NUMBER FORMAT");
+	private boolean checkPersonalnumber(String personalnumber) {
+		if (personalnumber.length() != 12)
+			return false;
+		try {
+			String pn = personalnumber.substring(0, 8);
+			DateFormat df = new SimpleDateFormat("yyyyMMdd");
+			df.setLenient(false);
+			df.parse(pn);
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
-		String pn = personalnumber.substring(0, 8);
-		DateFormat df = new SimpleDateFormat("yyyyMMdd");
-		df.setLenient(false);
-		df.parse(pn);
-		
-		return true;
 	}
 
 	private boolean checkMemberID(String input) {
-		return registry.lookUpMember(Integer.parseInt(input)) != null;
+		try {
+			if (registry.lookUpMember(Integer.parseInt(input)) == null)
+				return false;
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 	private boolean checkBoatLength(String length) {
-		if (Double.parseDouble(length) <= 0)
+		try {
+			if (Double.parseDouble(length) <= 0)
+				return false;
+		} catch (Exception e) {
 			return false;
+		}
 		return true;
 	}
 
@@ -776,19 +630,30 @@ public class Console implements IView {
 	}
 
 	private boolean checkBoatIndex(String input, Member m) {
-		if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getNumberOfBoats())
-			throw new IndexOutOfBoundsException("INCORRECT BOAT INDEX");
-	
+		try {
+			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getNumberOfBoats())
+				return false;
+		} catch (Exception e) {
+			return false;
+		}
 		return true;
 	}
 
 	private boolean checkSerachAge(String age) {
-		if (Integer.parseInt(age) > 0 && Integer.parseInt(age) <= 140)
-			return true;
+		try {
+			if (Integer.parseInt(age) > 0 && Integer.parseInt(age) <= 140)
+				return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 		return false;
 	}
 
 	private boolean checkMonth(String month) {
-		return Month.of(Integer.parseInt(month)) != null;
+		try {
+			return Month.of(Integer.parseInt(month)) != null;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

@@ -96,7 +96,7 @@ public class GUI implements Initializable, IView {
 		closeBoatListButton.setOnAction(e -> changeView());
 		logInButton.setOnAction(e -> logIn("", ""));
 		searchByChoiceBox.setItems(FXCollections.observableArrayList(SimpleSearchMode.values()));
-		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.ByName);
+		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.BY_NAME);
 		searchButton.setOnAction(e -> simpleSearch(searchField.getText()));
 		searchByChoiceBox.setOnAction(e -> showOtherSearchMode());
 	}
@@ -325,19 +325,19 @@ public class GUI implements Initializable, IView {
 		Object object = null;
 		try {
 			switch (searchByChoiceBox.getSelectionModel().getSelectedItem()) {
-			case OlderThanAge:
+			case OLD_THAN_AGE:
 				object = Integer.parseInt(searchField.getText());
 				break;
-			case GreaterThanBoatLength:
+			case GRT_THAN_BOAT_LENGTH:
 				object = Double.parseDouble(searchField.getText());
 				break;
-			case ByBoatType:
+			case BY_BOAT_TYPE:
 				object = searchByBoatType.getSelectionModel().getSelectedItem();
 				break;
-			case ByMonth:
+			case BY_MONTH:
 				object = searchByMonth.getSelectionModel().getSelectedItem();
 				break;
-			case ByName:
+			case BY_NAME:
 				object = searchField.getText();
 				break;
 			}
@@ -359,14 +359,14 @@ public class GUI implements Initializable, IView {
 
 	/********************************** FOR CREATING VIEW ************************/
 	private void showOtherSearchMode(){
-		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.ByBoatType) && memberTable.isVisible()){
+		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_TYPE) && memberTable.isVisible()){
 			searchByBoatType.setItems((FXCollections.observableArrayList(BoatType.values())));
 			searchByBoatType.getSelectionModel().select(BoatType.Sailboat);
 			searchField.setVisible(false);
 			searchByBoatType.setVisible(true);
 			searchByMonth.setVisible(false);
 		}
-		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.ByMonth) && memberTable.isVisible()){
+		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_MONTH) && memberTable.isVisible()){
 			searchByMonth.setItems((FXCollections.observableArrayList(Month.values())));
 			searchByMonth.getSelectionModel().select(Month.JANUARY);
 			searchField.setVisible(false);
@@ -385,11 +385,11 @@ public class GUI implements Initializable, IView {
 		compactListButton.setVisible(true);
 		verboListButton.setVisible(true);
 		createMemberButton.setVisible(true);
-		// setMemberTable(registry.getMemberList());
+		setMemberTable(registry.getMemberList());
 		memberTable.setVisible(true);
 		searchByChoiceBox.setVisible(true);
 		searchButton.setVisible(true);
-		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.ByBoatType))
+		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_TYPE))
 			searchByBoatType.setVisible(true);
 		else
 			searchField.setVisible(true);
