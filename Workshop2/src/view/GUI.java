@@ -3,8 +3,7 @@ package view;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-//import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -34,6 +33,7 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
+import model.Registry.SimpleSearchMode;
 
 public class GUI implements Initializable, IView {
 
@@ -60,10 +60,16 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Boat, String> boatTypeColumn;
 	@FXML private TableColumn<Boat, Boat> boatEditColumn;
 	@FXML private TableColumn<Boat, Boat> boatDeleteColumn;
-	private ChoiceBox <BoatType>boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
+	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
 	@FXML private Button addBoatButton;
 	@FXML private Button closeBoatListButton;	
 	private TextField boatLength = new TextField();
+	
+	@FXML private TextField searchField = new TextField();
+	@FXML private ChoiceBox <SimpleSearchMode> searchByChoiceBox;
+	@FXML private Button searchButton;
+	@FXML private ChoiceBox <BoatType> searchByBoatType;
+	@FXML private ChoiceBox <Month> searchByMonth;
 	
 	private Registry registry;
 	private Authentication authentication;
@@ -89,6 +95,10 @@ public class GUI implements Initializable, IView {
 		createMemberButton.setOnAction(e -> registerMember(memberName.getText(), memberPN.getText()));
 		closeBoatListButton.setOnAction(e -> changeView());
 		logInButton.setOnAction(e -> logIn("", ""));
+		searchByChoiceBox.setItems(FXCollections.observableArrayList(SimpleSearchMode.values()));
+		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.ByName);
+		searchButton.setOnAction(e -> simpleSearch(searchField.getText()));
+		searchByChoiceBox.setOnAction(e -> showOtherSearchMode());
 	}
 
 	@Override
@@ -99,7 +109,7 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void displayWelcomeMessage() {
-		welcomeText.setText("** WELCOME TO MEMBER REGISTERY PROGRAM **");
+		welcomeText.setText("WELCOME TO MEMBER REGISTERY PROGRAM");
 	}
 
 	@Override
@@ -198,6 +208,10 @@ public class GUI implements Initializable, IView {
 		compactListButton.setVisible(false);
 		verboListButton.setVisible(false);
 		createMemberButton.setVisible(false);
+		searchField.setVisible(false);
+		searchByBoatType.setVisible(false);
+		searchByChoiceBox.setVisible(false);
+		searchButton.setVisible(false);
 		setBoatTable(m);
 		boatTablePane.setVisible(true);
 		addBoatButton.setDisable(!authentication.isLoggedIn());
@@ -307,23 +321,78 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public void simpleSearch(Object o){
-		
+	public void simpleSearch(Object o) {
+		Object object = null;
+		try {
+			switch (searchByChoiceBox.getSelectionModel().getSelectedItem()) {
+			case OlderThanAge:
+				object = Integer.parseInt(searchField.getText());
+				break;
+			case GreaterThanBoatLength:
+				object = Double.parseDouble(searchField.getText());
+				break;
+			case ByBoatType:
+				object = searchByBoatType.getSelectionModel().getSelectedItem();
+				break;
+			case ByMonth:
+				object = searchByMonth.getSelectionModel().getSelectedItem();
+				break;
+			case ByName:
+				object = searchField.getText();
+				break;
+			}
+			ArrayList<Member> result = registry.simpleSearch(object);
+			if (!result.isEmpty()) {
+				displaySuccess(result.size() + " Result(s) Found!!");
+				setMemberTable(result);
+			} else
+				displayError("0 Result Found!!");
+		} catch (Exception e) {
+			displayError("Incorrect Data Type!!");
+		}
 	}
-	
+
 	@Override
 	public void quitProgram() {
 		registry.saveRegistry();
 	}
 
 	/********************************** FOR CREATING VIEW ************************/
+	private void showOtherSearchMode(){
+		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.ByBoatType) && memberTable.isVisible()){
+			searchByBoatType.setItems((FXCollections.observableArrayList(BoatType.values())));
+			searchByBoatType.getSelectionModel().select(BoatType.Sailboat);
+			searchField.setVisible(false);
+			searchByBoatType.setVisible(true);
+			searchByMonth.setVisible(false);
+		}
+		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.ByMonth) && memberTable.isVisible()){
+			searchByMonth.setItems((FXCollections.observableArrayList(Month.values())));
+			searchByMonth.getSelectionModel().select(Month.JANUARY);
+			searchField.setVisible(false);
+			searchByMonth.setVisible(true);
+			searchByBoatType.setVisible(false);
+		}
+		else {
+			searchField.setVisible(true);
+			searchByBoatType.setVisible(false);
+			searchByMonth.setVisible(false);
+		}
+	}
+	
 	private void changeView() {
 		boatTablePane.setVisible(false);
 		compactListButton.setVisible(true);
 		verboListButton.setVisible(true);
 		createMemberButton.setVisible(true);
-		setMemberTable(registry.getMemberList());
+		// setMemberTable(registry.getMemberList());
 		memberTable.setVisible(true);
+		searchByChoiceBox.setVisible(true);
+		searchButton.setVisible(true);
+		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.ByBoatType))
+			searchByBoatType.setVisible(true);
+		else
+			searchField.setVisible(true);
 	}
 
 	private GridPane createDialogeBox(Label l1, TextField first, Label l2, TextField second, ChoiceBox<BoatType> box) {
