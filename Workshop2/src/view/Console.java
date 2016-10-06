@@ -10,6 +10,7 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
+import model.Registry.SimpleSearchMode;
 
 public class Console implements IView {
 
@@ -56,13 +57,10 @@ public class Console implements IView {
 			System.out.println("1: DISPLAY COMPACT LIST");
 			System.out.println("2: DISPLAY VERBOSE LIST");
 			System.out.println("3: CREATE A MEMBER");
-			System.out.println("4: SEARCH BY NAME");
-			System.out.println("5: SEARCH BY OLDER THAN CERTAIN AGE");
-			System.out.println("6: SEARCH BY BORN IN A CERATAIN MONTH");
-			System.out.println("7: SEARCH BY CERTAIN BOAT TYPE");
-			System.out.println("8: SEARCH BY MEMBER BORN IN CERTAIN MONTH AND OLDER THAN CERTAIN AGE");
+			System.out.println("4: SIMPLE SEARCH");
+			System.out.println("5: COMPLEX SEARCH");
 			if (!authentication.isLoggedIn())
-				System.out.println("9: LOG IN");
+				System.out.println("6: LOG IN");
 			System.out.print(quitSequence + ": QUIT\n>");
 
 			input = scan.next();
@@ -86,27 +84,12 @@ public class Console implements IView {
 				registerMember(memberName, memberPN);
 				break;
 			case ("4"):
-				getMemberNameFromUser();
-				simpleSearch(input);
+				displaySimpleSearchInstructions();
 				break;
 			case ("5"):
-				getSearchAgeFromUser();
-				simpleSearch(Integer.parseInt(input));
+				displayComplexSearchInstructions();
 				break;
 			case ("6"):
-				simpleSearch(getSearchMonthFromUser());
-				break;
-			case ("7"):
-				getBoatTypeFromUser();
-				simpleSearch(boattype);
-				break;
-			case ("8"):
-				Month m = getSearchMonthFromUser();
-				getSearchAgeFromUser();
-				complexSearch(m, Integer.parseInt(input));
-				break;
-
-			case ("9"):
 				if (!authentication.isLoggedIn())
 					logIn(getUsernameFromUser(), getPasswordFromUser());
 				else
@@ -225,15 +208,15 @@ public class Console implements IView {
 			displayError("NO RESULT FOUND");
 	}
 
-	public void complexSearch(Month m, int age) {
-		searchedMemberList = registry.complexSearch(m, age);
-		if (!searchedMemberList.isEmpty()) {
-			displaySuccess(searchedMemberList.size() + " RESULT(S) FOUND");
-			displayVerboseList(searchedMemberList);
-			displayMemberInstructions();
-		} else
-			displayError("NO RESULT FOUND");
-	}
+	// public void complexSearch(Month m, int age) {
+	// searchedMemberList = registry.complexSearch(m, age);
+	// if (!searchedMemberList.isEmpty()) {
+	// displaySuccess(searchedMemberList.size() + " RESULT(S) FOUND");
+	// displayVerboseList(searchedMemberList);
+	// displayMemberInstructions();
+	// } else
+	// displayError("NO RESULT FOUND");
+	// }
 
 	@Override
 	public void quitProgram() {
@@ -255,7 +238,8 @@ public class Console implements IView {
 			System.out.print(quitSequence + ": QUIT\n>");
 
 			input = scan.next();
-			if (!authentication.isLoggedIn() && !input.equals(returnSequence) && !input.equals(quitSequence) && !input.equals("4")) {
+			if (!authentication.isLoggedIn() && !input.equals(returnSequence) && !input.equals(quitSequence)
+					&& !input.equals("4")) {
 				displayError("ACCESS DENIED!! PLEASE LOG IN");
 				continue;
 			}
@@ -405,7 +389,9 @@ public class Console implements IView {
 		}
 	}
 
+	// NEED TO FIX. NOT WORKING SO FAR
 	private void displayComplexSearchInstructions() {
+		System.out.println("\nNOT WORKING YET");
 		System.out.println("\nSELECT THE OPTION");
 		System.out.println("1: MEMBER BORN IN CERTAIN MONTH AND OLDER THAN CERTAIN AGE");
 		System.out.println("2: MEMBER NAME STARTS WITH CERTAIN CHARACTERS AND OLDER THAN CERTAIN AGE");
@@ -426,6 +412,53 @@ public class Console implements IView {
 		case (quitSequence):
 			quitProgram();
 			break;
+		}
+	}
+
+	private void displaySimpleSearchInstructions() {
+		while (input != quitSequence) {
+			System.out.println("\nSELECT THE OPTION");
+			System.out.println("1: " + SimpleSearchMode.ByName);
+			System.out.println("2: " + SimpleSearchMode.OlderThanAge);
+			System.out.println("3: " + SimpleSearchMode.GreaterThanBoatLength);
+			System.out.println("4: " + SimpleSearchMode.ByMonth);
+			System.out.println("5: " + SimpleSearchMode.ByBoatType);
+			System.out.println("r: RETURN");
+			System.out.println("q: QUIT");
+
+			input = scan.next();
+
+			switch (input) {
+			case ("1"):
+				getMemberNameFromUser();
+				simpleSearch(input);
+				break;
+			case ("2"):
+				getSearchAgeFromUser();
+				simpleSearch(input);
+				break;
+			case ("3"):
+				getBoatLengthFromUser();
+				simpleSearch(input);
+				break;
+			case ("4"):
+				getSearchMonthFromUser();
+				simpleSearch(input);
+				break;
+			case ("5"):
+				getBoatTypeFromUser();
+				simpleSearch(boattype);
+				break;
+			case (returnSequence):
+				displayMainInstructions();
+				break;
+			case (quitSequence):
+				quitProgram();
+				break;
+			default:
+				displayError("INVALID OPTION");
+				break;
+			}
 		}
 	}
 
@@ -545,7 +578,7 @@ public class Console implements IView {
 	}
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
-	private boolean checkName(String name){
+	private boolean checkName(String name) {
 		boolean charexists = false;
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);

@@ -11,14 +11,14 @@
    <content>
       <AnchorPane prefHeight="497.0" prefWidth="798.0">
          <children>
-            <Text fx:id="welcomeText" fill="#2a306f" layoutX="149.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0">
+            <Text fx:id="welcomeText" fill="#2a306f" layoutX="232.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOME TO MEMBER REGISTERY PROGRAM">
                <font>
-                  <Font size="20.0" />
+                  <Font size="15.0" />
                </font>
             </Text>
-            <Button fx:id="compactListButton" layoutX="104.0" layoutY="41.0" mnemonicParsing="false" text="Compact List" />
-            <Button fx:id="verboListButton" layoutX="3.0" layoutY="41.0" mnemonicParsing="false" text="Verbose List" />
-            <Button fx:id="createMemberButton" layoutX="678.0" layoutY="42.0" mnemonicParsing="false" text="Create Member" />
+            <Button fx:id="compactListButton" layoutX="14.0" layoutY="56.0" mnemonicParsing="false" text="Compact List" />
+            <Button fx:id="verboListButton" layoutX="15.0" layoutY="10.0" mnemonicParsing="false" text="Verbose List" />
+            <Button fx:id="createMemberButton" layoutX="678.0" layoutY="56.0" mnemonicParsing="false" text="Create Member" />
             <AnchorPane layoutX="6.0" layoutY="87.0" prefHeight="391.0" prefWidth="785.0">
                <children>
                   <TableView fx:id="memberTable" layoutX="8.0" layoutY="8.0" prefHeight="398.0" prefWidth="761.0">
@@ -48,7 +48,12 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <Button fx:id="logInButton" layoutX="735.0" layoutY="6.0" mnemonicParsing="false" text="Log In" />
+            <Button fx:id="logInButton" layoutX="679.0" layoutY="6.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="112.0" text="Log In" />
+            <TextField fx:id="searchField" layoutX="315.0" layoutY="48.0" prefHeight="27.0" prefWidth="186.0" />
+            <ChoiceBox fx:id="searchByChoiceBox" layoutX="203.0" layoutY="48.0" prefHeight="27.0" prefWidth="112.0" />
+            <Button fx:id="searchButton" layoutX="501.0" layoutY="48.0" mnemonicParsing="false" text="Search" />
+            <ChoiceBox fx:id="searchByBoatType" layoutX="315.0" layoutY="48.0" prefHeight="27.0" prefWidth="186.0" visible="false" />
+            <ChoiceBox fx:id="searchByMonth" layoutX="315.0" layoutY="47.0" prefHeight="27.0" prefWidth="186.0" visible="false" />
          </children>
       </AnchorPane>
    </content>

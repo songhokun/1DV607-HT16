@@ -9,7 +9,8 @@ public class Registry {
 	private ArrayList<Member> memberList;
 	private ReadWriteFile readWriteFile;
 	private int maxID = 0;
-
+	public enum SimpleSearchMode {ByName, OlderThanAge, ByMonth, ByBoatType, GreaterThanBoatLength};
+	
 	public Registry() throws Exception {
 		readWriteFile = new ReadWriteFile();
 		memberList = readWriteFile.readFile();
@@ -86,54 +87,54 @@ public class Registry {
 			for (Member m : memberList) {
 				for (Boat b : m.getBoatList()) {
 					if (b.getType() == type)
-						foundMembers.add(m);
+						if(!foundMembers.contains(m))
+							foundMembers.add(m);
 				}
 			}
 		} else if (o instanceof Double) {
 			double d = (double) o;
 			for (Member m : memberList) {
 				for (Boat b : m.getBoatList()) {
-					if (b.getLength() == d)
-						foundMembers.add(m);
+					if (b.getLength() > d)
+						if(!foundMembers.contains(m))
+							foundMembers.add(m);
 				}
 			}
 		}
 		return foundMembers;
 	}
+
 	public ArrayList<Member> complexSearch(ArrayList<Member> cp1, ArrayList<Member> cp2, boolean isAnd) {
 		ArrayList<Member> foundMembers = new ArrayList<Member>();
-		if(isAnd){
+		if (isAnd) {
 			for (int i = 0; i < cp1.size(); i++) {
 				if (cp2.indexOf(cp1.get(i)) != -1)
 					foundMembers.add(cp1.get(i));
 			}
-		}
-		else{
-			for(Member m : cp1){
-				if(foundMembers.indexOf(m)==-1)
+		} else {
+			for (Member m : cp1) {
+				if (foundMembers.indexOf(m) == -1)
 					foundMembers.add(m);
-				
+
 			}
-			for(Member m : cp2){
-				if(foundMembers.indexOf(m)==-1)
+			for (Member m : cp2) {
+				if (foundMembers.indexOf(m) == -1)
 					foundMembers.add(m);
-				
+
 			}
 		}
 		return foundMembers;
 	}
-	/*public ArrayList<Member> complexSearch(Month month, int age) {
-		ArrayList<Member> monthSearch = simpleSearch(month);
-		ArrayList<Member> ageSearch = simpleSearch(age);
-		if (monthSearch.isEmpty() || ageSearch.isEmpty())
-			return new ArrayList<Member>();
-		ArrayList<Member> foundMembers = new ArrayList<Member>();
-		for (int i = 0; i < monthSearch.size(); i++) {
-			if (ageSearch.indexOf(monthSearch.get(i)) != -1)
-				foundMembers.add(monthSearch.get(i));
-		}
-		return foundMembers;
-	}*/
+	
+	/*
+	 * public ArrayList<Member> complexSearch(Month month, int age) {
+	 * ArrayList<Member> monthSearch = simpleSearch(month); ArrayList<Member>
+	 * ageSearch = simpleSearch(age); if (monthSearch.isEmpty() ||
+	 * ageSearch.isEmpty()) return new ArrayList<Member>(); ArrayList<Member>
+	 * foundMembers = new ArrayList<Member>(); for (int i = 0; i <
+	 * monthSearch.size(); i++) { if (ageSearch.indexOf(monthSearch.get(i)) !=
+	 * -1) foundMembers.add(monthSearch.get(i)); } return foundMembers; }
+	 */
 
 	public void saveRegistry() {
 		readWriteFile.writeFile(memberList, maxID);
