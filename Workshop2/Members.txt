@@ -1,12 +1,1 @@
-<<<<<<< HEAD
-6
-1;Songho Lee;199504245123
-2;Sarpreet Buttar;199501312934
-4;John Smith;196309282803
-6;Klára Klazarová;195701035601
-=======
-5
-1;Songo Lee;199001310271
-2;Sarpreet Singh;201601310271
-4;John Smith;202001310271
->>>>>>> 3ae8068d9bc18f6d6165870af6b0c87733c987d5
+
