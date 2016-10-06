@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * Information class of a member object.
+ */
 public class Member {
 
 	private String name;
@@ -52,7 +55,11 @@ public class Member {
 	public int getMemberID() {
 		return this.memberID;
 	}
-
+	/**
+	 * This method is used in a view part only. (in console)
+	 * @param index
+	 * @return specific boat of member
+	 */
 	public Boat lookUpBoat(int index) {
 		return this.boatList.get(index);
 	}

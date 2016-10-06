@@ -58,7 +58,8 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Boat, String> boatTypeColumn;
 	@FXML private TableColumn<Boat, Boat> boatEditColumn;
 	@FXML private TableColumn<Boat, Boat> boatDeleteColumn;
-	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
+	//this button contains all the boat types
+	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values())); 
 	@FXML private Button addBoatButton;
 	@FXML private Button closeBoatListButton;	
 	private TextField boatLength = new TextField();
@@ -130,6 +131,8 @@ public class GUI implements Initializable, IView {
 	public void registerMember(String name, String personalnumber) {
 		memberName.clear(); // clear the fields because we are registering member
 		memberPN.clear();
+		
+		//We receive input inside the alert box.
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -156,8 +159,10 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void updateMember(Member m, String name, String personalnumber) {
+		//It sets given name and personal number in the fields.
 		memberName.setText(name);
 		memberPN.setText(personalnumber);
+		
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -197,19 +202,23 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void displaySelectedMember(Member m) {
+		//Since we are using the same scene for displaying members information, it hides current buttons and tables.
 		memberTable.setVisible(false);
 		compactListButton.setVisible(false);
 		verboListButton.setVisible(false);
 		createMemberButton.setVisible(false);
+		
+		//Hereby display selected member´s boats.
 		setBoatTable(m);
 		boatTablePane.setVisible(true);
+		//set register boat button on action by giving default values.
 		addBoatButton.setOnAction(e -> registerBoat(m, 0, null));
 	}
 
 	@Override
 	public void registerBoat(Member m, double boatLength, BoatType boattype) {
-		this.boatLength.clear();
-		boatTypeChoiceBox.getSelectionModel().select(BoatType.Sailboat);
+		this.boatLength.clear(); //because we are registering, so we need to clear previous inputs.
+		boatTypeChoiceBox.getSelectionModel().select(BoatType.Sailboat); // default selection.
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Register Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -217,7 +226,7 @@ public class GUI implements Initializable, IView {
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)*"), this.boatLength, new Label("Type*"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if (checkLength(this.boatLength)) {
+			if (checkLength(this.boatLength)) { //if boat length data is correct
 				registry.registerBoat(m, Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
 				displaySuccess("Boat Registerd !!");
 				registry.saveRegistry();
@@ -234,8 +243,8 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void updateBoat(double length, BoatType type, Boat boat) {
-		boatLength.setText("" + length);
-		boatTypeChoiceBox.getSelectionModel().select(type);
+		boatLength.setText("" + length); //text fields only take strings.
+		boatTypeChoiceBox.getSelectionModel().select(type); // set the present type of given boat
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -243,11 +252,11 @@ public class GUI implements Initializable, IView {
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), boatLength, new Label("Type"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if (checkLength(boatLength)) {
+			if (checkLength(boatLength)) { //if boat length data is correct
 				registry.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 				displaySuccess("Boat Updated !!");
-				registry.saveRegistry();
-				boatTable.refresh();
+				registry.saveRegistry(); // save the file
+				boatTable.refresh();  // refresh the tables to show changes
 			} else {
 				if (this.boatLength.getText().isEmpty())
 					displayError("Length field is empty!!");
@@ -266,7 +275,7 @@ public class GUI implements Initializable, IView {
 			registry.deleteBoat(m, b);
 			displaySuccess("Boat Deleted !!");
 			registry.saveRegistry();
-			setBoatTable(m);
+			setBoatTable(m);  // update the table
 		} else
 			alert.close();
 	}
@@ -290,13 +299,16 @@ public class GUI implements Initializable, IView {
 
 	/********************************** FOR CREATING VIEW ************************/
 	private void changeView() {
+		//For displaying the member table, we have to hide boat table
 		boatTablePane.setVisible(false);
 		compactListButton.setVisible(true);
 		verboListButton.setVisible(true);
 		createMemberButton.setVisible(true);
 		memberTable.setVisible(true);
+		setMemberTable(registry.getMemberList()); // update table
 	}
 
+	// This create a dialogue box for getting the input from user
 	private GridPane createDialogeBox(Label l1, TextField first, Label l2, TextField second, ChoiceBox<BoatType> box) {
 		GridPane pane = new GridPane();
 		pane.setHgap(10);
@@ -305,18 +317,19 @@ public class GUI implements Initializable, IView {
 		pane.add(l1, 0, 0);
 		pane.add(first, 1, 0);
 		pane.add(l2, 0, 1);
-		if (second == null)
+		if (second == null) // if we need to show boat types button
 			pane.add(box, 1, 1);
 		else
 			pane.add(second, 1, 1);
 		return pane;
 	}
 
+	//display the boats of given member
 	private void setBoatTable(Member member) {
 		ObservableList<Boat> data = FXCollections.observableArrayList(member.getBoatList());
 		boatLengthColumn.setCellValueFactory(new PropertyValueFactory<Boat, String>("length"));
 		boatTypeColumn.setCellValueFactory(new PropertyValueFactory<Boat, String>("type"));
-		boatEditColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		boatEditColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue())); //for adding edit buttons
 		boatEditColumn.setCellFactory(param -> new TableCell<Boat, Boat>() {
 			private final Button boatEditButton = new Button("Edit");
 
@@ -328,11 +341,11 @@ public class GUI implements Initializable, IView {
 					return;
 				} else {
 					setGraphic(boatEditButton);
-					boatEditButton.setOnAction(event -> updateBoat(boat.getLength(), boat.getType(), boat));
+					boatEditButton.setOnAction(event -> updateBoat(boat.getLength(), boat.getType(), boat)); //set on action
 				}
 			}
 		});
-		boatDeleteColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		boatDeleteColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue())); //for adding delete buttons
 		boatDeleteColumn.setCellFactory(param -> new TableCell<Boat, Boat>() {
 			private final Button boatDeleteButton = new Button("Delete");
 
@@ -351,6 +364,7 @@ public class GUI implements Initializable, IView {
 		boatTable.setItems(data);
 	}
 
+	//display given member list
 	private void setMemberTable(ArrayList<Member> m) {
 		ObservableList<Member> data = FXCollections.observableArrayList(m);
 		memberNameColumn.setCellValueFactory(new PropertyValueFactory<Member, String>("name"));
@@ -422,7 +436,7 @@ public class GUI implements Initializable, IView {
 	}
 
 	private boolean checkName(TextField name) {
-		if (name.getText().isEmpty())
+		if (name.getText().isEmpty()) 
 			return false;
 		boolean charexists = false;
 		for (int i = 0; i < name.getText().length(); i++) {
