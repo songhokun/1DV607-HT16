@@ -212,6 +212,7 @@ public class GUI implements Initializable, IView {
 		searchByBoatType.setVisible(false);
 		searchByChoiceBox.setVisible(false);
 		searchButton.setVisible(false);
+		searchByMonth.setVisible(false);
 		setBoatTable(m);
 		boatTablePane.setVisible(true);
 		addBoatButton.setDisable(!authentication.isLoggedIn());
@@ -391,6 +392,8 @@ public class GUI implements Initializable, IView {
 		searchButton.setVisible(true);
 		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_TYPE))
 			searchByBoatType.setVisible(true);
+		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_MONTH))
+			searchByMonth.setVisible(true);
 		else
 			searchField.setVisible(true);
 	}
