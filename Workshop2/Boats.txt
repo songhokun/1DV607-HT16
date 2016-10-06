@@ -1,11 +1,1 @@
-<<<<<<< HEAD
-6.0;Sailboat;1
-=======
-15.0;Kayak;1
-12.33;Other;1
->>>>>>> 3ae8068d9bc18f6d6165870af6b0c87733c987d5
-1.0;Sailboat;2
-12.2;Motorsailer;2
-10.0;Kayak;2
-4.0;Kayak;4
-3.0;Kayak;6
+
