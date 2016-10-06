@@ -1,4 +1,5 @@
-5
-1;Songo Lee;1234567899
-2;Sarpreet Singh;1234567891
-4;John Smith;9999999999
+6
+1;Songho Lee;199504245123
+2;Sarpreet Buttar;199501312934
+4;John Smith;196309282803
+6;Klára Klazarová;195701035601
