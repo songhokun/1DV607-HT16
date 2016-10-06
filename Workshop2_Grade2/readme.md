@@ -8,9 +8,9 @@ If you have problems to set up your IDE, we also included our runnable JAR file 
 If you want to execute the programme, run ConsoleMain or GUI_Main inside /src/main.
 We store information in Members.txt and Boats.txt inside the project directory (default project path of IDE).
 
-Should you have questions contact to
-  Sarpreet Singh Buttar sb223ce [at] student.lnu.se
-  Songho Lee sl222xk [at] student.lnu.se
+Should you have questions contact to either,
+1. Sarpreet Singh Buttar sb223ce [at] student.lnu.se
+2. Songho Lee sl222xk [at] student.lnu.se
 
 Enjoy the programme!
 
