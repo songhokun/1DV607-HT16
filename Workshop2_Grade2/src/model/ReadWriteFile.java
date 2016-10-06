@@ -9,6 +9,7 @@ import model.Boat.BoatType;
 
 public class ReadWriteFile {
 
+	//Files name for saving data
 	private File memberDataFile = new File("Members.txt");
 	private File boatDataFile = new File("Boats.txt");
 	private int maxID;
@@ -16,25 +17,43 @@ public class ReadWriteFile {
 	public ReadWriteFile() {
 
 	}
-
+	/**
+	 * Reads file
+	 * @return member list; 
+	 * @throws Exception
+	 */
 	public ArrayList<Member> readFile() throws Exception {
 		ArrayList<Member> toReturn = new ArrayList<Member>();
-		if (!memberDataFile.exists() && !boatDataFile.exists()) {
+		
+		//Create a new file if either of one file does not exist.
+		if (!memberDataFile.exists() || !boatDataFile.exists()) {
 			memberDataFile.createNewFile();
 			boatDataFile.createNewFile();
 			return toReturn;
 		}
+		
+		//if file exists
 		Scanner scan = new Scanner(memberDataFile);
 		if (scan.hasNext()) {
 			this.maxID = (Integer.parseInt(scan.nextLine()));
 		}
-
+		/*
+		 * Member data is stored in follwoing format: memberID;name;personalnumber
+		 * e.g. 2;Sarpreet Singh;201601310271
+		 * 
+		 * Thus, fields are divided using ';'
+		 */
 		while (scan.hasNext()) {
 			String[] temp = scan.nextLine().split(";");
 			toReturn.add(new Member(temp[1], temp[2], Integer.parseInt(temp[0])));
 		}
 		scan.close();
+		
 		scan = new Scanner(boatDataFile);
+		/*
+		 * Boat data is stored in follwoing format: length;Type;owner's member id
+		 * e.g. 15.0;Kayak;1
+		 */
 		while (scan.hasNext()) {
 			String[] temp = scan.nextLine().split(";");
 			for (Member i : toReturn) {
@@ -51,24 +70,31 @@ public class ReadWriteFile {
 	public int getMaxID() {
 		return maxID;
 	}
-
-	public void writeFile(ArrayList<Member> registry, int maxID) {
+	/**
+	 * Writes file
+	 * @param memberlist.
+	 * @param maxID
+	 */
+	public void writeFile(ArrayList<Member> memberlist, int maxID) {
 		StringBuilder members = new StringBuilder();
 		StringBuilder boats = new StringBuilder();
+		
+		//First line of member files begins always with maxID
 		members.append(maxID + "\n");
-
-		for (int i = 0; i < registry.size(); i++) {
-			members.append(registry.get(i).getMemberID() + ";");
-			members.append(registry.get(i).getName() + ";");
-			members.append(registry.get(i).getPersonalnumber() + "\n");
-
-			for (int j = 0; j < registry.get(i).getBoatList().size(); j++) {
-				boats.append(registry.get(i).getBoatList().get(j).getLength() + ";");
-				boats.append(registry.get(i).getBoatList().get(j).getType().toString() + ";");
-				boats.append(registry.get(i).getMemberID() + "\n");
+		//Saves a member's data in one line
+		for (int i = 0; i < memberlist.size(); i++) {
+			members.append(memberlist.get(i).getMemberID() + ";");
+			members.append(memberlist.get(i).getName() + ";");
+			members.append(memberlist.get(i).getPersonalnumber() + "\n");
+			//Meanwhile creates boats information a member has for a separate file 'boats.txt'
+			for (int j = 0; j < memberlist.get(i).getBoatList().size(); j++) {
+				boats.append(memberlist.get(i).getBoatList().get(j).getLength() + ";");
+				boats.append(memberlist.get(i).getBoatList().get(j).getType().toString() + ";");
+				boats.append(memberlist.get(i).getMemberID() + "\n");
 			}
 		}
 		try {
+			//Write the file
 			PrintWriter writer = new PrintWriter(memberDataFile.getAbsolutePath());
 			memberDataFile.createNewFile();
 			writer.print(members.toString());
@@ -78,7 +104,6 @@ public class ReadWriteFile {
 			writer.print(boats.toString());
 			writer.close();
 		} catch (IOException e) {
-
 		}
 	}
 }

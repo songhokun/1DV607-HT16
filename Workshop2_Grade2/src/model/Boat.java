@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * This is information class for boat
+ */
 public class Boat {
 
 	private double length;
@@ -13,17 +16,17 @@ public class Boat {
 		return this.selectCode;
 		}
 	}
-
 	
 	public Boat() {
 
 	}
-
+	
 	public Boat(double length, BoatType type) {
 		this.length = length;
 		this.type = type;
 	}
 
+	//Getters and setters follows:
 	public void setLength(double length) {
 		this.length = length;
 	}

@@ -23,12 +23,17 @@ public class Console implements IView {
 	private final String quitSequence = "q";
 	private final String returnSequence = "r";
 
+	/**
+	 * Constructor of console. Reads member data and boat file
+	 */
 	public Console() {
 		try {
 			registry = new Registry();
 		} catch (Exception e) {
-
+			displayError("THERE WAS A PROBLEM READING FILE");
+			displayError("PLLEASE RESTART PROGRAMME");
 		}
+
 	}
 
 	@Override
@@ -82,6 +87,7 @@ public class Console implements IView {
 	public void displayCompactList(ArrayList<Member> m) {
 		if (m.isEmpty()) {
 			displayError("LIST IS EMPTY");
+			displayMainInstructions();
 			return;
 		}
 		System.out.println("+ ID |  NAME OF A MEMBER  | TOTAL BOATS +");
@@ -94,6 +100,7 @@ public class Console implements IView {
 	public void displayVerboseList(ArrayList<Member> m) {
 		if (m.isEmpty()) {
 			displayError("LIST IS EMPTY");
+			displayMainInstructions();
 			return;
 		}
 		for (Member member : m) {
@@ -170,6 +177,8 @@ public class Console implements IView {
 
 	/***************** CONSOLE NAVIGATION *********************************/
 	private void displayMemberInstructions() {
+		if (registry.getMemberList().isEmpty())
+			return;
 		while (input != quitSequence || input != returnSequence) {
 			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: CREATE A MEMBER");
@@ -223,14 +232,18 @@ public class Console implements IView {
 			System.out.print(quitSequence + ": QUIT \n>");
 
 			input = scan.next();
+
+			// After each operations we display member's information again to show the changes.
 			switch (input) {
 			case ("1"):
 				getMemberNameFromUser();
+				// Member is only updating its name. Thus personal number is provided in ""
 				updateMember(registry.lookUpMember(memberID), memberName, "");
 				displaySelectedMember(registry.lookUpMember(memberID));
 				break;
 			case ("2"):
 				getMemberPersonalnumberFromUser();
+				// Member is only updating its personal number. Thus name is provided in ""
 				updateMember(registry.lookUpMember(memberID), "", memberPN);
 				displaySelectedMember(registry.lookUpMember(memberID));
 				break;
@@ -252,6 +265,8 @@ public class Console implements IView {
 				break;
 			case ("6"):
 				getBoatIndexFromUser();
+				// The console cannot select boat without using index since we do not have boat IDs.
+				// Mind that array always begins with index 0. Thus index-1 is required.
 				deleteBoat(registry.lookUpMember(memberID), registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 				displaySelectedMember(registry.lookUpMember(memberID));
 				break;
@@ -279,31 +294,28 @@ public class Console implements IView {
 		System.out.print(quitSequence + ": QUIT\n>");
 
 		input = scan.next();
+		// Mind that array always begins with index 0. Thus index-1 is required.
 		switch (input) {
 		case ("1"):
 			getBoatLengthFromUser();
+			// Member is only updating its boat's length. Thus type is provided in null
 			updateBoat(boatLength, null, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-			displayUpdateMemberInstructions();
 			break;
 		case ("2"):
 			getBoatTypeFromUser();
+			// Member is only updating its boat's type. Thus length is provided in 0
 			updateBoat(0, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-			displayUpdateMemberInstructions();
 			break;
 		case ("3"):
 			getBoatLengthFromUser();
 			getBoatTypeFromUser();
 			updateBoat(boatLength, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-			displayUpdateMemberInstructions();
 			break;
 		case (returnSequence):
 			displaySelectedMember(registry.lookUpMember(memberID));
-			displayUpdateMemberInstructions();
-			displaySelectedMember(registry.lookUpMember(memberID));
-			displayUpdateMemberInstructions();
 			break;
 		case (quitSequence):
 			quitProgram();
@@ -315,6 +327,7 @@ public class Console implements IView {
 	}
 
 	/***************************** CONSOLE INPUT DATA METHODS ************/
+
 	private void getMemberNameFromUser() {
 		System.out.print("NAME\n>");
 		input = scan.next() + scan.nextLine();
@@ -360,11 +373,14 @@ public class Console implements IView {
 	}
 
 	private void getBoatTypeFromUser() {
+		// Prints out types of boats
 		System.out.println("BOAT TYPE");
 		System.out.println("+ ID | Boat type +");
 		for (BoatType b : BoatType.values())
 			System.out.printf("%5d|%11s|\n", b.getCode(), b.toString());
 		System.out.println("+----|-----------+");
+
+		// receives an input
 		System.out.print("\nENTER BOAT TYPE ID\n>");
 		input = scan.next();
 		while (!checkBoatType(input, BoatType.values().length)) {
@@ -395,6 +411,12 @@ public class Console implements IView {
 	}
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
+	/**
+	 * 
+	 * @param name
+	 * @return true if name is only consists of alphabetic letters and white
+	 *         spaces.
+	 */
 	private boolean checkName(String name) {
 		boolean charexists = false;
 		for (int i = 0; i < name.length(); i++) {
@@ -407,6 +429,11 @@ public class Console implements IView {
 		return charexists;
 	}
 
+	/**
+	 * 
+	 * @param personalnumber
+	 * @return true if length is correct and provided date is in valid date.
+	 */
 	private boolean checkPersonalnumber(String personalnumber) {
 		if (personalnumber.length() != 12)
 			return false;
@@ -421,6 +448,11 @@ public class Console implements IView {
 		}
 	}
 
+	/**
+	 * 
+	 * @param input
+	 * @return true if member id exists in registry
+	 */
 	private boolean checkMemberID(String input) {
 		try {
 			if (registry.lookUpMember(Integer.parseInt(input)) == null)
@@ -431,6 +463,11 @@ public class Console implements IView {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @param length
+	 * @return true if boat length is correct data type and greater than zero
+	 */
 	private boolean checkBoatLength(String length) {
 		try {
 			if (Double.parseDouble(length) <= 0)
@@ -441,6 +478,12 @@ public class Console implements IView {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @param input
+	 * @param size
+	 * @return true if input lies within the index of boat types
+	 */
 	private boolean checkBoatType(String input, int size) {
 		try {
 			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > size)
@@ -452,6 +495,13 @@ public class Console implements IView {
 
 	}
 
+	/**
+	 * 
+	 * @param input
+	 * @param m
+	 * @return if provided boat index is valid boat index of boat list that m
+	 *         has.
+	 */
 	private boolean checkBoatIndex(String input, Member m) {
 		try {
 			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getNumberOfBoats())
