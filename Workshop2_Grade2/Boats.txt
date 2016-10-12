@@ -1,2 +1,1 @@
-99.0;Motorsailer;1
-7.0;Sailboat;2
+12.0;Other;1

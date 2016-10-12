@@ -1,7 +1,6 @@
 package view;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import model.Boat;
@@ -110,14 +109,22 @@ public class Console implements IView {
 
 	@Override
 	public void registerMember(String name, String personalnumber) {
-		registry.createMember(name, personalnumber);
-		displaySuccess("MEMBER CREATED SUCCESSFULLY !!");
+		try {
+			registry.createMember(name, personalnumber);
+			displaySuccess("MEMBER CREATED SUCCESSFULLY !!");
+		} catch (ParseException e) {
+			displayError("INCORRECT PERSONAL NUMBER DATE FORMAT");
+		}
 	}
 
 	@Override
 	public void updateMember(Member m, String name, String personalnumber) {
+		try{
 		registry.updateMember(m, name, personalnumber);
 		displaySuccess("MEMBER UPDATED SUCCESSFULLY !!");
+		}catch (ParseException e) {
+			displayError("INCORRECT PERSONAL NUMBER DATE FORMAT");
+		}
 	}
 
 	@Override
@@ -142,19 +149,28 @@ public class Console implements IView {
 
 	@Override
 	public void registerBoat(Member m, double boatLength, BoatType boattype) {
-		registry.registerBoat(m, boatLength, boattype);
-		displaySuccess("BOAT REGISTERD SUCCESSFULLY !!");
+		try {
+			m.registerBoat(boatLength, boattype);
+			displaySuccess("BOAT REGISTERD SUCCESSFULLY !!");
+		} catch (Exception e) {
+			displayError("UNABLE TO REGISTER A BOAT. LENGHT IS INCORRECT");
+		}
 	}
 
 	@Override
-	public void updateBoat(double length, BoatType type, Boat boat) {
-		registry.updateBoat(length, type, boat);
-		displaySuccess("BOAT UPDATED SUCCESSFULLY !!");
+	public void updateBoat(Member m, double length, BoatType type, Boat boat) {
+		try {
+			m.updateBoat(length, type, boat);
+			displaySuccess("BOAT UPDATED SUCCESSFULLY !!");
+		} catch (Exception e) {
+			displayError("UNABLE TO REGISTER A BOAT. LENGHT IS INCORRECT");
+		}
+
 	}
 
 	@Override
 	public void deleteBoat(Member m, Boat b) {
-		registry.deleteBoat(m, b);
+		m.deleteBoat(b);
 		displaySuccess("BOAT DELETED SUCCESSFULLY !!");
 	}
 
@@ -233,17 +249,20 @@ public class Console implements IView {
 
 			input = scan.next();
 
-			// After each operations we display member's information again to show the changes.
+			// After each operations we display member's information again to
+			// show the changes.
 			switch (input) {
 			case ("1"):
 				getMemberNameFromUser();
-				// Member is only updating its name. Thus personal number is provided in ""
+				// Member is only updating its name. Thus personal number is
+				// provided in ""
 				updateMember(registry.lookUpMember(memberID), memberName, "");
 				displaySelectedMember(registry.lookUpMember(memberID));
 				break;
 			case ("2"):
 				getMemberPersonalnumberFromUser();
-				// Member is only updating its personal number. Thus name is provided in ""
+				// Member is only updating its personal number. Thus name is
+				// provided in ""
 				updateMember(registry.lookUpMember(memberID), "", memberPN);
 				displaySelectedMember(registry.lookUpMember(memberID));
 				break;
@@ -265,9 +284,12 @@ public class Console implements IView {
 				break;
 			case ("6"):
 				getBoatIndexFromUser();
-				// The console cannot select boat without using index since we do not have boat IDs.
-				// Mind that array always begins with index 0. Thus index-1 is required.
-				deleteBoat(registry.lookUpMember(memberID), registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+				// The console cannot select boat without using index since we
+				// do not have boat IDs.
+				// Mind that array always begins with index 0. Thus index-1 is
+				// required.
+				deleteBoat(registry.lookUpMember(memberID),
+						registry.lookUpMember(memberID).getBoatList().get((boatIndex - 1)));
 				displaySelectedMember(registry.lookUpMember(memberID));
 				break;
 			case (returnSequence):
@@ -298,20 +320,25 @@ public class Console implements IView {
 		switch (input) {
 		case ("1"):
 			getBoatLengthFromUser();
-			// Member is only updating its boat's length. Thus type is provided in null
-			updateBoat(boatLength, null, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			// Member is only updating its boat's length. Thus type is provided
+			// in null
+			updateBoat(registry.lookUpMember(memberID), boatLength, null,
+					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
 			break;
 		case ("2"):
 			getBoatTypeFromUser();
-			// Member is only updating its boat's type. Thus length is provided in 0
-			updateBoat(0, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			// Member is only updating its boat's type. Thus length is provided
+			// in 0
+			updateBoat(registry.lookUpMember(memberID), 0, boattype,
+					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
 			break;
 		case ("3"):
 			getBoatLengthFromUser();
 			getBoatTypeFromUser();
-			updateBoat(boatLength, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			updateBoat(registry.lookUpMember(memberID), boatLength, boattype,
+					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
 			break;
 		case (returnSequence):
@@ -435,17 +462,7 @@ public class Console implements IView {
 	 * @return true if length is correct and provided date is in valid date.
 	 */
 	private boolean checkPersonalnumber(String personalnumber) {
-		if (personalnumber.length() != 12)
-			return false;
-		try {
-			String pn = personalnumber.substring(0, 8);
-			DateFormat df = new SimpleDateFormat("yyyyMMdd");
-			df.setLenient(false);
-			df.parse(pn);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+		return personalnumber.length() == 12;
 	}
 
 	/**
@@ -470,8 +487,7 @@ public class Console implements IView {
 	 */
 	private boolean checkBoatLength(String length) {
 		try {
-			if (Double.parseDouble(length) <= 0)
-				return false;
+			Double.parseDouble(length);
 		} catch (Exception e) {
 			return false;
 		}

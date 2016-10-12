@@ -1,7 +1,7 @@
 package model;
 
+import java.text.ParseException;
 import java.util.ArrayList;
-import model.Boat.BoatType;
 
 public class Registry {
 
@@ -21,7 +21,7 @@ public class Registry {
 		return new ArrayList<Member>(memberList);
 	}
 
-	public void createMember(String name, String personalNumber) {
+	public void createMember(String name, String personalNumber) throws ParseException {
 		//incrementing maxID generates a new unique member ID.
 		this.memberList.add(new Member(name, personalNumber, ++maxID));
 	}
@@ -30,8 +30,9 @@ public class Registry {
 	 * @param inMember
 	 * @param name ; if it is "", only personalNumber will be updated.
 	 * @param personalNumber ; if it is "", only name will be updated.
+	 * @throws ParseException 
 	 */
-	public void updateMember(Member inMember, String name, String personalNumber) {
+	public void updateMember(Member inMember, String name, String personalNumber) throws ParseException {
 		if (!name.isEmpty())
 			inMember.setName(name);
 		if (!personalNumber.isEmpty())
@@ -42,26 +43,6 @@ public class Registry {
 		this.memberList.remove(m);
 	}
 
-	public void registerBoat(Member m, double length, BoatType type) {
-		m.getBoatList().add(new Boat(length, type));
-	}
-	/**
-	 * Updates given boat as an argument.
-	 * @param length; 0 when user does not update length.
-	 * @param type; null when user does not update boat type
-	 * 
-	 * @param boat
-	 */
-	public void updateBoat(double length, BoatType type, Boat boat) {
-		if (length != 0)
-			boat.setLength(length);
-		if (type != null)
-			boat.setType(type);
-	}
-
-	public void deleteBoat(Member m, Boat boat) {
-		m.getBoatList().remove(boat);
-	}
 	/**
 	 * The method is used in view side to select a member based on console input
 	 * 

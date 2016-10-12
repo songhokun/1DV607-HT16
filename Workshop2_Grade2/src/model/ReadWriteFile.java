@@ -58,7 +58,7 @@ public class ReadWriteFile {
 			String[] temp = scan.nextLine().split(";");
 			for (Member i : toReturn) {
 				if (i.getMemberID() == Integer.parseInt(temp[2])) {
-					i.getBoatList().add(new Boat(Double.parseDouble(temp[0]), BoatType.valueOf(temp[1])));
+					i.registerBoat(Double.parseDouble(temp[0]), BoatType.valueOf(temp[1]));
 					break;
 				}
 			}

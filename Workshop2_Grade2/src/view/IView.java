@@ -74,7 +74,7 @@ public interface IView {
 	 * @param type
 	 * @param boat
 	 */
-	void updateBoat(double length, BoatType type, Boat boat);
+	void updateBoat(Member m, double length, BoatType type, Boat boat);
 	/**
 	 * Delete provided boat from provided member's boat list
 	 * @param m

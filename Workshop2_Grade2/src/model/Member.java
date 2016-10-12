@@ -1,6 +1,11 @@
 package model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import model.Boat.BoatType;
 
 /**
  * Information class of a member object.
@@ -11,20 +16,11 @@ public class Member {
 	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatList = new ArrayList<Boat>();
-
-
-	public Member() {
-
-	}
-
-	public Member(String name, String personalnumber) {
+	
+	
+	public Member(String name, String personalnumber, int memberID) throws ParseException {
 		this.name = name;
-		this.personalnumber = personalnumber;
-	}
-
-	public Member(String name, String personalnumber, int memberID) {
-		this.name = name;
-		this.personalnumber = personalnumber;
+		setPersonalnumber(personalnumber);
 		this.memberID = memberID;
 	}
 
@@ -40,7 +36,11 @@ public class Member {
 		this.name = name;
 	}
 
-	public void setPersonalnumber(String personalnumber) {
+	public void setPersonalnumber(String personalnumber) throws ParseException {
+		String pn = personalnumber.substring(0, 8);
+		DateFormat df = new SimpleDateFormat("yyyyMMdd");
+		df.setLenient(false);
+		df.parse(pn);
 		this.personalnumber = personalnumber;
 	}
 
@@ -49,18 +49,29 @@ public class Member {
 	}
 
 	public ArrayList<Boat> getBoatList() {
-		return boatList;
+		return new ArrayList<Boat>(boatList);
 	}
 
 	public int getMemberID() {
 		return this.memberID;
 	}
-	/**
-	 * This method is used in a view part only. (in console)
-	 * @param index
-	 * @return specific boat of member
-	 */
-	public Boat lookUpBoat(int index) {
+
+	public void registerBoat(double length, BoatType type) {
+		this.boatList.add(new Boat(length, type));
+	}
+
+	public void updateBoat(double length, BoatType type, Boat boat) {
+		if (length != 0)
+			boat.setLength(length);
+		if (type != null)
+			boat.setType(type);
+	}
+
+	public void deleteBoat(Boat boat) {
+		this.boatList.remove(boat);
+	}
+	
+	public Boat lookUpBoat(int index){
 		return this.boatList.get(index);
 	}
 }
