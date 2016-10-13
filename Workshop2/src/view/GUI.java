@@ -2,6 +2,7 @@ package view;
 
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Month;
 import java.util.ArrayList;
@@ -37,12 +38,14 @@ import model.Registry.SimpleSearchMode;
 
 public class GUI implements Initializable, IView {
 
+	//General fields of the program
 	@FXML private Text welcomeText;
 	@FXML private Button compactListButton;
-	@FXML private Button verboListButton;	
+	@FXML private Button verboListButton;
 	@FXML private Button createMemberButton;
-	@FXML private Button logInButton;	
-	
+	@FXML private Button logInButton;
+
+	//All fields are related to member
 	@FXML private TableView<Member> memberTable;
 	@FXML private TableColumn<Member, String> memberNameColumn;
 	@FXML private TableColumn<Member, String> memberPersonalnumberColumn;
@@ -53,24 +56,27 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Member, Member> memberDeleteColumn;
 	private TextField memberName = new TextField();
 	private TextField memberPN = new TextField();
-	
+
+	//All fields are related to Boat
 	@FXML private AnchorPane boatTablePane;
 	@FXML private TableView<Boat> boatTable;
 	@FXML private TableColumn<Boat, String> boatLengthColumn;
 	@FXML private TableColumn<Boat, String> boatTypeColumn;
 	@FXML private TableColumn<Boat, Boat> boatEditColumn;
 	@FXML private TableColumn<Boat, Boat> boatDeleteColumn;
+
+	//this button contains all the boat types
 	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
 	@FXML private Button addBoatButton;
-	@FXML private Button closeBoatListButton;	
+	@FXML private Button closeBoatListButton;
 	private TextField boatLength = new TextField();
-	
+
 	@FXML private TextField searchField = new TextField();
 	@FXML private ChoiceBox <SimpleSearchMode> searchByChoiceBox;
 	@FXML private Button searchButton;
 	@FXML private ChoiceBox <BoatType> searchByBoatType;
 	@FXML private ChoiceBox <Month> searchByMonth;
-	
+
 	private Registry registry;
 	private Authentication authentication;
 
@@ -121,6 +127,10 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void displayCompactList(ArrayList<Member> m) {
+		if(m.isEmpty()){
+			displayError("List is Empty!!");
+			return;
+		}
 		setMemberTable(registry.getMemberList());
 		memberPersonalnumberColumn.setVisible(false);
 		memberBoatsInformationColumn.setVisible(false);
@@ -128,6 +138,10 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void displayVerboseList(ArrayList<Member> m) {
+		if(m.isEmpty()){
+			displayError("List is Empty!!");
+			return;
+		}
 		setMemberTable(registry.getMemberList());
 		memberPersonalnumberColumn.setVisible(true);
 		memberBoatsInformationColumn.setVisible(true);
@@ -135,27 +149,33 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void registerMember(String name, String personalnumber) {
-		memberName.clear();
+		memberName.clear(); // clear the fields because we are registering member
 		memberPN.clear();
+
+		//We receive input inside the alert box.
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == alert.getButtonTypes().get(0)) {
+		if (result.get() == alert.getButtonTypes().get(0)) { // index 0 button is "save button"
 			if (checkName(memberName) && checkPN(memberPN)) {
+				try{
 				registry.createMember(memberName.getText(), memberPN.getText());
 				displaySuccess("Member Registered !!");
-				registry.saveRegistry();
+				registry.saveRegistry();  // Save file
 				setMemberTable(registry.getMemberList());
+				}catch(ParseException e) {
+					displayError("Please fill the correct personal number. Eg: YYYYMMDDXXXX!!");
+				}
 			} else {
 				if (memberName.getText().isEmpty() || memberPN.getText().isEmpty())
 					displayError("Please fill all the required(*) fields.");
 				else if (!checkName(memberName))
 					displayError("Please fill the correct name. Eg: John Smith!!");
 				else
-					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
+					displayError("Please fill the correct personal number. Eg: YYYYMMDDXXXX!!");
 			}
 		} else
 			alert.close();
@@ -163,8 +183,10 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void updateMember(Member m, String name, String personalnumber) {
+		//It sets given name and personal number in the fields.
 		memberName.setText(name);
 		memberPN.setText(personalnumber);
+
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -173,17 +195,21 @@ public class GUI implements Initializable, IView {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			if (checkName(memberName) && checkPN(memberPN)) {
+				try{
 				registry.updateMember(m, memberName.getText(), memberPN.getText());
 				displaySuccess("Member Updated !!");
 				registry.saveRegistry();
 				setMemberTable(registry.getMemberList());
+				}catch(ParseException e){
+					displayError("Please fill the correct personal number. Eg: YYYYMMDDXXXX!!");
+				}
 			} else {
 				if (memberName.getText().isEmpty() || memberPN.getText().isEmpty())
 					displayError("Please fill all the required(*) fields.");
 				else if (!checkName(memberName))
 					displayError("Please fill the correct name. Eg: John Smith!!");
 				else
-					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
+					displayError("Please fill the correct personal number. Eg: YYYYMMDDXXXX!!");
 			}
 		} else
 			alert.close();
@@ -204,6 +230,7 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void displaySelectedMember(Member m) {
+		//Since we are using the same scene for displaying members information, it hides current buttons and tables.
 		memberTable.setVisible(false);
 		compactListButton.setVisible(false);
 		verboListButton.setVisible(false);
@@ -213,16 +240,19 @@ public class GUI implements Initializable, IView {
 		searchByChoiceBox.setVisible(false);
 		searchButton.setVisible(false);
 		searchByMonth.setVisible(false);
+
+		//Hereby display selected member´s boats.
 		setBoatTable(m);
 		boatTablePane.setVisible(true);
 		addBoatButton.setDisable(!authentication.isLoggedIn());
+		//set register boat button on action by giving default values.
 		addBoatButton.setOnAction(e -> registerBoat(m, 0, null));
 	}
 
 	@Override
 	public void registerBoat(Member m, double boatLength, BoatType boattype) {
-		this.boatLength.clear();
-		boatTypeChoiceBox.getSelectionModel().select(BoatType.Sailboat);
+		this.boatLength.clear();  //because we are registering, so we need to clear previous inputs.
+		boatTypeChoiceBox.getSelectionModel().select(BoatType.Sailboat);  // default selection.
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Register Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -230,8 +260,8 @@ public class GUI implements Initializable, IView {
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)*"), this.boatLength, new Label("Type*"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if (checkLength(this.boatLength)) {
-				registry.registerBoat(m, Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
+			if (checkLength(this.boatLength)) { //if boat length data is correct
+				m.registerBoat(Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
 				displaySuccess("Boat Registerd !!");
 				registry.saveRegistry();
 				setBoatTable(m);
@@ -246,9 +276,9 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public void updateBoat(double length, BoatType type, Boat boat) {
-		boatLength.setText("" + length);
-		boatTypeChoiceBox.getSelectionModel().select(type);
+	public void updateBoat(Member m, double length, BoatType type, Boat boat) {
+		boatLength.setText("" + length); //text fields only take strings.
+		boatTypeChoiceBox.getSelectionModel().select(type); // set the present type of given boat
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -256,11 +286,11 @@ public class GUI implements Initializable, IView {
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), boatLength, new Label("Type"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if (checkLength(boatLength)) {
-				registry.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
+			if (checkLength(boatLength)) { //if boat length data is correct
+				m.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 				displaySuccess("Boat Updated !!");
-				registry.saveRegistry();
-				boatTable.refresh();
+				registry.saveRegistry(); // save the file
+				boatTable.refresh();  // refresh the tables to show changes
 			} else {
 				if (this.boatLength.getText().isEmpty())
 					displayError("Length field is empty!!");
@@ -276,10 +306,10 @@ public class GUI implements Initializable, IView {
 		Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			registry.deleteBoat(m, b);
+			m.deleteBoat(b);
 			displaySuccess("Boat Deleted !!");
 			registry.saveRegistry();
-			setBoatTable(m);
+			setBoatTable(m);  // update the table
 		} else
 			alert.close();
 	}
@@ -380,7 +410,7 @@ public class GUI implements Initializable, IView {
 			searchByMonth.setVisible(false);
 		}
 	}
-	
+
 	private void changeView() {
 		boatTablePane.setVisible(false);
 		compactListButton.setVisible(true);
@@ -430,7 +460,7 @@ public class GUI implements Initializable, IView {
 				} else {
 					setGraphic(boatEditButton);
 					boatEditButton.setDisable(!authentication.isLoggedIn());
-					boatEditButton.setOnAction(event -> updateBoat(boat.getLength(), boat.getType(), boat));
+					boatEditButton.setOnAction(event -> updateBoat(member, boat.getLength(), boat.getType(), boat));
 				}
 			}
 		});
@@ -518,8 +548,7 @@ public class GUI implements Initializable, IView {
 	/*************************** FOR CHECKING INPUT *************************************************/
 	private boolean checkLength(TextField length) {
 		try {
-			if (Double.parseDouble(length.getText()) <= 0)
-				return false;
+			Double.parseDouble(length.getText());
 		} catch (Exception e) {
 			return false;
 		}

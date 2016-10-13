@@ -14,16 +14,7 @@ public class Member {
 	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatList = new ArrayList<Boat>();
-	//private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd");
 
-	public Member() {
-
-	}
-
-	public Member(String name, String personalnumber) throws ParseException {
-		this.name = name;
-		setPersonalnumber(personalnumber);
-	}
 
 	public Member(String name, String personalnumber, int memberID) throws ParseException {
 		this.name = name;
@@ -82,7 +73,7 @@ public class Member {
 	public int getAge() {
 		return Year.now().getValue() - getBirthYear();
 	}
-	
+
 	public void registerBoat(double length, BoatType type) {
 		this.boatList.add(new Boat(length, type));
 	}

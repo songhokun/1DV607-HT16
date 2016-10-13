@@ -27,6 +27,9 @@ public class Console implements IView {
 	private Authentication authentication;
 	private ArrayList<Member> searchedMemberList = new ArrayList<Member>();
 
+	/**
+	 * Constructor of console. Reads member data and boat file
+	 */
 	public Console() {
 		authentication = new Authentication();
 		try {
@@ -423,7 +426,7 @@ public class Console implements IView {
 			break;
 		case ("3"):
 			getBoatLengthFromUser();
-			simpleSearch(boatlength);
+			simpleSearch(input);
 			break;
 		case ("4"):
 			simpleSearch(getSearchMonthFromUser());
@@ -446,9 +449,9 @@ public class Console implements IView {
 	private void displayComplexSearchInstructions() {
 		ArrayList<Member> previousResult = new ArrayList<Member>(registry.getMemberList());
 		boolean isAnd=true;
-		
+
 		while(true){
-			
+
 			System.out.println("PERFORMING COMPLEX SEARCH");
 			displaySimpleSearchInstructions();
 			complexSearch(previousResult, isAnd);
@@ -458,7 +461,7 @@ public class Console implements IView {
 			System.out.println("2: PERFORM NEW SEARCH WITH OR OPERATION");
 			System.out.print("   ENTER ANYTHING ELSE TO FINISH SEARCH\n>");
 			input = scan.next();
-			
+
 			if(input.compareToIgnoreCase("1")==0){
 				isAnd=true;
 			}
@@ -466,7 +469,7 @@ public class Console implements IView {
 				isAnd=false;
 			else
 				break;
-					
+
 		}
 	}
 	private void displaySearchResults(){
@@ -595,7 +598,7 @@ public class Console implements IView {
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
 	/**
-	 * 
+	 *
 	 * @param name
 	 * @return true if name is only consists of alphabetic letters and white
 	 *         spaces.
@@ -613,16 +616,16 @@ public class Console implements IView {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param personalnumber
 	 * @return true if length is correct and provided date is in valid date.
 	 */
 	private boolean checkPersonalnumber(String personalnumber) {
 		return personalnumber.length() == 12;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param input
 	 * @return true if member id exists in registry
 	 */
@@ -636,7 +639,7 @@ public class Console implements IView {
 		return true;
 	}
 	/**
-	 * 
+	 *
 	 * @param length
 	 * @return true if boat length is correct data type and greater than zero
 	 */
@@ -649,7 +652,7 @@ public class Console implements IView {
 		return true;
 	}
 	/**
-	 * 
+	 *
 	 * @param input
 	 * @param size
 	 * @return true if input lies within the index of boat types
@@ -665,7 +668,7 @@ public class Console implements IView {
 
 	}
 	/**
-	 * 
+	 *
 	 * @param input
 	 * @param m
 	 * @return if provided boat index is valid boat index of boat list that m

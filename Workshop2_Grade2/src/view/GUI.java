@@ -35,9 +35,9 @@ public class GUI implements Initializable, IView {
 	//General fields of the program
 	@FXML private Text welcomeText;
 	@FXML private Button compactListButton;
-	@FXML private Button verboListButton;	
+	@FXML private Button verboListButton;
 	@FXML private Button createMemberButton;
-	
+
 	//All fields are related to member
 	@FXML private TableView<Member> memberTable;
 	@FXML private TableColumn<Member, String> memberNameColumn;
@@ -49,7 +49,7 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Member, Member> memberDeleteColumn;
 	private TextField memberName = new TextField();
 	private TextField memberPN = new TextField();
-	
+
 	//All fields are related to Boat
 	@FXML private AnchorPane boatTablePane;
 	@FXML private TableView<Boat> boatTable;
@@ -57,20 +57,21 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Boat, String> boatTypeColumn;
 	@FXML private TableColumn<Boat, Boat> boatEditColumn;
 	@FXML private TableColumn<Boat, Boat> boatDeleteColumn;
+
 	//this button contains all the boat types
-	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values())); 
+	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
 	@FXML private Button addBoatButton;
-	@FXML private Button closeBoatListButton;	
+	@FXML private Button closeBoatListButton;
 	private TextField boatLength = new TextField();
-	
+
 	private Registry registry;
-	
-	
+
+
 	public GUI() {
 		try {
 			registry = new Registry();
 		} catch (Exception e) {
-		
+
 		}
 	}
 
@@ -130,7 +131,7 @@ public class GUI implements Initializable, IView {
 	public void registerMember(String name, String personalnumber) {
 		memberName.clear(); // clear the fields because we are registering member
 		memberPN.clear();
-		
+
 		//We receive input inside the alert box.
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
@@ -139,7 +140,7 @@ public class GUI implements Initializable, IView {
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) { // index 0 button is "save button"
-			if (checkName(memberName) && checkPN(memberPN)) { 
+			if (checkName(memberName) && checkPN(memberPN)) {
 				try{
 				registry.createMember(memberName.getText(), memberPN.getText());
 				displaySuccess("Member Registered !!");
@@ -165,7 +166,7 @@ public class GUI implements Initializable, IView {
 		//It sets given name and personal number in the fields.
 		memberName.setText(name);
 		memberPN.setText(personalnumber);
-		
+
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -180,7 +181,7 @@ public class GUI implements Initializable, IView {
 				registry.saveRegistry();
 				setMemberTable(registry.getMemberList());
 				}catch(ParseException e){
-					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
+					displayError("Please fill the correct personal number. Eg: YYYYMMDDXXXX!!");
 				}
 			} else {
 				if (memberName.getText().isEmpty() || memberPN.getText().isEmpty())
@@ -188,7 +189,7 @@ public class GUI implements Initializable, IView {
 				else if (!checkName(memberName))
 					displayError("Please fill the correct name. Eg: John Smith!!");
 				else
-					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
+					displayError("Please fill the correct personal number. Eg: YYYYMMDDXXXX!!");
 			}
 		} else
 			alert.close();
@@ -214,7 +215,7 @@ public class GUI implements Initializable, IView {
 		compactListButton.setVisible(false);
 		verboListButton.setVisible(false);
 		createMemberButton.setVisible(false);
-		
+
 		//Hereby display selected member´s boats.
 		setBoatTable(m);
 		boatTablePane.setVisible(true);
@@ -442,7 +443,7 @@ public class GUI implements Initializable, IView {
 	}
 
 	private boolean checkName(TextField name) {
-		if (name.getText().isEmpty()) 
+		if (name.getText().isEmpty())
 			return false;
 		boolean charexists = false;
 		for (int i = 0; i < name.getText().length(); i++) {
@@ -457,6 +458,6 @@ public class GUI implements Initializable, IView {
 
 	private boolean checkPN(TextField personalnumber) {
 		return personalnumber.getText().length() == 12 && !(personalnumber.getText().isEmpty());
-			
+
 	}
 }
