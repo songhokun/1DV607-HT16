@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -7,7 +8,6 @@ public class Registry {
 
 	private ArrayList<Member> memberList;
 	private ReadWriteFile readWriteFile;
-	//maxID
 	private int maxID = 0;
 	
 	
@@ -21,12 +21,11 @@ public class Registry {
 		return new ArrayList<Member>(memberList);
 	}
 
-	public void createMember(String name, String personalNumber) throws ParseException {
-		//incrementing maxID generates a new unique member ID.
-		this.memberList.add(new Member(name, personalNumber, ++maxID));
+	public void registerMember(String name, String personalNumber) throws ParseException {
+		this.memberList.add(new Member(name, personalNumber, ++maxID)); //incrementing maxID generates a new unique member ID.
 	}
+	
 	/**
-	 * 
 	 * @param inMember
 	 * @param name ; if it is "", only personalNumber will be updated.
 	 * @param personalNumber ; if it is "", only name will be updated.
@@ -45,7 +44,6 @@ public class Registry {
 
 	/**
 	 * The method is used in view side to select a member based on console input
-	 * 
 	 * @param ID of member in integer form
 	 * @return a member from present member list.
 	 * 			null if member does not exist
@@ -62,10 +60,10 @@ public class Registry {
 	 * Saves the current data into file.
 	 * Note: called on console's quit sequence
 	 * Note: on GUI it is called whenever change is occurred. 
+	 * @throws IOException 
 	 */
-	public void saveRegistry() {
-		//This maxID in argument is current maximum value of user's ID.
-		//This is because userID is generated based on increment of maxID.
+	public void saveRegistry() throws IOException {
+		//This maxID in argument is current maximum value of user's ID. This is because userID is generated based on increment of maxID.
 		readWriteFile.writeFile(memberList, maxID);
 	}
 }

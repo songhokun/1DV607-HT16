@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class GUI implements Initializable, IView {
 		try {
 			registry = new Registry();
 		} catch (Exception e) {
-		
+			displayError(e.getLocalizedMessage());
 		}
 	}
 
@@ -110,7 +111,7 @@ public class GUI implements Initializable, IView {
 			displayError("List is Empty!!");
 			return;
 		}
-		setMemberTable(registry.getMemberList());
+		setMemberTable(m);
 		memberPersonalnumberColumn.setVisible(false);
 		memberBoatsInformationColumn.setVisible(false);
 	}
@@ -121,7 +122,7 @@ public class GUI implements Initializable, IView {
 			displayError("List is Empty!!");
 			return;
 		}
-		setMemberTable(registry.getMemberList());
+		setMemberTable(m);
 		memberPersonalnumberColumn.setVisible(true);
 		memberBoatsInformationColumn.setVisible(true);
 	}
@@ -141,12 +142,16 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) { // index 0 button is "save button"
 			if (checkName(memberName) && checkPN(memberPN)) { 
 				try{
-				registry.createMember(memberName.getText(), memberPN.getText());
+				registry.registerMember(memberName.getText(), memberPN.getText());
 				displaySuccess("Member Registered !!");
-				registry.saveRegistry();  // Save file
+				
+				registry.saveRegistry();
 				setMemberTable(registry.getMemberList());
 				}catch(ParseException e) {
 					displayError("Please fill the correct personal number. Eg: YYYYMMDDXXXX!!");
+				}
+				catch (IOException e) {
+					displayError(e.getLocalizedMessage());
 				}
 			} else {
 				if (memberName.getText().isEmpty() || memberPN.getText().isEmpty())
@@ -178,9 +183,14 @@ public class GUI implements Initializable, IView {
 				registry.updateMember(m, memberName.getText(), memberPN.getText());
 				displaySuccess("Member Updated !!");
 				registry.saveRegistry();
+		
 				setMemberTable(registry.getMemberList());
 				}catch(ParseException e){
 					displayError("Please fill the correct personal number. Eg: YYMMDDXXXX!!");
+				}
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					displayError(e.getLocalizedMessage());
 				}
 			} else {
 				if (memberName.getText().isEmpty() || memberPN.getText().isEmpty())
@@ -201,7 +211,12 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			registry.deleteMember(m);
 			displaySuccess("Member Deleted !!");
-			registry.saveRegistry();
+			try {
+				registry.saveRegistry();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			setMemberTable(registry.getMemberList());
 		} else
 			alert.close();
@@ -236,7 +251,12 @@ public class GUI implements Initializable, IView {
 			if (checkLength(this.boatLength)) { //if boat length data is correct
 				m.registerBoat(Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
 				displaySuccess("Boat Registerd !!");
-				registry.saveRegistry();
+				try {
+					registry.saveRegistry();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				setBoatTable(m);
 			} else {
 				if (this.boatLength.getText().isEmpty())
@@ -262,7 +282,12 @@ public class GUI implements Initializable, IView {
 			if (checkLength(boatLength)) { //if boat length data is correct
 				m.updateBoat(Double.parseDouble(boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 				displaySuccess("Boat Updated !!");
-				registry.saveRegistry(); // save the file
+				try {
+					registry.saveRegistry();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} // save the file
 				boatTable.refresh();  // refresh the tables to show changes
 			} else {
 				if (this.boatLength.getText().isEmpty())
@@ -281,7 +306,11 @@ public class GUI implements Initializable, IView {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			m.deleteBoat(b);
 			displaySuccess("Boat Deleted !!");
-			registry.saveRegistry();
+			try {
+				registry.saveRegistry();
+			} catch (IOException e) {
+				displayError(e.getLocalizedMessage());
+			}
 			setBoatTable(m);  // update the table
 		} else
 			alert.close();
@@ -301,7 +330,13 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public void quitProgram() {
-		registry.saveRegistry();
+		try {
+			registry.saveRegistry();
+			displaySuccess("REGISTRY SAVED SUCCESSFULLY!!.");	
+			System.exit(1);
+		} catch (IOException e) {
+			displayError("ERROR!! REGISTRY FILE IS NOT SAVED.");
+		}
 	}
 
 	/********************************** FOR CREATING VIEW ************************/
