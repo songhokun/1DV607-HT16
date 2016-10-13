@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,12 +12,6 @@ import model.Registry;
 public class Console implements IView {
 
 	private String input;
-	private String memberName;
-	private String memberPN;
-	private int memberID = 0;
-	private double boatLength = 0;
-	private BoatType boattype;
-	private int boatIndex = 0;
 	private Scanner scan = new Scanner(System.in);
 	private Registry registry;
 	private final String quitSequence = "q";
@@ -29,8 +24,8 @@ public class Console implements IView {
 		try {
 			registry = new Registry();
 		} catch (Exception e) {
-			displayError("THERE WAS A PROBLEM READING FILE");
-			displayError("PLLEASE RESTART PROGRAMME");
+			displayError("CANNOT READ THE FILES. PLEASE CHECK THE CONTENT OF \'Member.txt\' AND \'Boat.txt\' FILE.");
+			quitProgram();
 		}
 
 	}
@@ -68,9 +63,7 @@ public class Console implements IView {
 				displayMemberInstructions();
 				break;
 			case ("3"):
-				getMemberNameFromUser();
-				getMemberPersonalnumberFromUser();
-				registerMember(memberName, memberPN);
+				registerMember(getMemberNameFromUser(), getMemberPersonalnumberFromUser());
 				break;
 			case (quitSequence):
 				quitProgram();
@@ -110,7 +103,7 @@ public class Console implements IView {
 	@Override
 	public void registerMember(String name, String personalnumber) {
 		try {
-			registry.createMember(name, personalnumber);
+			registry.registerMember(name, personalnumber);
 			displaySuccess("MEMBER CREATED SUCCESSFULLY !!");
 		} catch (ParseException e) {
 			displayError("INCORRECT PERSONAL NUMBER DATE FORMAT");
@@ -119,10 +112,10 @@ public class Console implements IView {
 
 	@Override
 	public void updateMember(Member m, String name, String personalnumber) {
-		try{
-		registry.updateMember(m, name, personalnumber);
-		displaySuccess("MEMBER UPDATED SUCCESSFULLY !!");
-		}catch (ParseException e) {
+		try {
+			registry.updateMember(m, name, personalnumber);
+			displaySuccess("MEMBER UPDATED SUCCESSFULLY !!");
+		} catch (ParseException e) {
 			displayError("INCORRECT PERSONAL NUMBER DATE FORMAT");
 		}
 	}
@@ -144,7 +137,6 @@ public class Console implements IView {
 				System.out.printf("%4d|%13s|%6.2f      |\n", ++i, b.getType(), b.getLength());
 			System.out.printf("+---|-------------|------------+\n");
 		}
-
 	}
 
 	@Override
@@ -165,7 +157,6 @@ public class Console implements IView {
 		} catch (Exception e) {
 			displayError("UNABLE TO REGISTER A BOAT. LENGHT IS INCORRECT");
 		}
-
 	}
 
 	@Override
@@ -176,7 +167,7 @@ public class Console implements IView {
 
 	@Override
 	public void displayError(String error) {
-		System.out.println("<<< " + error + " >>>");
+		System.out.println("ERROR: <<< " + error + " >>>");
 	}
 
 	@Override
@@ -186,9 +177,14 @@ public class Console implements IView {
 
 	@Override
 	public void quitProgram() {
-		registry.saveRegistry();
-		scan.close();
-		System.exit(1);
+		try {
+			registry.saveRegistry();
+			scan.close();
+			displaySuccess("REGISTRY SAVED SUCCESSFULLY!!.");
+			System.exit(1);
+		} catch (IOException e) {
+			displayError("ERROR!! REGISTRY FILE IS NOT SAVED.");
+		}
 	}
 
 	/***************** CONSOLE NAVIGATION *********************************/
@@ -202,24 +198,24 @@ public class Console implements IView {
 			System.out.println("3: DELETE A MEMBER");
 			System.out.println(returnSequence + ": RETURN");
 			System.out.print(quitSequence + ": QUIT\n>");
-
+			
+			Member member;
 			input = scan.next();
+			
 			switch (input) {
 			case ("1"):
-				getMemberNameFromUser();
-				getMemberPersonalnumberFromUser();
-				registerMember(memberName, memberPN);
+				registerMember(getMemberNameFromUser(), getMemberPersonalnumberFromUser());
 				displayCompactList(registry.getMemberList());
 				break;
 			case ("2"):
-				getMemberIDFromUser();
-				displaySelectedMember(registry.lookUpMember(memberID));
-				displayUpdateMemberInstructions();
+				member = getMemberBasedOnMemberIDGivenByUser();
+				displaySelectedMember(member);
+				displayUpdateMemberInstructions(member);
 				displayCompactList(registry.getMemberList());
 				break;
 			case ("3"):
-				getMemberIDFromUser();
-				deleteMember(registry.lookUpMember(memberID));
+				member = getMemberBasedOnMemberIDGivenByUser();
+				deleteMember(member);
 				displayCompactList(registry.getMemberList());
 				break;
 			case (returnSequence):
@@ -235,7 +231,7 @@ public class Console implements IView {
 		}
 	}
 
-	private void displayUpdateMemberInstructions() {
+	private void displayUpdateMemberInstructions(Member member) {
 		while (input != quitSequence) {
 			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: UPDATE NAME");
@@ -246,51 +242,38 @@ public class Console implements IView {
 			System.out.println("6: DELETE A BOAT");
 			System.out.println(returnSequence + ": RETURN");
 			System.out.print(quitSequence + ": QUIT \n>");
-
+			
+			Boat boat;
 			input = scan.next();
-
-			// After each operations we display member's information again to
-			// show the changes.
+			
+			// After each operations we display member's information again to show the changes.
 			switch (input) {
 			case ("1"):
-				getMemberNameFromUser();
-				// Member is only updating its name. Thus personal number is
-				// provided in ""
-				updateMember(registry.lookUpMember(memberID), memberName, "");
-				displaySelectedMember(registry.lookUpMember(memberID));
+				// Member is only updating its name. Thus personal number is provided in ""
+				updateMember(member, getMemberNameFromUser(), member.getPersonalnumber());
+				displaySelectedMember(member);
 				break;
 			case ("2"):
-				getMemberPersonalnumberFromUser();
-				// Member is only updating its personal number. Thus name is
-				// provided in ""
-				updateMember(registry.lookUpMember(memberID), "", memberPN);
-				displaySelectedMember(registry.lookUpMember(memberID));
+				// Member is only updating its personal number. Thus name is provided in ""
+				updateMember(member, member.getName(), getMemberPersonalnumberFromUser());
+				displaySelectedMember(member);
 				break;
 			case ("3"):
-				getMemberNameFromUser();
-				getMemberPersonalnumberFromUser();
-				updateMember(registry.lookUpMember(memberID), memberName, memberPN);
-				displaySelectedMember(registry.lookUpMember(memberID));
+				updateMember(member, getMemberNameFromUser(), getMemberPersonalnumberFromUser());
+				displaySelectedMember(member);
 				break;
 			case ("4"):
-				getBoatLengthFromUser();
-				getBoatTypeFromUser();
-				registerBoat(registry.lookUpMember(memberID), boatLength, boattype);
-				displaySelectedMember(registry.lookUpMember(memberID));
+				registerBoat(member, getBoatLengthFromUser(), getBoatTypeFromUser());
+				displaySelectedMember(member);
 				break;
 			case ("5"):
-				getBoatIndexFromUser();
-				displayUpdateBoatInstructions();
+				boat = getBoatFromUser(member);
+				displayUpdateBoatInstructions(member, boat);
 				break;
 			case ("6"):
-				getBoatIndexFromUser();
-				// The console cannot select boat without using index since we
-				// do not have boat IDs.
-				// Mind that array always begins with index 0. Thus index-1 is
-				// required.
-				deleteBoat(registry.lookUpMember(memberID),
-						registry.lookUpMember(memberID).getBoatList().get((boatIndex - 1)));
-				displaySelectedMember(registry.lookUpMember(memberID));
+				boat = getBoatFromUser(member);
+				deleteBoat(member, boat);
+				displaySelectedMember(member);
 				break;
 			case (returnSequence):
 				displayCompactList(registry.getMemberList());
@@ -304,45 +287,33 @@ public class Console implements IView {
 				break;
 			}
 		}
-
 	}
 
-	private void displayUpdateBoatInstructions() {
+	private void displayUpdateBoatInstructions(Member member, Boat boat) {
 		System.out.println("\nSELECT THE OPTION");
 		System.out.println("1: UPDATE LENGTH");
 		System.out.println("2: UPDATE BOAT TYPE");
 		System.out.println("3: UPDATE LENGTH & BOAT TYPE");
 		System.out.println(returnSequence + ": RETURN");
 		System.out.print(quitSequence + ": QUIT\n>");
-
+		
 		input = scan.next();
-		// Mind that array always begins with index 0. Thus index-1 is required.
+	
 		switch (input) {
 		case ("1"):
-			getBoatLengthFromUser();
-			// Member is only updating its boat's length. Thus type is provided
-			// in null
-			updateBoat(registry.lookUpMember(memberID), boatLength, null,
-					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
-			displaySelectedMember(registry.lookUpMember(memberID));
+			updateBoat(member, getBoatLengthFromUser(), boat.getType(), boat);
+			displaySelectedMember(member);
 			break;
 		case ("2"):
-			getBoatTypeFromUser();
-			// Member is only updating its boat's type. Thus length is provided
-			// in 0
-			updateBoat(registry.lookUpMember(memberID), 0, boattype,
-					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
-			displaySelectedMember(registry.lookUpMember(memberID));
+			updateBoat(member, boat.getLength(), getBoatTypeFromUser(), boat);
+			displaySelectedMember(member);
 			break;
 		case ("3"):
-			getBoatLengthFromUser();
-			getBoatTypeFromUser();
-			updateBoat(registry.lookUpMember(memberID), boatLength, boattype,
-					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
-			displaySelectedMember(registry.lookUpMember(memberID));
+			updateBoat(member, getBoatLengthFromUser(), getBoatTypeFromUser(), boat);
+			displaySelectedMember(member);
 			break;
 		case (returnSequence):
-			displaySelectedMember(registry.lookUpMember(memberID));
+			displaySelectedMember(member);
 			break;
 		case (quitSequence):
 			quitProgram();
@@ -353,53 +324,54 @@ public class Console implements IView {
 		}
 	}
 
-	/***************************** CONSOLE INPUT DATA METHODS ************/
+	/**************** CONSOLE INPUT DATA METHODS ************/
 
-	private void getMemberNameFromUser() {
+	private String getMemberNameFromUser() {
 		System.out.print("NAME\n>");
 		input = scan.next() + scan.nextLine();
 		while (!checkName(input)) {
 			displayError("INCORRECT NAME!! PLEASE WRITE AGAIN (Eg: John Smith)");
 			input = scan.next() + scan.nextLine();
 		}
-		memberName = input;
+		return input;
 	}
 
-	private void getMemberPersonalnumberFromUser() {
+	private String getMemberPersonalnumberFromUser() {
 		System.out.print("PERSONAL NUMBER (YYYYMMDDXXXX)\n>");
 		input = scan.next();
-		while (!checkPersonalnumber(input)) {
-			displayError("INCORRECT PERSONAL NUMBER!! PLEASE WRITE AGAIN");
+		while (input.length() != 12) {
+			displayError("INCORRECT PERSONAL NUMBER!! PERSONAL NUMBER MUST HAVE 12 DIGITS");
 			input = scan.next();
 		}
-		memberPN = input;
+		return input;
 	}
 
-	private void getMemberIDFromUser() {
+	private Member getMemberBasedOnMemberIDGivenByUser() {
 		if (registry.getMemberList().isEmpty()) {
 			displayError("LIST IS EMPTY");
 			displayMemberInstructions();
 		}
 		System.out.print("PLEASE TYPE THE MEMBER ID\n>");
 		input = scan.next();
+		
 		while (!checkMemberID(input)) {
 			displayError("INVALID MEMBER ID!! PLEASE WRITE AGAIN");
 			input = scan.next();
 		}
-		memberID = Integer.parseInt(input);
+		return registry.lookUpMember(Integer.parseInt(input));
 	}
 
-	private void getBoatLengthFromUser() {
+	private double getBoatLengthFromUser() {
 		System.out.print("LENGTH(m)\n>");
 		input = scan.next();
 		while (!checkBoatLength(input)) {
 			displayError("INCORRECT LENGTH!! PLEASE WRITE AGAIN");
 			input = scan.next();
 		}
-		boatLength = Double.parseDouble(input);
+			return Double.parseDouble(input);
 	}
 
-	private void getBoatTypeFromUser() {
+	private BoatType getBoatTypeFromUser() {
 		// Prints out types of boats
 		System.out.println("BOAT TYPE");
 		System.out.println("+ ID | Boat type +");
@@ -410,36 +382,32 @@ public class Console implements IView {
 		// receives an input
 		System.out.print("\nENTER BOAT TYPE ID\n>");
 		input = scan.next();
-		while (!checkBoatType(input, BoatType.values().length)) {
+		while (!checkIndex(input, BoatType.values().length)) {
 			displayError("INVALID BOAT TYPE ID!! PLEASE WRITE AGAIN");
 			input = scan.next();
 		}
-		for (BoatType b : BoatType.values())
-			if (b.getCode() == Integer.parseInt(input)) {
-				boattype = b;
-				return;
-			}
+			return BoatType.values()[Integer.parseInt(input) - 1]; // array
 	}
 
-	private void getBoatIndexFromUser() {
-		if (registry.lookUpMember(memberID).getNumberOfBoats() == 0) {
+	private Boat getBoatFromUser(Member member) {
+		if (member.getNumberOfBoats() == 0) {
 			displayError("THIS MEMBER HAVE NO BOAT CURRENTLY");
-			displaySelectedMember(registry.lookUpMember(memberID));
-			displayUpdateMemberInstructions();
-			return;
+			displaySelectedMember(member);
+			displayUpdateMemberInstructions(member);
+			return null;
 		}
 		System.out.print("PLEASE ENTER THE BOAT #\n>");
 		input = scan.next();
-		while (!checkBoatIndex(input, registry.lookUpMember(memberID))) {
+		while (!checkIndex(input, member.getNumberOfBoats())) {
 			displayError("INVALID BOAT #!! PLEASE WRITE AGAIN");
 			input = scan.next();
 		}
-		boatIndex = Integer.parseInt(input);
+		return member.getBoatList().get(Integer.parseInt(input) - 1);
 	}
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
 	/**
-	 *
+	 * 
 	 * @param name
 	 * @return true if name is only consists of alphabetic letters and white
 	 *         spaces.
@@ -457,74 +425,38 @@ public class Console implements IView {
 	}
 
 	/**
-	 *
-	 * @param personalnumber
-	 * @return true if length is correct and provided date is in valid date.
-	 */
-	private boolean checkPersonalnumber(String personalnumber) {
-		return personalnumber.length() == 12;
-	}
-
-	/**
-	 *
+	 * 
 	 * @param input
 	 * @return true if member id exists in registry
 	 */
 	private boolean checkMemberID(String input) {
 		try {
-			if (registry.lookUpMember(Integer.parseInt(input)) == null)
-				return false;
+			return registry.lookUpMember(Integer.parseInt(input)) != null;
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
 	}
 
 	/**
-	 *
-	 * @param length
-	 * @return true if boat length is correct data type and greater than zero
-	 */
-	private boolean checkBoatLength(String length) {
-		try {
-			Double.parseDouble(length);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 *
+	 * 
 	 * @param input
 	 * @param size
 	 * @return true if input lies within the index of boat types
 	 */
-	private boolean checkBoatType(String input, int size) {
+	private boolean checkIndex(String input, int size) {
 		try {
-			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > size)
-				return false;
+			return Integer.parseInt(input) > 0 && Integer.parseInt(input) <= size;
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
-
 	}
-
-	/**
-	 *
-	 * @param input
-	 * @param m
-	 * @return if provided boat index is valid boat index of boat list that m
-	 *         has.
-	 */
-	private boolean checkBoatIndex(String input, Member m) {
+	
+	private boolean checkBoatLength(String input){
 		try {
-			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getNumberOfBoats())
-				return false;
+			Double.parseDouble(input);
 		} catch (Exception e) {
 			return false;
-		}
+		}	
 		return true;
 	}
 }
