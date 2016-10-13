@@ -32,9 +32,7 @@ public class Registry {
 	 * @throws ParseException 
 	 */
 	public void updateMember(Member inMember, String name, String personalNumber) throws ParseException {
-		if (!name.isEmpty())
 			inMember.setName(name);
-		if (!personalNumber.isEmpty())
 			inMember.setPersonalnumber(personalNumber);
 	}
 

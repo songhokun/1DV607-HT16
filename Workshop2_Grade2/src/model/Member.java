@@ -18,8 +18,8 @@ public class Member {
 	private ArrayList<Boat> boatList = new ArrayList<Boat>();
 
 	public Member(String name, String personalnumber, int memberID) throws ParseException {
-		this.name = name;
 		setPersonalnumber(personalnumber);
+		this.name = name;
 		this.memberID = memberID;
 	}
 
