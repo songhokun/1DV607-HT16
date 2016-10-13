@@ -50,7 +50,7 @@ public class Console implements IView {
 			System.out.println("1: DISPLAY COMPACT LIST");
 			System.out.println("2: DISPLAY VERBOSE LIST");
 			System.out.println("3: CREATE A MEMBER");
-			System.out.print(quitSequence + ": QUIT\n>");
+			System.out.print(quitSequence + ": SAVE & QUIT\n>");
 
 			input = scan.next();
 			switch (input) {
@@ -197,7 +197,7 @@ public class Console implements IView {
 			System.out.println("2: UPDATE A MEMBER");
 			System.out.println("3: DELETE A MEMBER");
 			System.out.println(returnSequence + ": RETURN");
-			System.out.print(quitSequence + ": QUIT\n>");
+			System.out.print(quitSequence + ": SAVE & QUIT\n>");
 			
 			Member member;
 			input = scan.next();
@@ -241,7 +241,7 @@ public class Console implements IView {
 			System.out.println("5: UPDATE A BOAT");
 			System.out.println("6: DELETE A BOAT");
 			System.out.println(returnSequence + ": RETURN");
-			System.out.print(quitSequence + ": QUIT \n>");
+			System.out.print(quitSequence + ": SAVE & QUIT\n>");
 			
 			Boat boat;
 			input = scan.next();
@@ -295,7 +295,7 @@ public class Console implements IView {
 		System.out.println("2: UPDATE BOAT TYPE");
 		System.out.println("3: UPDATE LENGTH & BOAT TYPE");
 		System.out.println(returnSequence + ": RETURN");
-		System.out.print(quitSequence + ": QUIT\n>");
+		System.out.print(quitSequence + ": SAVE & QUIT\n>");
 		
 		input = scan.next();
 	
