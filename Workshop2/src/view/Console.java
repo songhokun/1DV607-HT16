@@ -85,9 +85,11 @@ public class Console implements IView {
 				break;
 			case ("4"):
 				displaySimpleSearchInstructions();
+				displaySearchResults();
 				break;
 			case ("5"):
 				displayComplexSearchInstructions();
+				displaySearchResults();
 				break;
 			case ("6"):
 				if (!authentication.isLoggedIn())
@@ -202,12 +204,9 @@ public class Console implements IView {
 	@Override
 	public void simpleSearch(Object o) {
 		searchedMemberList = registry.simpleSearch(o);
-		if (!searchedMemberList.isEmpty()) {
-			displaySuccess(searchedMemberList.size() + " RESULT(S) FOUND");
-			displayVerboseList(searchedMemberList);
-			displayMemberInstructions();
-		} else
-			displayError("NO RESULT FOUND");
+	}
+	public void complexSearch(ArrayList<Member> previousResult, boolean isAnd) {
+		searchedMemberList = registry.complexSearch(previousResult, searchedMemberList, isAnd);
 	}
 
 	@Override
@@ -353,26 +352,23 @@ public class Console implements IView {
 			getBoatLengthFromUser();
 			updateBoat(boatLength, null, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-		//	displayUpdateMemberInstructions();
 			break;
 		case ("2"):
 			getBoatTypeFromUser();
 			updateBoat(0, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-		//	displayUpdateMemberInstructions();
 			break;
 		case ("3"):
 			getBoatLengthFromUser();
 			getBoatTypeFromUser();
 			updateBoat(boatLength, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
-		//	displayUpdateMemberInstructions();
 			break;
 		case (returnSequence):
 			displaySelectedMember(registry.lookUpMember(memberID));
 			displayUpdateMemberInstructions();
 			displaySelectedMember(registry.lookUpMember(memberID));
-		//	displayUpdateMemberInstructions();
+
 			break;
 		case (quitSequence):
 			quitProgram();
@@ -383,22 +379,38 @@ public class Console implements IView {
 		}
 	}
 
-	// NEED TO FIX. NOT WORKING SO FAR
-	private void displayComplexSearchInstructions() {
-		System.out.println("\nNOT WORKING YET");
+	private void displaySimpleSearchInstructions() {
 		System.out.println("\nSELECT THE OPTION");
-		System.out.println("1: MEMBER BORN IN CERTAIN MONTH AND OLDER THAN CERTAIN AGE");
-		System.out.println("2: MEMBER NAME STARTS WITH CERTAIN CHARACTERS AND OLDER THAN CERTAIN AGE");
-		System.out.println(returnSequence + ": RETURN");
-		System.out.print(quitSequence + ": QUIT\n>");
+		System.out.println("1: " + SimpleSearchMode.BY_NAME);
+		System.out.println("2: " + SimpleSearchMode.OLD_THAN_AGE);
+		System.out.println("3: " + SimpleSearchMode.GRT_THAN_BOAT_LENGTH);
+		System.out.println("4: " + SimpleSearchMode.BY_MONTH);
+		System.out.println("5: " + SimpleSearchMode.BY_BOAT_TYPE);
+		System.out.println("r: RETURN");
+		System.out.println("q: QUIT");
 
 		input = scan.next();
+
 		switch (input) {
 		case ("1"):
-			getSearchMonthFromUser();
-			getSearchAgeFromUser();
+			getMemberNameFromUser();
+			simpleSearch(input);
 			break;
 		case ("2"):
+			getSearchAgeFromUser();
+			simpleSearch(input);
+			break;
+		case ("3"):
+			getBoatLengthFromUser();
+			simpleSearch(input);
+			break;
+		case ("4"):
+			getSearchMonthFromUser();
+			simpleSearch(input);
+			break;
+		case ("5"):
+			getBoatTypeFromUser();
+			simpleSearch(boattype);
 			break;
 		case (returnSequence):
 			displayMainInstructions();
@@ -406,54 +418,44 @@ public class Console implements IView {
 		case (quitSequence):
 			quitProgram();
 			break;
+		default:
+			displayError("INVALID OPTION");
+			break;
 		}
 	}
-
-	private void displaySimpleSearchInstructions() {
-		while (input != quitSequence) {
+	private void displayComplexSearchInstructions() {
+		ArrayList<Member> previousResult = new ArrayList<Member>(registry.getMemberList());
+		boolean isAnd=true;
+		
+		while(true){
+			
+			System.out.println("PERFORMING COMPLEX SEARCH");
+			displaySimpleSearchInstructions();
+			complexSearch(previousResult, isAnd);
+			previousResult = searchedMemberList;
 			System.out.println("\nSELECT THE OPTION");
-			System.out.println("1: " + SimpleSearchMode.BY_NAME);
-			System.out.println("2: " + SimpleSearchMode.OLD_THAN_AGE);
-			System.out.println("3: " + SimpleSearchMode.GRT_THAN_BOAT_LENGTH);
-			System.out.println("4: " + SimpleSearchMode.BY_MONTH);
-			System.out.println("5: " + SimpleSearchMode.BY_BOAT_TYPE);
-			System.out.println("r: RETURN");
-			System.out.println("q: QUIT");
-
+			System.out.println("1: PERFORM NEW SEARCH WITH AND OPERATION");
+			System.out.println("2: PERFORM NEW SEARCH WITH OR OPERATION");
+			System.out.print("   ENTER ANYTHING ELSE TO FINISH SEARCH\n>");
 			input = scan.next();
-
-			switch (input) {
-			case ("1"):
-				getMemberNameFromUser();
-				simpleSearch(input);
-				break;
-			case ("2"):
-				getSearchAgeFromUser();
-				simpleSearch(input);
-				break;
-			case ("3"):
-				getBoatLengthFromUser();
-				simpleSearch(input);
-				break;
-			case ("4"):
-				getSearchMonthFromUser();
-				simpleSearch(input);
-				break;
-			case ("5"):
-				getBoatTypeFromUser();
-				simpleSearch(boattype);
-				break;
-			case (returnSequence):
-				displayMainInstructions();
-				break;
-			case (quitSequence):
-				quitProgram();
-				break;
-			default:
-				displayError("INVALID OPTION");
-				break;
+			
+			if(input.compareToIgnoreCase("1")==0){
+				isAnd=true;
 			}
+			else if(input.compareToIgnoreCase("2")==0)
+				isAnd=false;
+			else
+				break;
+					
 		}
+	}
+	private void displaySearchResults(){
+		if (!searchedMemberList.isEmpty()) {
+			displaySuccess(searchedMemberList.size() + " RESULT(S) FOUND");
+			displayVerboseList(searchedMemberList);
+			displayMemberInstructions();
+		} else
+			displayError("NO RESULT FOUND");
 	}
 
 	/***************************** CONSOLE INPUT DATA METHODS ************/
