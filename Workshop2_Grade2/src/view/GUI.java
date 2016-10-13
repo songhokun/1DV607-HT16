@@ -68,8 +68,9 @@ public class GUI implements Initializable, IView {
 	
 	
 	public GUI() {
+		registry = new Registry();
 		try {
-			registry = new Registry();
+			registry.readFiles();
 		} catch (Exception e) {
 			displayError(e.getLocalizedMessage());
 		}

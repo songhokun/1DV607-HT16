@@ -21,11 +21,11 @@ public class Console implements IView {
 	 * Constructor of console. Reads member data and boat file
 	 */
 	public Console() {
+		registry = new Registry();
 		try {
-			registry = new Registry();
+			registry.readFiles();
 		} catch (Exception e) {
 			displayError("CANNOT READ THE FILES. PLEASE CHECK THE CONTENT OF \'Member.txt\' AND \'Boat.txt\' FILE.");
-			quitProgram();
 		}
 
 	}

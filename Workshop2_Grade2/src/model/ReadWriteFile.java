@@ -58,9 +58,9 @@ public class ReadWriteFile {
 		 */
 		while (scan.hasNext()) {
 			String[] temp = scan.nextLine().split(";");
-			for (Member i : toReturn) {
-				if (i.getMemberID() == Integer.parseInt(temp[2])) {
-					i.registerBoat(Double.parseDouble(temp[0]), BoatType.valueOf(temp[1]));
+			for (Member m : toReturn) {
+				if (m.getMemberID() == Integer.parseInt(temp[2])) {
+					m.registerBoat(Double.parseDouble(temp[0]), BoatType.valueOf(temp[1]));
 					break;
 				}
 			}

@@ -11,12 +11,16 @@ public class Registry {
 	private int maxID = 0;
 	
 	
-	public Registry() throws Exception {
+	public Registry(){
+		memberList = new ArrayList<Member>();
+	}
+
+	public void readFiles() throws Exception{
 		readWriteFile = new ReadWriteFile();
 		memberList = readWriteFile.readFile();
 		maxID = readWriteFile.getMaxID();
 	}
-
+	
 	public ArrayList<Member> getMemberList() {
 		return new ArrayList<Member>(memberList);
 	}
@@ -27,8 +31,6 @@ public class Registry {
 	
 	/**
 	 * @param inMember
-	 * @param name ; if it is "", only personalNumber will be updated.
-	 * @param personalNumber ; if it is "", only name will be updated.
 	 * @throws ParseException 
 	 */
 	public void updateMember(Member inMember, String name, String personalNumber) throws ParseException {
