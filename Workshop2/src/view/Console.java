@@ -1,7 +1,6 @@
 package view;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -134,14 +133,22 @@ public class Console implements IView {
 
 	@Override
 	public void registerMember(String name, String personalnumber) {
-		registry.createMember(name, personalnumber);
-		displaySuccess("MEMBER CREATED SUCCESSFULLY !!");
+		try {
+			registry.createMember(name, personalnumber);
+			displaySuccess("MEMBER CREATED SUCCESSFULLY !!");
+		} catch (ParseException e) {
+			displayError("INCORRECT PERSONAL NUMBER DATE FORMAT");
+		}
 	}
 
 	@Override
 	public void updateMember(Member m, String name, String personalnumber) {
-		registry.updateMember(m, name, personalnumber);
-		displaySuccess("MEMBER UPDATED SUCCESSFULLY !!");
+		try{
+			registry.updateMember(m, name, personalnumber);
+			displaySuccess("MEMBER UPDATED SUCCESSFULLY !!");
+		}catch (ParseException e) {
+			displayError("INCORRECT PERSONAL NUMBER DATE FORMAT");
+		}
 	}
 
 	@Override
@@ -166,19 +173,28 @@ public class Console implements IView {
 
 	@Override
 	public void registerBoat(Member m, double boatLength, BoatType boattype) {
-		registry.registerBoat(m, boatLength, boattype);
-		displaySuccess("BOAT REGISTERD SUCCESSFULLY !!");
+		try {
+			m.registerBoat(boatLength, boattype);
+			displaySuccess("BOAT REGISTERD SUCCESSFULLY !!");
+		} catch (Exception e) {
+			displayError("UNABLE TO REGISTER A BOAT. LENGHT IS INCORRECT");
+		}
 	}
 
 	@Override
-	public void updateBoat(double length, BoatType type, Boat boat) {
-		registry.updateBoat(length, type, boat);
-		displaySuccess("BOAT UPDATED SUCCESSFULLY !!");
+	public void updateBoat(Member m, double length, BoatType type, Boat boat) {
+		try {
+			m.updateBoat(length, type, boat);
+			displaySuccess("BOAT UPDATED SUCCESSFULLY !!");
+		} catch (Exception e) {
+			displayError("UNABLE TO REGISTER A BOAT. LENGHT IS INCORRECT");
+		}
+
 	}
 
 	@Override
 	public void deleteBoat(Member m, Boat b) {
-		registry.deleteBoat(m, b);
+		m.deleteBoat(b);
 		displaySuccess("BOAT DELETED SUCCESSFULLY !!");
 	}
 
@@ -347,28 +363,33 @@ public class Console implements IView {
 		System.out.print(quitSequence + ": QUIT\n>");
 
 		input = scan.next();
+		// Mind that array always begins with index 0. Thus index-1 is required.
 		switch (input) {
 		case ("1"):
 			getBoatLengthFromUser();
-			updateBoat(boatLength, null, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			// Member is only updating its boat's length. Thus type is provided
+			// in null
+			updateBoat(registry.lookUpMember(memberID), boatLength, null,
+					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
 			break;
 		case ("2"):
 			getBoatTypeFromUser();
-			updateBoat(0, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			// Member is only updating its boat's type. Thus length is provided
+			// in 0
+			updateBoat(registry.lookUpMember(memberID), 0, boattype,
+					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
 			break;
 		case ("3"):
 			getBoatLengthFromUser();
 			getBoatTypeFromUser();
-			updateBoat(boatLength, boattype, registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
+			updateBoat(registry.lookUpMember(memberID), boatLength, boattype,
+					registry.lookUpMember(memberID).lookUpBoat(boatIndex - 1));
 			displaySelectedMember(registry.lookUpMember(memberID));
 			break;
 		case (returnSequence):
 			displaySelectedMember(registry.lookUpMember(memberID));
-			displayUpdateMemberInstructions();
-			displaySelectedMember(registry.lookUpMember(memberID));
-
 			break;
 		case (quitSequence):
 			quitProgram();
@@ -402,11 +423,10 @@ public class Console implements IView {
 			break;
 		case ("3"):
 			getBoatLengthFromUser();
-			simpleSearch(input);
+			simpleSearch(boatlength);
 			break;
 		case ("4"):
-			getSearchMonthFromUser();
-			simpleSearch(input);
+			simpleSearch(getSearchMonthFromUser());
 			break;
 		case ("5"):
 			getBoatTypeFromUser();
@@ -574,6 +594,12 @@ public class Console implements IView {
 	}
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
+	/**
+	 * 
+	 * @param name
+	 * @return true if name is only consists of alphabetic letters and white
+	 *         spaces.
+	 */
 	private boolean checkName(String name) {
 		boolean charexists = false;
 		for (int i = 0; i < name.length(); i++) {
@@ -586,20 +612,20 @@ public class Console implements IView {
 		return charexists;
 	}
 
+	/**
+	 * 
+	 * @param personalnumber
+	 * @return true if length is correct and provided date is in valid date.
+	 */
 	private boolean checkPersonalnumber(String personalnumber) {
-		if (personalnumber.length() != 12)
-			return false;
-		try {
-			String pn = personalnumber.substring(0, 8);
-			DateFormat df = new SimpleDateFormat("yyyyMMdd");
-			df.setLenient(false);
-			df.parse(pn);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+		return personalnumber.length() == 12;
 	}
-
+	
+	/**
+	 * 
+	 * @param input
+	 * @return true if member id exists in registry
+	 */
 	private boolean checkMemberID(String input) {
 		try {
 			if (registry.lookUpMember(Integer.parseInt(input)) == null)
@@ -609,17 +635,25 @@ public class Console implements IView {
 		}
 		return true;
 	}
-
+	/**
+	 * 
+	 * @param length
+	 * @return true if boat length is correct data type and greater than zero
+	 */
 	private boolean checkBoatLength(String length) {
 		try {
-			if (Double.parseDouble(length) <= 0)
-				return false;
+			Double.parseDouble(length);
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
 	}
-
+	/**
+	 * 
+	 * @param input
+	 * @param size
+	 * @return true if input lies within the index of boat types
+	 */
 	private boolean checkBoatType(String input, int size) {
 		try {
 			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > size)
@@ -630,7 +664,13 @@ public class Console implements IView {
 		return true;
 
 	}
-
+	/**
+	 * 
+	 * @param input
+	 * @param m
+	 * @return if provided boat index is valid boat index of boat list that m
+	 *         has.
+	 */
 	private boolean checkBoatIndex(String input, Member m) {
 		try {
 			if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > m.getNumberOfBoats())

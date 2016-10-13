@@ -1,9 +1,12 @@
 package model;
 
-import java.time.LocalDate;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Year;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import model.Boat.BoatType;
 
 public class Member {
 
@@ -11,20 +14,20 @@ public class Member {
 	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatList = new ArrayList<Boat>();
-	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd");
+	//private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd");
 
 	public Member() {
 
 	}
 
-	public Member(String name, String personalnumber) {
+	public Member(String name, String personalnumber) throws ParseException {
 		this.name = name;
-		this.personalnumber = personalnumber;
+		setPersonalnumber(personalnumber);
 	}
 
-	public Member(String name, String personalnumber, int memberID) {
+	public Member(String name, String personalnumber, int memberID) throws ParseException {
 		this.name = name;
-		this.personalnumber = personalnumber;
+		setPersonalnumber(personalnumber);
 		this.memberID = memberID;
 	}
 
@@ -40,16 +43,21 @@ public class Member {
 		this.name = name;
 	}
 
-	public void setPersonalnumber(String personalnumber) {
+	public void setPersonalnumber(String personalnumber) throws ParseException {
+		String pn = personalnumber.substring(0, 8);
+		DateFormat df = new SimpleDateFormat("yyyyMMdd");
+		df.setLenient(false);
+		df.parse(pn);
 		this.personalnumber = personalnumber;
 	}
+
 
 	public int getNumberOfBoats() {
 		return boatList.size();
 	}
 
 	public ArrayList<Boat> getBoatList() {
-		return boatList;
+		return new ArrayList<Boat>(boatList);
 	}
 
 	public int getMemberID() {
@@ -57,21 +65,37 @@ public class Member {
 	}
 
 	public int getBirthYear() {
-		return LocalDate.parse(personalnumber.substring(0, 8), formatter).getYear();
+		return Integer.parseInt(personalnumber.substring(0, 4));
+		//return LocalDate.parse(personalnumber.substring(0, 8), formatter).getYear();
 	}
 
 	public int getBirthMonth() {
-		return LocalDate.parse(personalnumber.substring(0, 8), formatter).getMonthValue();
+		return Integer.parseInt(personalnumber.substring(4,6));
+		//return LocalDate.parse(personalnumber.substring(0, 8), formatter).getMonthValue();
 	}
 
 	public int getBirthDate() {
-		return LocalDate.parse(personalnumber.substring(0, 8), formatter).getDayOfMonth();
+		return Integer.parseInt(personalnumber.substring(6,8));
+		//return LocalDate.parse(personalnumber.substring(0, 8), formatter).getDayOfMonth();
 	}
 
 	public int getAge() {
 		return Year.now().getValue() - getBirthYear();
 	}
+	
+	public void registerBoat(double length, BoatType type) {
+		this.boatList.add(new Boat(length, type));
+	}
+	public void updateBoat(double length, BoatType type, Boat boat) {
+		if (length != 0)
+			boat.setLength(length);
+		if (type != null)
+			boat.setType(type);
+	}
 
+	public void deleteBoat(Boat boat) {
+		this.boatList.remove(boat);
+	}
 	public Boat lookUpBoat(int index) {
 		return this.boatList.get(index);
 	}

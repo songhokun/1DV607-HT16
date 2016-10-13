@@ -439,7 +439,7 @@ public class Console implements IView {
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
 	/**
-	 * 
+	 *
 	 * @param name
 	 * @return true if name is only consists of alphabetic letters and white
 	 *         spaces.
@@ -457,7 +457,7 @@ public class Console implements IView {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param personalnumber
 	 * @return true if length is correct and provided date is in valid date.
 	 */
@@ -466,7 +466,7 @@ public class Console implements IView {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param input
 	 * @return true if member id exists in registry
 	 */
@@ -481,7 +481,7 @@ public class Console implements IView {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param length
 	 * @return true if boat length is correct data type and greater than zero
 	 */
@@ -495,7 +495,7 @@ public class Console implements IView {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param input
 	 * @param size
 	 * @return true if input lies within the index of boat types
@@ -512,7 +512,7 @@ public class Console implements IView {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param input
 	 * @param m
 	 * @return if provided boat index is valid boat index of boat list that m
