@@ -16,8 +16,7 @@ public class Member {
 	private String personalnumber;
 	private int memberID;
 	private ArrayList<Boat> boatList = new ArrayList<Boat>();
-	
-	
+
 	public Member(String name, String personalnumber, int memberID) throws ParseException {
 		this.name = name;
 		setPersonalnumber(personalnumber);
@@ -61,17 +60,11 @@ public class Member {
 	}
 
 	public void updateBoat(double length, BoatType type, Boat boat) {
-		if (length != 0)
 			boat.setLength(length);
-		if (type != null)
 			boat.setType(type);
 	}
 
 	public void deleteBoat(Boat boat) {
 		this.boatList.remove(boat);
-	}
-	
-	public Boat lookUpBoat(int index){
-		return this.boatList.get(index);
 	}
 }
