@@ -58,8 +58,6 @@ public class Registry {
 	
 	/**
 	 * Saves the current data into file.
-	 * Note: called on console's quit sequence
-	 * Note: on GUI it is called whenever change is occurred. 
 	 * @throws IOException 
 	 */
 	public void saveRegistry() throws IOException {
