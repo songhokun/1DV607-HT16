@@ -1,0 +1,4 @@
+12.0;Motorsailer;1
+1.0;Other;1
+12.0;Kayak;1
+33.0;Sailboat;2
