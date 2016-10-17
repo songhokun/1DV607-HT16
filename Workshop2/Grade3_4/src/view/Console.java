@@ -433,10 +433,10 @@ public class Console implements IView {
 	}
 	
 	private void displayComplexSearchInstructions() {
-			ArrayList<Member> firstList = displaySimpleSearchInstructions();
-			ArrayList<Member> secondList = null;
-			String in;
-			do{
+		ArrayList<Member> firstList = displaySimpleSearchInstructions();
+		ArrayList<Member> secondList = null;
+		String in;
+		do{
 			System.out.println("1: AND");
 			System.out.println("2: OR");
 			System.out.println("3: SHOW RESULT");
