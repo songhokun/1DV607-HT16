@@ -400,7 +400,7 @@ public class GUI implements Initializable, IView {
 			displayError("Search field is empty");
 		else if (!m.isEmpty()) {
 			displaySuccess(m.size() + " Result(s) Found!!");
-			setMemberTable(m);
+			displayVerboseList(m);
 		} else{
 			displayError("0 Result Found!!");
 		}
@@ -444,9 +444,8 @@ public class GUI implements Initializable, IView {
 		saveAndQuitButton.setVisible(true);
 		searchPane.setVisible(true);
 		memberTable.setVisible(true);
-		
 		setMemberTable(registry.getMemberList());
-
+		
 		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_BOAT_TYPE))
 			searchByBoatType.setVisible(true);
 		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_MONTH))

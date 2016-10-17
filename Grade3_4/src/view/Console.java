@@ -435,16 +435,16 @@ public class Console implements IView {
 	private void displayComplexSearchInstructions() {
 			ArrayList<Member> firstList = displaySimpleSearchInstructions();
 			ArrayList<Member> secondList = null;
-			
-			while(!input.equals("3")){
+			String in;
+			do{
 			System.out.println("1: AND");
 			System.out.println("2: OR");
 			System.out.println("3: SHOW RESULT");
 			System.out.println(returnSequence + ": RETURN");
 			System.out.println(quitSequence + ": SAVE & QUIT");
-			input = scan.next();
+			in = scan.next();
 			
-			switch(input){
+			switch(in){
 			case("1"): 
 				secondList = displaySimpleSearchInstructions();
 				firstList = doComplexSearch(firstList, secondList, true);
@@ -455,7 +455,7 @@ public class Console implements IView {
 				break;
 			case("3"): 
 				displaySearchResult(firstList);
-				break;
+				return;
 			case(returnSequence): 
 				displayMainInstructions();
 				break;
@@ -466,8 +466,7 @@ public class Console implements IView {
 				displayError("INVALID OPTION");
 				break;
 			}
-		}
-			displayMainInstructions();
+		}while(!in.equals("3"));
 	}
 	
 	/**************** CONSOLE INPUT DATA METHODS ************/
