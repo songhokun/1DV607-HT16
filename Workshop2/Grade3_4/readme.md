@@ -12,3 +12,5 @@ We defined checking whether the data seems to be reasonable or not to be checkin
 
 3. Complex search
 We have interpreted a complex search by nesting results of previous simple search. Therefore, it performs comparison of two search results, and nest it by 'AND' or 'OR' operation. It means complex search is as much as flexible as simple search is.
+
+NOTE: GUI does not implement complex search function. It is only available in console.
