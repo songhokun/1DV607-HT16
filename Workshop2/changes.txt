@@ -27,4 +27,6 @@ Over-usage of registry.lookUpMember is removed. Since we are asking user to ente
 
 8. Operation of quit is renamed to save and quit since we save all changes when we quite the programme in console. (2016-10-14)
 
+9. Sequence diagrams are now showing private methods which help to check the user input (2016-10-18).
+
 The changes applies also to the grade 3 & 4 works.
