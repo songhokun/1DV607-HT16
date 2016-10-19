@@ -32,6 +32,7 @@ import model.Authentication;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Registry.SearchMode;
+import model.Registry.SearchOperator;
 import model.Member;
 import model.Registry;
 
@@ -112,7 +113,7 @@ public class GUI implements Initializable, IView {
 		searchByChoiceBox.setItems(FXCollections.observableArrayList(SearchMode.values()));
 		searchByChoiceBox.getSelectionModel().select(SearchMode.BY_NAME); // default
 		
-		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(searchField.getText())));
+		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(searchField.getText(), null)));
 	}
 
 	@Override
@@ -352,46 +353,48 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(Object o) { 
+	public ArrayList<Member> doSimpleSearch(Object o, SearchMode searchMode) { 
 		//if search field is empty
 		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_NAME) || 
-			searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.GRT_THAN_BOAT_LENGTH) ||
-			searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.OLD_THAN_AGE))
+			searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.GREATER_THAN_BOAT_LENGTH) ||
+			searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.OLDER_THAN_AGE))
 				if(searchField.getText().isEmpty())
 						return null;
-
-		Object object = null;
+		
 		try {
 			switch (searchByChoiceBox.getSelectionModel().getSelectedItem()) {
-			case OLD_THAN_AGE:
-				object = Integer.parseInt(searchField.getText());
-				break;
-			case GRT_THAN_BOAT_LENGTH:
-				object = Double.parseDouble(searchField.getText());
-				break;
-			case BY_BOAT_TYPE:
-				object = searchByBoatType.getSelectionModel().getSelectedItem();
-				break;
-			case BY_MONTH:
-				object = searchByMonth.getSelectionModel().getSelectedItem();
-				break;
 			case BY_NAME:
-				object = searchField.getText();
-				break;
+					return registry.simpleSearch(searchField.getText(), SearchMode.BY_NAME);
+			case OLDER_THAN_AGE:
+					return registry.simpleSearch(Integer.parseInt(searchField.getText()), SearchMode.OLDER_THAN_AGE);
+			case YOUNGER_THAN_AGE:
+					return registry.simpleSearch(Integer.parseInt(searchField.getText()), SearchMode.YOUNGER_THAN_AGE);
+			case EQUAL_TO_AGE:
+					return registry.simpleSearch(Integer.parseInt(searchField.getText()), SearchMode.EQUAL_TO_AGE);
+			case BY_MONTH:
+					return registry.simpleSearch(searchByMonth.getSelectionModel().getSelectedItem(), SearchMode.BY_MONTH);
+			case BY_BOAT_TYPE:
+					return registry.simpleSearch(searchByBoatType.getSelectionModel().getSelectedItem(), SearchMode.BY_BOAT_TYPE);
+			case GREATER_THAN_BOAT_LENGTH:
+					return registry.simpleSearch(Double.parseDouble(searchField.getText()), SearchMode.GREATER_THAN_BOAT_LENGTH);
+			case SMALLER_THAN_BOAT_LENGTH:
+					return registry.simpleSearch(Double.parseDouble(searchField.getText()), SearchMode.SMALLER_THAN_BOAT_LENGTH);
+			case EQUAL_TO_BOAT_LENGTH:
+					return registry.simpleSearch(Double.parseDouble(searchField.getText()), SearchMode.EQUAL_TO_BOAT_LENGTH);
 			default: 
-				displayError("Incorrect Data Type!!");
+					displayError("Incorrect Data Type!!");
 				break;
 			}
 		} catch (Exception e) {
 			displayError("Incorrect Data Type!!");
 		}
 		searchField.clear();
-		return registry.simpleSearch(object);
+		return new ArrayList<Member>();
 	}
 
 	@Override
-	public ArrayList<Member> doComplexSearch(ArrayList<Member> firstList, ArrayList<Member> secondList, boolean isAnd) {
-		return registry.complexSearch(firstList, secondList, isAnd);
+	public ArrayList<Member> doComplexSearch(ArrayList<Member> firstList, ArrayList<Member> secondList, SearchOperator operator) {
+		return registry.complexSearch(firstList, secondList, operator);
 	}
 	
 	@Override

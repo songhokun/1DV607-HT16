@@ -8,9 +8,10 @@ import java.util.Scanner;
 import model.Authentication;
 import model.Boat;
 import model.Boat.BoatType;
-import model.Registry.SearchMode;
 import model.Member;
 import model.Registry;
+import model.Registry.SearchMode;
+import model.Registry.SearchOperator;
 
 public class Console implements IView {
 
@@ -224,13 +225,13 @@ public class Console implements IView {
 	}
 	
 	@Override
-	public ArrayList<Member> doSimpleSearch(Object o) {
-		return registry.simpleSearch(o);
+	public ArrayList<Member> doSimpleSearch(Object o, SearchMode searchMode) {
+		return registry.simpleSearch(o, searchMode);
 	}
 	
 	@Override
-	public ArrayList<Member> doComplexSearch(ArrayList<Member> firstList, ArrayList<Member> secondList, boolean isAnd) {
-		return registry.complexSearch(firstList, secondList, isAnd);
+	public ArrayList<Member> doComplexSearch(ArrayList<Member> firstList, ArrayList<Member> secondList, SearchOperator operator) {
+		return registry.complexSearch(firstList, secondList, operator);
 	}
 
 	@Override
@@ -392,33 +393,33 @@ public class Console implements IView {
 
 	private ArrayList<Member> displaySimpleSearchInstructions() {
 		System.out.println("\nSELECT THE OPTION");
-		System.out.println("1: " + SearchMode.BY_NAME);
-		System.out.println("2: " + SearchMode.OLD_THAN_AGE);
-		System.out.println("3: " + SearchMode.GRT_THAN_BOAT_LENGTH);
-		System.out.println("4: " + SearchMode.BY_MONTH);
-		System.out.println("5: " + SearchMode.BY_BOAT_TYPE);
-		System.out.println("r: RETURN");
-		System.out.println("q: SAVE & QUIT");
+		for(SearchMode mode : SearchMode.values())
+			System.out.println(mode.ordinal() + ": " + mode);
 
-		input = scan.next();
+		System.out.println("r: RETURN");
+		System.out.print("q: SAVE & QUIT\n>");
 		ArrayList<Member> m = null;
+		input = scan.next();
 		
 		switch (input) {
+		case ("0"):
+				return doSimpleSearch(getMemberNameFromUser(), SearchMode.BY_NAME);
 		case ("1"):
-			m = doSimpleSearch(getMemberNameFromUser());
-			break;
+				return doSimpleSearch(getSearchAgeFromUser(), SearchMode.OLDER_THAN_AGE);
 		case ("2"):
-			m = doSimpleSearch(getSearchAgeFromUser());
-			break;
+				return doSimpleSearch(getSearchAgeFromUser(), SearchMode.YOUNGER_THAN_AGE);
 		case ("3"):
-			m = doSimpleSearch(getBoatLengthFromUser());
-			break;
+				return doSimpleSearch(getSearchAgeFromUser(), SearchMode.EQUAL_TO_AGE);
 		case ("4"):
-			m = doSimpleSearch(getSearchMonthFromUser());
-			break;
+				return doSimpleSearch(getSearchMonthFromUser(), SearchMode.BY_MONTH);	
 		case ("5"):
-			m = doSimpleSearch(getBoatTypeFromUser());	
-			break;
+				return doSimpleSearch(getBoatTypeFromUser(), SearchMode.BY_BOAT_TYPE);
+		case ("6"):
+				return doSimpleSearch(getBoatLengthFromUser(), SearchMode.GREATER_THAN_BOAT_LENGTH);
+		case ("7"):
+				return doSimpleSearch(getBoatLengthFromUser(), SearchMode.SMALLER_THAN_BOAT_LENGTH);
+		case ("8"):
+				return doSimpleSearch(getBoatLengthFromUser(), SearchMode.EQUAL_TO_BOAT_LENGTH);
 		case (returnSequence):
 			displayMainInstructions();
 			break;
@@ -427,6 +428,7 @@ public class Console implements IView {
 			break;
 		default:
 			displayError("INVALID OPTION");
+			displaySimpleSearchInstructions();
 			break;
 		}
 		return m;
@@ -437,8 +439,8 @@ public class Console implements IView {
 		ArrayList<Member> secondList = null;
 		String in;
 		do{
-			System.out.println("1: AND");
-			System.out.println("2: OR");
+			System.out.println("1: " + SearchOperator.AND);
+			System.out.println("2: " + SearchOperator.OR);
 			System.out.println("3: SHOW RESULT");
 			System.out.println(returnSequence + ": RETURN");
 			System.out.println(quitSequence + ": SAVE & QUIT");
@@ -447,11 +449,11 @@ public class Console implements IView {
 			switch(in){
 			case("1"): 
 				secondList = displaySimpleSearchInstructions();
-				firstList = doComplexSearch(firstList, secondList, true);
+				firstList = doComplexSearch(firstList, secondList, SearchOperator.AND);
 				break;
 			case("2"): 
 				secondList = displaySimpleSearchInstructions();
-				firstList = doComplexSearch(firstList, secondList, false);
+				firstList = doComplexSearch(firstList, secondList, SearchOperator.OR);
 				break;
 			case("3"): 
 				displaySearchResult(firstList);
@@ -466,7 +468,7 @@ public class Console implements IView {
 				displayError("INVALID OPTION");
 				break;
 			}
-		}while(!in.equals("3"));
+		}while(!in.equals("3"));	
 	}
 	
 	/**************** CONSOLE INPUT DATA METHODS ************/

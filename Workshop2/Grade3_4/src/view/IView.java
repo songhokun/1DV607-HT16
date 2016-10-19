@@ -1,9 +1,12 @@
 package view;
 
 import java.util.ArrayList;
+
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
+import model.Registry.SearchMode;
+import model.Registry.SearchOperator;
 
 /**
  * Collection of methods both in GUI and Console application
@@ -109,19 +112,19 @@ public interface IView {
 
 	/**
 	 * 
-	 * @param o
+	 * @param o, searchMode
 	 * @return ArrayList<Member> who have given parameter object
 	 */
-	ArrayList<Member> doSimpleSearch(Object o);
+	ArrayList<Member> doSimpleSearch(Object o, SearchMode searchMode);
 
 	/**
 	 * 
 	 * @param firstList
 	 * @param secondList
-	 * @param isAnd
+	 * @param SearchMode operator
 	 * @return ArrayList<Member> after doing AND/OR operation on given arrays.
 	 */
-	ArrayList<Member> doComplexSearch(ArrayList<Member> firstList, ArrayList<Member> secondList, boolean isAnd);
+	ArrayList<Member> doComplexSearch(ArrayList<Member> firstList, ArrayList<Member> secondList, SearchOperator operator);
 
 	/**
 	 * Print the given parameter array
