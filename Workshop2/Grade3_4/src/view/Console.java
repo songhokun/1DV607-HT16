@@ -398,77 +398,79 @@ public class Console implements IView {
 
 		System.out.println("r: RETURN");
 		System.out.print("q: SAVE & QUIT\n>");
-		ArrayList<Member> m = null;
 		input = scan.next();
 		
-		switch (input) {
-		case ("0"):
-				return doSimpleSearch(getMemberNameFromUser(), SearchMode.BY_NAME);
-		case ("1"):
-				return doSimpleSearch(getSearchAgeFromUser(), SearchMode.OLDER_THAN_AGE);
-		case ("2"):
-				return doSimpleSearch(getSearchAgeFromUser(), SearchMode.YOUNGER_THAN_AGE);
-		case ("3"):
-				return doSimpleSearch(getSearchAgeFromUser(), SearchMode.EQUAL_TO_AGE);
-		case ("4"):
-				return doSimpleSearch(getSearchMonthFromUser(), SearchMode.BY_MONTH);	
-		case ("5"):
-				return doSimpleSearch(getBoatTypeFromUser(), SearchMode.BY_BOAT_TYPE);
-		case ("6"):
-				return doSimpleSearch(getBoatLengthFromUser(), SearchMode.GREATER_THAN_BOAT_LENGTH);
-		case ("7"):
-				return doSimpleSearch(getBoatLengthFromUser(), SearchMode.SMALLER_THAN_BOAT_LENGTH);
-		case ("8"):
-				return doSimpleSearch(getBoatLengthFromUser(), SearchMode.EQUAL_TO_BOAT_LENGTH);
-		case (returnSequence):
+		if(input.equals(returnSequence))
 			displayMainInstructions();
-			break;
-		case (quitSequence):
-			quitProgram();
-			break;
-		default:
-			displayError("INVALID OPTION");
-			displaySimpleSearchInstructions();
-			break;
-		}
-		return m;
+		else if (input.equals(quitSequence))
+					quitProgram();
+		else
+			try{
+				switch (SearchMode.values()[Integer.parseInt(input)]) {
+		
+				case BY_NAME:
+					return doSimpleSearch(getMemberNameFromUser(), SearchMode.BY_NAME);
+				case OLDER_THAN_AGE:
+					return doSimpleSearch(getSearchAgeFromUser(), SearchMode.OLDER_THAN_AGE);
+				case YOUNGER_THAN_AGE:
+					return doSimpleSearch(getSearchAgeFromUser(), SearchMode.YOUNGER_THAN_AGE);
+				case EQUAL_TO_AGE:
+					return doSimpleSearch(getSearchAgeFromUser(), SearchMode.EQUAL_TO_AGE);
+				case BY_MONTH:
+					return doSimpleSearch(getSearchMonthFromUser(), SearchMode.BY_MONTH);	
+				case BY_BOAT_TYPE:
+					return doSimpleSearch(getBoatTypeFromUser(), SearchMode.BY_BOAT_TYPE);
+				case GREATER_THAN_BOAT_LENGTH:
+					return doSimpleSearch(getBoatLengthFromUser(), SearchMode.GREATER_THAN_BOAT_LENGTH);
+				case SMALLER_THAN_BOAT_LENGTH:
+					return doSimpleSearch(getBoatLengthFromUser(), SearchMode.SMALLER_THAN_BOAT_LENGTH);
+				case EQUAL_TO_BOAT_LENGTH:
+					return doSimpleSearch(getBoatLengthFromUser(), SearchMode.EQUAL_TO_BOAT_LENGTH);
+				}
+			}catch(Exception e){
+				displayError("INVALID OPTION");
+				displaySimpleSearchInstructions();
+			}
+		return null;
 	}
 	
 	private void displayComplexSearchInstructions() {
 		ArrayList<Member> firstList = displaySimpleSearchInstructions();
 		ArrayList<Member> secondList = null;
 		String in;
-		do{
-			System.out.println("1: " + SearchOperator.AND);
-			System.out.println("2: " + SearchOperator.OR);
-			System.out.println("3: SHOW RESULT");
-			System.out.println(returnSequence + ": RETURN");
-			System.out.println(quitSequence + ": SAVE & QUIT");
-			in = scan.next();
-			
-			switch(in){
-			case("1"): 
-				secondList = displaySimpleSearchInstructions();
-				firstList = doComplexSearch(firstList, secondList, SearchOperator.AND);
-				break;
-			case("2"): 
-				secondList = displaySimpleSearchInstructions();
-				firstList = doComplexSearch(firstList, secondList, SearchOperator.OR);
-				break;
-			case("3"): 
-				displaySearchResult(firstList);
+	do{
+		for (SearchOperator operator : SearchOperator.values())
+			System.out.println(operator.ordinal() + ": " + operator);
+
+		System.out.println("s: SHOW RESULT");
+		System.out.println(returnSequence + ": RETURN");
+		System.out.print(quitSequence + ": SAVE & QUIT\n");
+		in = scan.next();
+
+			if (in.equals(returnSequence))
 				return;
-			case(returnSequence): 
-				displayMainInstructions();
-				break;
-			case(quitSequence): 
+			else if (in.equals(quitSequence))
 				quitProgram();
-				break;
-			default: 
-				displayError("INVALID OPTION");
-				break;
+			else if(in.equals("s"))
+				displaySearchResult(firstList);
+			else{
+				try {
+					switch (SearchOperator.values()[Integer.parseInt(in)]) {
+
+					case AND:
+						secondList = displaySimpleSearchInstructions();
+						firstList = doComplexSearch(firstList, secondList, SearchOperator.AND);
+						break;
+					case OR:
+						secondList = displaySimpleSearchInstructions();
+						firstList = doComplexSearch(firstList, secondList, SearchOperator.OR);
+						break;
+					}
+				} catch (Exception e) {
+					displayError("INVALID OPTION");
+				}
 			}
-		}while(!in.equals("3"));	
+		}while(!in.equals("s"));
 	}
 	
 	/**************** CONSOLE INPUT DATA METHODS ************/
