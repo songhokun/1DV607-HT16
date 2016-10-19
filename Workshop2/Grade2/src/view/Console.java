@@ -247,12 +247,10 @@ public class Console implements IView {
 			// After each operations we display member's information again to show the changes.
 			switch (input) {
 			case ("1"):
-				// Member is only updating its name. Thus personal number is provided in ""
 				updateMember(member, getMemberNameFromUser(), member.getPersonalnumber());
 				displaySelectedMember(member);
 				break;
 			case ("2"):
-				// Member is only updating its personal number. Thus name is provided in ""
 				updateMember(member, member.getName(), getMemberPersonalnumberFromUser());
 				displaySelectedMember(member);
 				break;
