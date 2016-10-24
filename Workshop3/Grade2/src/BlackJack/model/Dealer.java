@@ -51,9 +51,9 @@ public class Dealer extends Player {
 			}
 
 			while (m_hitRule.doHit(this)) {
-					Card c = m_deck.getCard();
-					c.show(true);
-					dealCard(c);
+				Card c = m_deck.getCard();
+				c.show(true);
+				dealCard(c);
 			}
 			return true;
 		}

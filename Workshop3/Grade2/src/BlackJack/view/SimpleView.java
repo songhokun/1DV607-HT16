@@ -2,6 +2,8 @@ package BlackJack.view;
 
 import java.util.Scanner;
 
+import BlackJack.controller.PlayGame.Command;
+
 public class SimpleView implements IView 
 {
 	public void displayWelcomeMessage()
@@ -11,14 +13,24 @@ public class SimpleView implements IView
 		System.out.println("Type 'p' to Play, 'h' to Hit, 's' to Stand or 'q' to Quit\n");
 	
 	}
-	public int getInput()
+	public Command getInput()
     {
-		try {
-			return System.in.read();
-        } catch (java.io.IOException e) {
-        	System.out.println("" + e);
-        }
-		return 0;
+		Scanner scan = new Scanner(System.in);
+		String input = scan.next();
+		
+		switch(input){
+		case "p":
+			return Command.NEWGAME;
+		case "h":
+			return Command.HIT;
+		case "s":
+			return Command.STAND;
+		case "q":
+			return Command.QUIT;
+		default:
+			break;
+		}			
+		return null;
     }
 	
 	public void displayCard(BlackJack.model.Card a_card)
