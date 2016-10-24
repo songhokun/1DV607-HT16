@@ -20,53 +20,53 @@ public class Dealer extends Player {
   }
   
   
-  public boolean NewGame(Player a_player) {
+  public boolean newGame(Player a_player) {
     if (m_deck == null || IsGameOver()) {
       m_deck = new Deck();
-      ClearHand();
-      a_player.ClearHand();
-      return m_newGameRule.NewGame(m_deck, this, a_player);   
+      clearHand();
+      a_player.clearHand();
+      return m_newGameRule.newGame(m_deck, this, a_player);   
     }
     return false;
   }
 
-  public boolean Hit(Player a_player) {
+  public boolean hit(Player a_player) {
     if (m_deck != null && a_player.CalcScore() < g_maxScore && !IsGameOver()) {
       Card c;
-      c = m_deck.GetCard();
-      c.Show(true);
-      a_player.DealCard(c);
+      c = m_deck.getCard();
+      c.show(true);
+      a_player.dealCard(c);
       
       return true;
     }
     return false;
   }
   
-	public boolean Stand(Player a_player) {
+	public boolean stand(Player a_player) {
 		if (m_deck != null) {
-			ShowHand();
+			showHand();
 
-			for (Card c : GetHand()) {
-				c.Show(true);
+			for (Card c : getHand()) {
+				c.show(true);
 			}
 
-			while (m_hitRule.DoHit(this)) {
-					Card c = m_deck.GetCard();
-					c.Show(true);
-					DealCard(c);
+			while (m_hitRule.doHit(this)) {
+					Card c = m_deck.getCard();
+					c.show(true);
+					dealCard(c);
 			}
 			return true;
 		}
 		return false;
 	}
 
-  public boolean IsDealerWinner(Player a_player) {
-    if (a_player.CalcScore() > g_maxScore) {
+  public boolean isDealerWinner(Player a_player) {
+    if (a_player.calcScore() > g_maxScore) {
       return true;
-    } else if (CalcScore() > g_maxScore) {
+    } else if (calcScore() > g_maxScore) {
       return false;
     }
-    return CalcScore() >= a_player.CalcScore();
+    return calcScore() >= a_player.calcScore();
   }
 
   public boolean IsGameOver() {
