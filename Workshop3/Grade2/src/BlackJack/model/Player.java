@@ -34,7 +34,7 @@ public class Player {
   {
     for(Card c : m_hand)
     {
-      c.Show(true);
+      c.show(true);
     }
   }
   
@@ -52,9 +52,9 @@ public class Player {
     int score = 0;
 
     for(Card c : getHand()) {
-        if (c.GetValue() != Card.Value.Hidden)
+        if (c.getValue() != Card.Value.Hidden)
         {
-            score += cardScores[c.GetValue().ordinal()];
+            score += cardScores[c.getValue().ordinal()];
         }
     }
 
@@ -62,7 +62,7 @@ public class Player {
     {
         for(Card c : getHand())
         {
-            if (c.GetValue() == Card.Value.Ace && score > g_maxScore)
+            if (c.getValue() == Card.Value.Ace && score > g_maxScore)
             {
                 score -= 10;
             }

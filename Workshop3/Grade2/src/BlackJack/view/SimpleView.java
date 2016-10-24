@@ -23,7 +23,7 @@ public class SimpleView implements IView
 	
 	public void displayCard(BlackJack.model.Card a_card)
 	{
-		System.out.println("" + a_card.GetValue() + " of " + a_card.GetColor());
+		System.out.println("" + a_card.getValue() + " of " + a_card.getColor());
 	}
 
     public void displayPlayerHand(Iterable<BlackJack.model.Card> a_hand, int a_score)

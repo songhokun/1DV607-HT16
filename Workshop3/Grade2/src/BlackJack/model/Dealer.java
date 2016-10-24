@@ -10,8 +10,8 @@ public class Dealer extends Player {
 
   public Dealer(RulesFactory a_rulesFactory) {
   
-    m_newGameRule = a_rulesFactory.GetNewGameRule();
-    m_hitRule = a_rulesFactory.GetHitRule();
+    m_newGameRule = a_rulesFactory.getNewGameRule();
+    m_hitRule = a_rulesFactory.getHitRule();
     
     /*for(Card c : m_deck.GetCards()) {
       c.Show(true);
@@ -21,7 +21,7 @@ public class Dealer extends Player {
   
   
   public boolean newGame(Player a_player) {
-    if (m_deck == null || IsGameOver()) {
+    if (m_deck == null || isGameOver()) {
       m_deck = new Deck();
       clearHand();
       a_player.clearHand();
@@ -31,7 +31,7 @@ public class Dealer extends Player {
   }
 
   public boolean hit(Player a_player) {
-    if (m_deck != null && a_player.CalcScore() < g_maxScore && !IsGameOver()) {
+    if (m_deck != null && a_player.calcScore() < g_maxScore && !isGameOver()) {
       Card c;
       c = m_deck.getCard();
       c.show(true);
@@ -69,8 +69,8 @@ public class Dealer extends Player {
     return calcScore() >= a_player.calcScore();
   }
 
-  public boolean IsGameOver() {
-    if (m_deck != null && m_hitRule.DoHit(this) != true) {
+  public boolean isGameOver() {
+    if (m_deck != null && m_hitRule.doHit(this) != true) {
         return true;
     }
     return false;
