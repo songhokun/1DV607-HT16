@@ -18,21 +18,21 @@ public class SwedishView implements IView
         public Command getInput()
         {
     		Scanner scan = new Scanner(System.in);
-    		String input = scan.next();
-    		
-    		switch(input){
-    		case "b":
-    			return Command.NEWGAME;
-    		case "n":
-    			return Command.HIT;
-    		case "s":
-    			return Command.STAND;
-    		case "a":
-    			return Command.QUIT;
-    		default:
-    			break;
-    		}			
-    		return null;
+    		while(true){
+    			String input = scan.next();
+	    		switch(input){
+	    		case "b":
+	    			return Command.NEWGAME;
+	    		case "n":
+	    			return Command.HIT;
+	    		case "s":
+	    			return Command.STAND;
+	    		case "a":
+	    			return Command.QUIT;
+	    		default:
+	    			System.err.println("Felaktigt input. Foersoek igen!");
+	    		}
+    		}
         }
         
         

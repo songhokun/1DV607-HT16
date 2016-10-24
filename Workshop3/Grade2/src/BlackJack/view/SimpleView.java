@@ -16,21 +16,21 @@ public class SimpleView implements IView
 	public Command getInput()
     {
 		Scanner scan = new Scanner(System.in);
-		String input = scan.next();
-		
-		switch(input){
-		case "p":
-			return Command.NEWGAME;
-		case "h":
-			return Command.HIT;
-		case "s":
-			return Command.STAND;
-		case "q":
-			return Command.QUIT;
-		default:
-			break;
-		}			
-		return null;
+		while(true){
+			String input = scan.next();
+			switch(input){
+			case "p":
+				return Command.NEWGAME;
+			case "h":
+				return Command.HIT;
+			case "s":
+				return Command.STAND;
+			case "q":
+				return Command.QUIT;
+			default:
+				System.err.println("Incorrect input. Try again!");
+			}
+		}
     }
 	
 	public void displayCard(BlackJack.model.Card a_card)
