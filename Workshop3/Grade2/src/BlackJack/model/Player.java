@@ -1,17 +1,29 @@
 package BlackJack.model;
 
 import java.util.List;
+
+import BlackJack.model.rules.IHitStrategy;
+import BlackJack.model.rules.INewGameStrategy;
+import BlackJack.model.rules.IWinStrategy;
+import BlackJack.model.rules.RulesFactory;
+
 import java.util.LinkedList;
 
 public class Player {
 
 	private List<Card> m_hand;
 	protected final int g_maxScore = 21;
+	protected INewGameStrategy m_newGameRule;
+	protected IHitStrategy m_hitRule;
+	protected IWinStrategy m_winRule;
+	
+	public Player(RulesFactory a_rulesFactory) {
 
-	public Player() {
-
+		m_newGameRule = a_rulesFactory.getNewGameRule();
+		m_hitRule = a_rulesFactory.getHitRule();
+		m_winRule = a_rulesFactory.getWinRule();
 		m_hand = new LinkedList<Card>();
-		// System.out.println("Hello List World");
+		
 	}
 
 	public void dealCard(Card a_addToHand) {
@@ -31,9 +43,15 @@ public class Player {
 			c.show(true);
 		}
 	}
-
+	public int getG_maxScore(){
+		return g_maxScore;
+	}
+	public int calcScore(){
+		return m_newGameRule.calcScore(this);
+	}
+	/*
 	public int calcScore() {
-		// the number of scores is dependant on the number of scorable values
+		// the number of scores is dependent on the number of scorable values
 		// as it seems there is no way to do this check at compile time in java
 		// ?!
 		// cardScores[13] = {...};
@@ -57,4 +75,5 @@ public class Player {
 		}
 		return score;
 	}
+	*/
 }

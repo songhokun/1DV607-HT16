@@ -6,8 +6,9 @@ public class Game {
 	private Player m_player;
 
 	public Game() {
+		m_player = new Player(new BlackJack.model.rules.RulesFactory());
 		m_dealer = new Dealer(new BlackJack.model.rules.RulesFactory());
-		m_player = new Player();
+		
 	}
 
 	public boolean isGameOver() {

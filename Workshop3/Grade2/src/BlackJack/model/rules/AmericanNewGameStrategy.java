@@ -28,4 +28,25 @@ class AmericanNewGameStrategy implements INewGameStrategy {
 
 		return true;
 	}
+	public int calcScore(Player a_player){
+		int cardScores[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
+		assert (cardScores.length == Card.Value.Count.ordinal()) : "Card Scores array size does not match number of card values";
+
+		int score = 0;
+
+		for (Card c : a_player.getHand()) {
+			if (c.getValue() != Card.Value.Hidden) {
+				score += cardScores[c.getValue().ordinal()];
+			}
+		}
+
+		if (score > a_player.getG_maxScore()) {
+			for (Card c : a_player.getHand()) {
+				if (c.getValue() == Card.Value.Ace && score > a_player.getG_maxScore()) {
+					score -= 10;
+				}
+			}
+		}
+		return score;
+	}
 }
