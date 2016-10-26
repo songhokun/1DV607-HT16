@@ -1,7 +1,5 @@
 package BlackJack.view;
 
-import java.util.Scanner;
-
 import BlackJack.controller.PlayGame.Command;
 
 public class SimpleView implements IView {
@@ -15,24 +13,37 @@ public class SimpleView implements IView {
 	}
 
 	public Command getInput() {
-		Scanner scan = new Scanner(System.in);
-		while (true) {
-			String input = scan.next();
-			switch (input) {
-			case "p":
+		int c = -1;
+		
+		do{
+			c = getIntInput();
+			switch (c) {
+			case 'p':
 				return Command.NEWGAME;
-			case "h":
+			case 'h':
 				return Command.HIT;
-			case "s":
+			case 's':
 				return Command.STAND;
-			case "q":
+			case 'q':
 				return Command.QUIT;
 			default:
 				System.err.println("Incorrect input. Try again!");
 			}
-		}
+		}while(true);
 	}
-
+	private int getIntInput()
+    {
+      try {
+    	  int c = System.in.read();
+    	  while (c == '\r' || c =='\n') {
+    		  c = System.in.read();
+    		  }
+    	  return c;
+    	  } catch (java.io.IOException e) {
+    		  System.out.println("" + e);
+    		  return 0;
+    	  }
+      }
 	public void displayCard(BlackJack.model.Card a_card) {
 		System.out.println("" + a_card.getValue() + " of " + a_card.getColor());
 	}

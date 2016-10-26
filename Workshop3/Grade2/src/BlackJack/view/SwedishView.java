@@ -12,28 +12,40 @@ public class SwedishView implements IView {
 		}
 		System.out.println("Hej Black Jack Vaerlden");
 		System.out.println("----------------------");
-		System.out
-				.println("Skriv 'b' for att boerja spel, 'n' for nytt kort, 's' for att stanna 'a' for att avsluta\n");
+		System.out.println("Skriv 'b' for att boerja spel, 'n' for nytt kort, 's' for att stanna 'a' for att avsluta\n");
 	}
 
 	public Command getInput() {
-		Scanner scan = new Scanner(System.in);
-		while (true) {
-			String input = scan.next();
-			switch (input) {
-			case "b":
+		do{
+			int c = getIntInput();
+			
+			switch (c) {
+			case 'b':
 				return Command.NEWGAME;
-			case "n":
+			case 'n':
 				return Command.HIT;
-			case "s":
+			case 's':
 				return Command.STAND;
-			case "a":
+			case 'a':
 				return Command.QUIT;
 			default:
 				System.err.println("Felaktigt input. Foersoek igen!");
 			}
-		}
+		}while(true);
 	}
+	private int getIntInput()
+    {
+      try {
+    	  int c = System.in.read();
+    	  while (c == '\r' || c =='\n') {
+    		  c = System.in.read();
+    		  }
+    	  return c;
+    	  } catch (java.io.IOException e) {
+    		  System.out.println("" + e);
+    		  return 0;
+    	  }
+      }
 
 	public void displayCard(BlackJack.model.Card a_card) {
 		if (a_card.getColor() == BlackJack.model.Card.Color.Hidden) {
