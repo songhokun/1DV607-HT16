@@ -53,14 +53,6 @@ public class Dealer extends Player {
 		return false;
 	}
 	public boolean isDealerWinner(Player a_player) {
-		/*
-		if (a_player.calcScore() > g_maxScore) {
-			return true;
-		} else if (calcScore() > g_maxScore) {
-			return false;
-		}
-		return calcScore() >= a_player.calcScore();
-		*/
 		return m_winRule.isDealerWinner(this, a_player);
 	}
 
