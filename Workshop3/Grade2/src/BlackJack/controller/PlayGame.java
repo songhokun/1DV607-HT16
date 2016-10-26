@@ -1,38 +1,36 @@
 package BlackJack.controller;
 
 import BlackJack.view.IView;
+import BlackJack.view.IView.Command;
 import BlackJack.model.Game;
 
 public class PlayGame {
-	public enum Command {
-		NEWGAME, HIT, STAND, QUIT
-	};
 
 	public boolean Play(Game a_game, IView a_view) {
-		a_view.displayWelcomeMessage();
+		a_view.DisplayWelcomeMessage();
 
-		a_view.displayDealerHand(a_game.getDealerHand(), a_game.getDealerScore());
-		a_view.displayPlayerHand(a_game.getPlayerHand(), a_game.getPlayerScore());
+		a_view.DisplayDealerHand(a_game.GetDealerHand(), a_game.GetDealerScore());
+		a_view.DisplayPlayerHand(a_game.GetPlayerHand(), a_game.GetPlayerScore());
 
-		if (a_game.isGameOver()) {
-			a_view.displayGameOver(a_game.isDealerWinner());
+		if (a_game.IsGameOver()) {
+			a_view.DisplayGameOver(a_game.IsDealerWinner());
 		}
 
-		Command input = a_view.getInput();
+		Command input = a_view.GetInput();
 
 		switch (input) {
-		case NEWGAME:
-			a_game.newGame();
+		case PLAY:
+			a_game.NewGame();
 			break;
 		case HIT:
-			a_game.hit();
+			a_game.Hit();
 			break;
 		case STAND:
-			a_game.stand();
+			a_game.Stand();
 			break;
-		case QUIT:
-			return false;
+		default:
+			break;
 		}
-		return !input.equals(Command.QUIT);
+		return input != Command.QUIT;
 	}
 }

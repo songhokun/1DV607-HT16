@@ -1,70 +1,58 @@
 package BlackJack.view;
 
-import BlackJack.controller.PlayGame.Command;
-
 public class SwedishView implements IView {
-	public void displayWelcomeMessage() {
 
+	private final char play = 'p';
+	private final char hit = 'h';
+	private final char stand = 's';
+	private final char quit = 'q';
+
+	public void DisplayWelcomeMessage() {
 		for (int i = 0; i < 50; i++) {
 			System.out.print("\n");
 		}
-		System.out.println("Hej Black Jack Vaerlden");
+		System.out.println("Hej Black Jack Världen");
 		System.out.println("----------------------");
-		System.out.println("Skriv 'b' for att boerja spel, 'n' for nytt kort, 's' for att stanna 'a' for att avsluta\n");
+		System.out.println("Skriv " + "\'" + play + "\' för att Spela, " + "\'" + hit + "\' för nytt Kort, " + "\'"
+				+ stand + "\' för att Stanna, " + "\'" + quit + "\' för att avsluta\n");
 	}
 
-	public Command getInput() {
-		do{
-			int c = getIntInput();
-			
-			switch (c) {
-			case 'b':
-				return Command.NEWGAME;
-			case 'n':
-				return Command.HIT;
-			case 's':
-				return Command.STAND;
-			case 'a':
-				return Command.QUIT;
-			default:
-				System.err.println("Felaktigt input. Foersoek igen!");
-			}
-		}while(true);
-	}
-	private int getIntInput()
-    {
-      try {
-    	  int c = System.in.read();
-    	  while (c == '\r' || c =='\n') {
-    		  c = System.in.read();
-    		  }
-    	  return c;
-    	  } catch (java.io.IOException e) {
-    		  System.out.println("" + e);
-    		  return 0;
-    	  }
-      }
-
-	public void displayCard(BlackJack.model.Card a_card) {
-		if (a_card.getColor() == BlackJack.model.Card.Color.Hidden) {
-			System.out.println("Dolt Kort");
-		} else {
-			String colors[] = { "Hjaerter", "Spader", "Ruter", "Klaever" };
-			String values[] = { "tvaa", "tre", "fyra", "fem", "sex", "sju", "aatta", "nio", "tio", "knekt", "dam",
-					"kung", "ess" };
-			System.out.println("" + colors[a_card.getColor().ordinal()] + " " + values[a_card.getValue().ordinal()]);
+	public Command GetInput() {
+		int input = GetIntInput();
+		switch (input) {
+		case 'p':
+			return Command.PLAY;
+		case 'h':
+			return Command.HIT;
+		case 's':
+			return Command.STAND;
+		case 'q':
+			return Command.QUIT;
+		default:
+			System.out.println("<< INVALID OPTION. TRY AGAIN !! >>\n");
+			return Command.INVALID;
 		}
 	}
 
-	public void displayPlayerHand(Iterable<BlackJack.model.Card> a_hand, int a_score) {
-		displayHand("Spelare", a_hand, a_score);
+	public void DisplayCard(BlackJack.model.Card a_card) {
+		if (a_card.GetColor() == BlackJack.model.Card.Color.Hidden) {
+			System.out.println("Dolt Kort");
+		} else {
+			String colors[] = { "Hjärter", "Spader", "Ruter", "Klöver" };
+			String values[] = { "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "knekt", "dam", "kung", "ess" };
+			System.out.println("" + colors[a_card.GetColor().ordinal()] + " " + values[a_card.GetValue().ordinal()]);
+		}
 	}
 
-	public void displayDealerHand(Iterable<BlackJack.model.Card> a_hand, int a_score) {
-		displayHand("Croupier", a_hand, a_score);
+	public void DisplayPlayerHand(Iterable<BlackJack.model.Card> a_hand, int a_score) {
+		DisplayHand("Spelare", a_hand, a_score);
 	}
 
-	public void displayGameOver(boolean a_dealerIsWinner) {
+	public void DisplayDealerHand(Iterable<BlackJack.model.Card> a_hand, int a_score) {
+		DisplayHand("Croupier", a_hand, a_score);
+	}
+
+	public void DisplayGameOver(boolean a_dealerIsWinner) {
 		System.out.println("Slut: ");
 		if (a_dealerIsWinner) {
 			System.out.println("Croupiern Vann!");
@@ -73,12 +61,25 @@ public class SwedishView implements IView {
 		}
 	}
 
-	private void displayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
+	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
 		System.out.println(a_name + " Har: " + a_score);
 		for (BlackJack.model.Card c : a_hand) {
-			displayCard(c);
+			DisplayCard(c);
 		}
-		System.out.println("Poaeng: " + a_score);
+		System.out.println("Poäng: " + a_score);
 		System.out.println("");
+	}
+
+	private int GetIntInput() {
+		try {
+			int c = System.in.read();
+			while (c == '\r' || c == '\n') {
+				c = System.in.read();
+			}
+			return c;
+		} catch (java.io.IOException e) {
+			System.out.println("" + e);
+			return 0;
+		}
 	}
 }

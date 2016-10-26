@@ -7,42 +7,21 @@ import BlackJack.model.Card;
 
 class InternationalNewGameStrategy implements INewGameStrategy {
 
-	public boolean newGame(Deck a_deck, Dealer a_dealer, Player a_player) {
+	public boolean NewGame(Deck a_deck, Dealer a_dealer, Player a_player) {
 		Card c;
 
-		c = a_deck.getCard();
-		c.show(true);
-		a_player.dealCard(c);
+		c = a_deck.GetCard();
+		c.Show(true);
+		a_player.DealCard(c);
 
-		c = a_deck.getCard();
-		c.show(true);
-		a_dealer.dealCard(c);
+		c = a_deck.GetCard();
+		c.Show(true);
+		a_dealer.DealCard(c);
 
-		c = a_deck.getCard();
-		c.show(true);
-		a_player.dealCard(c);
+		c = a_deck.GetCard();
+		c.Show(true);
+		a_player.DealCard(c);
 
 		return true;
-	}
-	public int calcScore(Player a_player){
-		int cardScores[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
-		assert (cardScores.length == Card.Value.Count.ordinal()) : "Card Scores array size does not match number of card values";
-
-		int score = 0;
-
-		for (Card c : a_player.getHand()) {
-			if (c.getValue() != Card.Value.Hidden) {
-				score += cardScores[c.getValue().ordinal()];
-			}
-		}
-
-		if (score > a_player.getG_maxScore()) {
-			for (Card c : a_player.getHand()) {
-				if (c.getValue() == Card.Value.Ace && score > a_player.getG_maxScore()) {
-					score -= 10;
-				}
-			}
-		}
-		return score;
 	}
 }

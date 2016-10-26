@@ -9,37 +9,36 @@ public class Deck {
 
 	public Deck() {
 		m_cards = new LinkedList<Card>();
-
 		for (int cIx = 0; cIx < Card.Color.Count.ordinal(); cIx++) {
 			for (int vIx = 0; vIx < Card.Value.Count.ordinal(); vIx++) {
 				Card c = new Card(Card.Color.values()[cIx], Card.Value.values()[vIx]);
-				addCard(c);
+				AddCard(c);
 			}
 		}
-
-		shuffle();
+		Shuffle();
 	}
 
-	public void addCard(Card a_cardToAdd) {
+	public void AddCard(Card a_cardToAdd) {
 		m_cards.add(a_cardToAdd);
 	}
 
-	public Card getCard() {
+	public Card GetCard() {
 		Card c = m_cards.get(0);
 		m_cards.remove(0);
+
 		return c;
 	}
 
-	public Iterable<Card> getCards() {
+	public Iterable<Card> GetCards() {
 		return m_cards;
 	}
 
-	private void shuffle() {
+	private void Shuffle() {
 		for (int i = 0; i < 1017; i++) {
 			int index = (int) (Math.random() * 171717.0) % m_cards.size();
 			Card c = m_cards.get(index);
 			m_cards.remove(index);
-			addCard(c);
+			AddCard(c);
 		}
 	}
 }

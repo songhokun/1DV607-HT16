@@ -2,14 +2,18 @@ package BlackJack.model.rules;
 
 public class RulesFactory {
 
-	public IHitStrategy getHitRule() {
-		return new BasicHitStrategy();
+	public IHitStrategy GetHitRule() {
+		return new Soft17HitStrategy();
+		//return new BasicHitStrategy();
 	}
 
-	public INewGameStrategy getNewGameRule() {
+	public INewGameStrategy GetNewGameRule() {
 		return new AmericanNewGameStrategy();
+		//return new InternationalNewGameStrategy();
 	}
-	public IWinStrategy getWinRule(){
-		return new BasicWinStrategy();
+	
+	public IWinStrategy GetWinRule(){
+		return new PlayerWinStrategy();
+		//return new BasicWinStrategy();
 	}
 }

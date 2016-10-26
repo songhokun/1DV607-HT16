@@ -1,79 +1,64 @@
 package BlackJack.model;
 
 import java.util.List;
-
-import BlackJack.model.rules.IHitStrategy;
-import BlackJack.model.rules.INewGameStrategy;
-import BlackJack.model.rules.IWinStrategy;
-import BlackJack.model.rules.RulesFactory;
-
 import java.util.LinkedList;
 
 public class Player {
 
 	private List<Card> m_hand;
 	protected final int g_maxScore = 21;
-	protected INewGameStrategy m_newGameRule;
-	protected IHitStrategy m_hitRule;
-	protected IWinStrategy m_winRule;
-	
-	public Player(RulesFactory a_rulesFactory) {
 
-		m_newGameRule = a_rulesFactory.getNewGameRule();
-		m_hitRule = a_rulesFactory.getHitRule();
-		m_winRule = a_rulesFactory.getWinRule();
+	public Player() {
 		m_hand = new LinkedList<Card>();
-		
+		System.out.println("Hello List World");
 	}
 
-	public void dealCard(Card a_addToHand) {
+	public void DealCard(Card a_addToHand) {
 		m_hand.add(a_addToHand);
 	}
 
-	public Iterable<Card> getHand() {
+	public Iterable<Card> GetHand() {
 		return m_hand;
 	}
 
-	public void clearHand() {
+	public void ClearHand() {
 		m_hand.clear();
 	}
 
-	public void showHand() {
+	public void ShowHand() {
 		for (Card c : m_hand) {
-			c.show(true);
+			c.Show(true);
 		}
 	}
-	public int getG_maxScore(){
-		return g_maxScore;
-	}
-	public int calcScore(){
-		return m_newGameRule.calcScore(this);
-	}
-	/*
-	public int calcScore() {
-		// the number of scores is dependent on the number of scorable values
-		// as it seems there is no way to do this check at compile time in java
-		// ?!
-		// cardScores[13] = {...};
-		int cardScores[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
-		assert (cardScores.length == Card.Value.Count.ordinal()) : "Card Scores array size does not match number of card values";
 
-		int score = 0;
-
-		for (Card c : getHand()) {
-			if (c.getValue() != Card.Value.Hidden) {
-				score += cardScores[c.getValue().ordinal()];
-			}
+	public boolean ContainsSoft17() {
+		if (CalcCardScore() == 17 && m_hand.contains(Card.Value.Ace)) {
+			return true;
 		}
-
+		return false;
+	}
+	
+	public int CalcScore() {
+		int score = CalcCardScore();
 		if (score > g_maxScore) {
-			for (Card c : getHand()) {
-				if (c.getValue() == Card.Value.Ace && score > g_maxScore) {
+			for (Card c : GetHand()) {
+				if (c.GetValue() == Card.Value.Ace && score > g_maxScore) {
 					score -= 10;
 				}
 			}
 		}
 		return score;
 	}
-	*/
+	
+	private int CalcCardScore(){
+		int cardScores[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
+		assert (cardScores.length == Card.Value.Count.ordinal()) : "Card Scores array size does not match number of card values";
+		int score = 0;
+		for (Card c : GetHand()) {
+			if (c.GetValue() != Card.Value.Hidden) {
+				score += cardScores[c.GetValue().ordinal()];
+			}
+		}
+		return score;
+	}
 }
