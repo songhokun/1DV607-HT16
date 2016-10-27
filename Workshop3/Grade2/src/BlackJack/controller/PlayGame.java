@@ -43,7 +43,7 @@ public class PlayGame implements IObserver {
 			a_view.DisplayDealerHand(a_game.GetDealerHand(), a_game.GetDealerScore());
 			Thread.sleep(2000);
 			a_view.DisplayPlayerHand(a_game.GetPlayerHand(), a_game.GetPlayerScore());
-			Thread.sleep(100);
+			Thread.sleep(1000);
 			
 			if (a_game.IsGameOver()) {
 				a_view.DisplayGameOver(a_game.IsDealerWinner());
