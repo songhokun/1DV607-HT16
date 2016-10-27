@@ -26,7 +26,7 @@ public class SwedishView implements IView {
 		case quit:
 			return Command.QUIT;
 		default:
-			System.out.println("<< INVALID OPTION. TRY AGAIN !! >>\n");
+			System.out.println("<< OGILTIGT VAL. FÖRSÖK IGEN !! >>\n");
 			return Command.INVALID;
 		}
 	}
