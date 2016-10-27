@@ -2,15 +2,12 @@ package BlackJack.view;
 
 public class SimpleView implements IView {
 
-	private final char play = 'p';
-	private final char hit = 'h';
-	private final char stand = 's';
-	private final char quit = 'q';
+	private final char play 	= 'p';
+	private final char hit 		= 'h';
+	private final char stand	= 's';
+	private final char quit 	= 'q';
 
 	public void DisplayWelcomeMessage() {
-		//for (int i = 0; i < 50; i++) {
-		//	System.out.print("\n");
-	//	}
 		System.out.println("Hello Black Jack World");
 		System.out.println("Type " + "\'" + play + "\' to Play, " + "\'" + hit + "\' to Hit, " + "\'" + stand
 				+ "\' to Stand, " + "\'" + quit + "\' to Quit\n");
@@ -19,13 +16,13 @@ public class SimpleView implements IView {
 	public Command GetInput() {
 		int input = GetIntInput();
 		switch (input) {
-		case 'p':
+		case play:
 			return Command.PLAY;
-		case 'h':
+		case hit:
 			return Command.HIT;
-		case 's':
+		case stand:
 			return Command.STAND;
-		case 'q':
+		case quit:
 			return Command.QUIT;
 		default:
 			System.out.println("<< INVALID OPTION. TRY AGAIN !! >>\n");

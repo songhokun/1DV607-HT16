@@ -1,6 +1,9 @@
 package BlackJack.model;
 
-import BlackJack.model.rules.*;
+import BlackJack.model.rules.IHitStrategy;
+import BlackJack.model.rules.INewGameStrategy;
+import BlackJack.model.rules.IWinStrategy;
+import BlackJack.model.rules.RulesFactory;
 
 public class Dealer extends Player {
 

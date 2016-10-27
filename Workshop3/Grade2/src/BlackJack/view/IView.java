@@ -15,4 +15,5 @@ public interface IView {
 	void DisplayDealerHand(Iterable<BlackJack.model.Card> a_hand, int a_score);
 
 	void DisplayGameOver(boolean a_dealerIsWinner);
+
 }

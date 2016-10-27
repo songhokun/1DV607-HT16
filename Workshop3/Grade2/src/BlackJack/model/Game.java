@@ -45,4 +45,8 @@ public class Game {
 	public int GetPlayerScore() {
 		return m_player.CalcScore();
 	}
+	
+	public void AddSubscribers(IObserver a_subscriber){
+		m_player.AddSubscribers(a_subscriber);
+	}
 }
