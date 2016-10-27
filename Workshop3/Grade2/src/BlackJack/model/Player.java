@@ -77,7 +77,7 @@ public class Player {
 	
 	private void NotifySubscribers(){
 		for(IObserver a_subscriber: m_subscribers){
-			a_subscriber.PlayerGotNewCard(this);
+			a_subscriber.PlayerGotNewCard();
 		}
 	}
 }

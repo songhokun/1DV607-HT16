@@ -60,7 +60,7 @@ public class SwedishView implements IView {
 
 	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
 		if(!a_hand.iterator().hasNext())
-			System.out.println(a_name + " Har inget kort ännu.");
+			System.out.println(a_name + " Har inget kort ännu.\n");
 		else
 		{
 			System.out.println(a_name + " Har: " + a_score);
