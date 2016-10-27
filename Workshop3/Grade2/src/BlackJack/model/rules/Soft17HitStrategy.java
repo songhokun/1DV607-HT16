@@ -1,11 +1,21 @@
 package BlackJack.model.rules;
 
+import BlackJack.model.Card;
 import BlackJack.model.Player;
 
 class Soft17HitStrategy extends BasicHitStrategy implements IHitStrategy{
 
 	@Override	
 	public boolean DoHit(Player a_dealer) {
-		return super.DoHit(a_dealer) || a_dealer.ContainsSoft17();
+		//Special condition for Soft-17.
+		if(a_dealer.CalcScore() == 17)
+		{
+			for (Card c : a_dealer.GetHand()){
+				if(c.GetValue() == Card.Value.Ace){
+					return true;
+				}
+			}
+		}
+		return super.DoHit(a_dealer);
 	}
 }
