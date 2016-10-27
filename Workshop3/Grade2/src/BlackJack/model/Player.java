@@ -10,6 +10,7 @@ public class Player {
 	protected final int g_maxScore = 21;
 	private ArrayList<IObserver> m_subscribers;
 
+	
 	public Player() {
 		m_hand = new LinkedList<Card>();
 		m_subscribers = new ArrayList<IObserver>();
@@ -29,15 +30,12 @@ public class Player {
 	}
 
 	public void ShowHand() {
-		boolean isThereHidden=false;
 		for (Card c : m_hand) {
 			if(c.GetValue()==Card.Value.Hidden){
-				isThereHidden=true;
-			}
-			c.Show(true);
+				c.Show(true);
+				NotifySubscribers();
+			}		
 		}
-		if(isThereHidden)
-			NotifySubscribers();
 	}
 	
 	public int CalcScore() {
@@ -66,7 +64,7 @@ public class Player {
 	
 	private void NotifySubscribers(){
 		for(IObserver a_subscriber: m_subscribers){
-			a_subscriber.PlayerGotNewCard();
+			a_subscriber.PlayerGetNewCard();
 		}
 	}
 }

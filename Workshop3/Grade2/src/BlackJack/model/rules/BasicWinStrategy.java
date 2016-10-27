@@ -4,7 +4,7 @@ import BlackJack.model.Player;
 
 class BasicWinStrategy implements IWinStrategy {
 
-	public boolean GetWinner(Player a_player, Player a_dealer, int g_maxScore) {
+	public boolean IsDealerWinner(Player a_player, Player a_dealer, int g_maxScore) {
 		if (a_player.CalcScore() > g_maxScore) {
 			return true;
 		} else if (a_dealer.CalcScore() > g_maxScore) {

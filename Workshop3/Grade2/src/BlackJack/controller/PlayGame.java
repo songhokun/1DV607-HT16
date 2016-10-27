@@ -1,16 +1,16 @@
 package BlackJack.controller;
 
 import BlackJack.view.IView;
-import BlackJack.view.IView.Command;
 import BlackJack.model.Game;
 import BlackJack.model.IObserver;
-import BlackJack.model.Player;
 
 public class PlayGame implements IObserver {
 
+	public enum Command{PLAY, HIT, STAND, QUIT, INVALID}
 	private Game a_game;
 	private IView a_view;
 
+	
 	public PlayGame(Game a_game, IView a_view) {
 		this.a_game = a_game;
 		this.a_view = a_view;
@@ -37,7 +37,7 @@ public class PlayGame implements IObserver {
 	}
 
 	@Override
-	public void PlayerGotNewCard() {
+	public void PlayerGetNewCard() {
 		try {
 			Thread.sleep(2000);
 			a_view.DisplayDealerHand(a_game.GetDealerHand(), a_game.GetDealerScore());
