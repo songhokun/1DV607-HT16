@@ -13,7 +13,6 @@ public class Player {
 	public Player() {
 		m_hand = new LinkedList<Card>();
 		m_subscribers = new ArrayList<IObserver>();
-		System.out.println("Hello List World");
 	}
 
 	public void DealCard(Card a_addToHand) {
@@ -30,9 +29,15 @@ public class Player {
 	}
 
 	public void ShowHand() {
+		boolean isThereHidden=false;
 		for (Card c : m_hand) {
+			if(c.GetValue()==Card.Value.Hidden){
+				isThereHidden=true;
+			}
 			c.Show(true);
 		}
+		if(isThereHidden)
+			NotifySubscribers();
 	}
 
 	public boolean ContainsSoft17() {
@@ -72,7 +77,7 @@ public class Player {
 	
 	private void NotifySubscribers(){
 		for(IObserver a_subscriber: m_subscribers){
-			a_subscriber.PlayerGotNewCard();
+			a_subscriber.PlayerGotNewCard(this);
 		}
 	}
 }

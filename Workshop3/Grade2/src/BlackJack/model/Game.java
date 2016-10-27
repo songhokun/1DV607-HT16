@@ -48,5 +48,6 @@ public class Game {
 	
 	public void AddSubscribers(IObserver a_subscriber){
 		m_player.AddSubscribers(a_subscriber);
+		m_dealer.AddSubscribers(a_subscriber);
 	}
 }

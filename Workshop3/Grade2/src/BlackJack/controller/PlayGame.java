@@ -4,6 +4,7 @@ import BlackJack.view.IView;
 import BlackJack.view.IView.Command;
 import BlackJack.model.Game;
 import BlackJack.model.IObserver;
+import BlackJack.model.Player;
 
 public class PlayGame implements IObserver {
 
@@ -25,11 +26,9 @@ public class PlayGame implements IObserver {
 			break;
 		case HIT:
 			a_game.Hit();
-			PlayerGotNewCard();
 			break;
 		case STAND:
 			a_game.Stand();
-			PlayerGotNewCard();
 			break;
 		default:
 			break;
@@ -38,13 +37,24 @@ public class PlayGame implements IObserver {
 	}
 
 	@Override
-	public void PlayerGotNewCard() {
+	public void PlayerGotNewCard(Player a_player) {
 		try {
+			if(a_player instanceof BlackJack.model.Dealer){
+				Thread.sleep(2000);
+				a_view.DisplayDealerHand(a_game.GetDealerHand(), a_game.GetDealerScore());
+			}
+			else if(a_player instanceof BlackJack.model.Player){
+				Thread.sleep(2000);
+				a_view.DisplayPlayerHand(a_game.GetPlayerHand(), a_game.GetPlayerScore());
+			}
+			
+			/*
 			Thread.sleep(2000);
 			a_view.DisplayDealerHand(a_game.GetDealerHand(), a_game.GetDealerScore());
 			Thread.sleep(2000);
 			a_view.DisplayPlayerHand(a_game.GetPlayerHand(), a_game.GetPlayerScore());
 			Thread.sleep(2000);
+			*/
 			if (a_game.IsGameOver()) {
 				a_view.DisplayGameOver(a_game.IsDealerWinner());
 			}
