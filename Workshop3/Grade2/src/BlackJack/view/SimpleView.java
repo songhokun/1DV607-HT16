@@ -43,12 +43,15 @@ public class SimpleView implements IView {
 	}
 
 	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
-		System.out.println(a_name + " Has: ");
-		for (BlackJack.model.Card c : a_hand) {
-			DisplayCard(c);
+		if(!a_hand.iterator().hasNext())
+			System.out.println(a_name + " Has no cards yet.");
+		else{
+			System.out.println(a_name + " Has: ");
+			for (BlackJack.model.Card c : a_hand) {
+				DisplayCard(c);
+			}
+			System.out.println("Score: " + a_score+"\n");
 		}
-		System.out.println("Score: " + a_score);
-		System.out.println("");
 	}
 
 	public void DisplayGameOver(boolean a_dealerIsWinner) {

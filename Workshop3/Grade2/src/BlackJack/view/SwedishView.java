@@ -59,12 +59,16 @@ public class SwedishView implements IView {
 	}
 
 	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
-		System.out.println(a_name + " Har: " + a_score);
-		for (BlackJack.model.Card c : a_hand) {
-			DisplayCard(c);
+		if(!a_hand.iterator().hasNext())
+			System.out.println(a_name + " Har inget kort ännu.");
+		else
+		{
+			System.out.println(a_name + " Har: " + a_score);
+			for (BlackJack.model.Card c : a_hand) {
+				DisplayCard(c);
+			}
+			System.out.println("Poäng: " + a_score+"\n");
 		}
-		System.out.println("Poäng: " + a_score);
-		System.out.println("");
 	}
 
 	private int GetIntInput() {
