@@ -15,10 +15,6 @@ public class Authentication {
 			loggedIn = true;
 	}
 
-	public void logOut() {
-		loggedIn = false;
-	}
-
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}

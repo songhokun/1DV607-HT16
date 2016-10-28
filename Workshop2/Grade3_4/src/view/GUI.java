@@ -7,6 +7,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,10 +32,11 @@ import javafx.scene.text.Text;
 import model.Authentication;
 import model.Boat;
 import model.Boat.BoatType;
-import model.Registry.SearchMode;
-import model.Registry.SearchOperator;
 import model.Member;
 import model.Registry;
+import model.Search.ISimpleSearchStrategy;
+import model.Search.SearchFactory;
+import model.Search.SearchMode.SimpleSearchMode;
 
 public class GUI implements Initializable, IView {
 
@@ -73,13 +75,14 @@ public class GUI implements Initializable, IView {
 	//Search
 	@FXML private TextField searchField = new TextField();
 	@FXML private Button searchButton;
-	@FXML private ChoiceBox <SearchMode> searchByChoiceBox;
+	@FXML private ChoiceBox <SimpleSearchMode> searchByChoiceBox;
 	@FXML private ChoiceBox <BoatType> searchByBoatType;
 	@FXML private ChoiceBox <Month> searchByMonth;
 	@FXML private AnchorPane searchPane;
 	
 	private Registry registry;
 	private Authentication authentication;
+	private ISimpleSearchStrategy simpleSearchStrategy;
 
 
 	
@@ -110,10 +113,10 @@ public class GUI implements Initializable, IView {
 		logInButton.setOnAction(e -> logIn("", ""));
 		
 		searchByChoiceBox.setOnAction(e -> showOtherSearchMode());
-		searchByChoiceBox.setItems(FXCollections.observableArrayList(SearchMode.values()));
-		searchByChoiceBox.getSelectionModel().select(SearchMode.BY_NAME); // default
+		searchByChoiceBox.setItems(FXCollections.observableArrayList(SimpleSearchMode.values()));
+		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.BY_NAME); // default
 		
-		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(searchField.getText(), null)));
+		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(registry.getMemberList(), new SearchFactory())));
 	}
 
 	@Override
@@ -353,36 +356,41 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(Object o, SearchMode searchMode) { 
-		//if search field is empty
-		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_NAME) || 
-			searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.GREATER_THAN_BOAT_LENGTH) ||
-			searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.OLDER_THAN_AGE))
-				if(searchField.getText().isEmpty())
-						return null;
+	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchFactory factory) {
+		// if search field is empty
+		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_NAME)
+				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_LENGTH)
+				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_AGE_GREATER_THAN)
+				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_AGE_LESS_THAN)
+				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_AGE_EQUAL_TO))
+
+			if (searchField.getText().isEmpty())
+				return null;
 		
 		try {
 			switch (searchByChoiceBox.getSelectionModel().getSelectedItem()) {
 			case BY_NAME:
-					return registry.simpleSearch(searchField.getText(), SearchMode.BY_NAME);
-			case OLDER_THAN_AGE:
-					return registry.simpleSearch(Integer.parseInt(searchField.getText()), SearchMode.OLDER_THAN_AGE);
-			case YOUNGER_THAN_AGE:
-					return registry.simpleSearch(Integer.parseInt(searchField.getText()), SearchMode.YOUNGER_THAN_AGE);
-			case EQUAL_TO_AGE:
-					return registry.simpleSearch(Integer.parseInt(searchField.getText()), SearchMode.EQUAL_TO_AGE);
+					simpleSearchStrategy = factory.getSearchByName(searchField.getText());
+					return simpleSearchStrategy.simpleSearch(list);
 			case BY_MONTH:
-					return registry.simpleSearch(searchByMonth.getSelectionModel().getSelectedItem(), SearchMode.BY_MONTH);
+					simpleSearchStrategy = factory.getSearchByMonth(searchByMonth.getSelectionModel().getSelectedItem().ordinal() + 1);
+					return simpleSearchStrategy.simpleSearch(list);
 			case BY_BOAT_TYPE:
-					return registry.simpleSearch(searchByBoatType.getSelectionModel().getSelectedItem(), SearchMode.BY_BOAT_TYPE);
-			case GREATER_THAN_BOAT_LENGTH:
-					return registry.simpleSearch(Double.parseDouble(searchField.getText()), SearchMode.GREATER_THAN_BOAT_LENGTH);
-			case SMALLER_THAN_BOAT_LENGTH:
-					return registry.simpleSearch(Double.parseDouble(searchField.getText()), SearchMode.SMALLER_THAN_BOAT_LENGTH);
-			case EQUAL_TO_BOAT_LENGTH:
-					return registry.simpleSearch(Double.parseDouble(searchField.getText()), SearchMode.EQUAL_TO_BOAT_LENGTH);
-			default: 
-					displayError("Incorrect Data Type!!");
+					simpleSearchStrategy = factory.getSearchByBoatType(searchByBoatType.getSelectionModel().getSelectedItem());
+					return simpleSearchStrategy.simpleSearch(list);
+			case BY_AGE_EQUAL_TO:
+				simpleSearchStrategy = factory.getSearchByAge(Integer.parseInt(searchField.getText()), SimpleSearchMode.BY_AGE_EQUAL_TO);
+				return simpleSearchStrategy.simpleSearch(list);
+			case BY_AGE_GREATER_THAN:
+				simpleSearchStrategy = factory.getSearchByAge(Integer.parseInt(searchField.getText()), SimpleSearchMode.BY_AGE_GREATER_THAN);
+				return simpleSearchStrategy.simpleSearch(list);
+			case BY_AGE_LESS_THAN:
+				simpleSearchStrategy = factory.getSearchByAge(Integer.parseInt(searchField.getText()), SimpleSearchMode.BY_AGE_LESS_THAN);
+				return simpleSearchStrategy.simpleSearch(list);
+			case BY_BOAT_LENGTH:
+				simpleSearchStrategy = factory.getSearchByBoatLength(Double.parseDouble(searchField.getText()));
+				return simpleSearchStrategy.simpleSearch(list);
+			default:
 				break;
 			}
 		} catch (Exception e) {
@@ -393,8 +401,7 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public ArrayList<Member> doComplexSearch(ArrayList<Member> firstList, ArrayList<Member> secondList, SearchOperator operator) {
-		return registry.complexSearch(firstList, secondList, operator);
+	public void doComplexSearch(ArrayList<Member> list, SearchFactory factory) {
 	}
 	
 	@Override
@@ -413,7 +420,7 @@ public class GUI implements Initializable, IView {
 			
 	private void showOtherSearchMode(){
 		// search by boat type
-		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_BOAT_TYPE)){
+		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_TYPE)){
 			searchByBoatType.setItems((FXCollections.observableArrayList(BoatType.values())));
 			searchByBoatType.getSelectionModel().select(BoatType.Sailboat);
 			searchField.setVisible(false);
@@ -421,7 +428,7 @@ public class GUI implements Initializable, IView {
 			searchByMonth.setVisible(false);
 		}
 		// search by month
-		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_MONTH)){
+		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_MONTH)){
 			searchByMonth.setItems((FXCollections.observableArrayList(Month.values())));
 			searchByMonth.getSelectionModel().select(Month.JANUARY);
 			searchField.setVisible(false);
@@ -449,9 +456,9 @@ public class GUI implements Initializable, IView {
 		memberTable.setVisible(true);
 		setMemberTable(registry.getMemberList());
 		
-		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_BOAT_TYPE))
+		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_TYPE))
 			searchByBoatType.setVisible(true);
-		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SearchMode.BY_MONTH))
+		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_MONTH))
 			searchByMonth.setVisible(true);
 		else 
 			searchField.setVisible(true);

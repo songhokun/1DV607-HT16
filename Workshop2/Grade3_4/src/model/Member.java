@@ -75,11 +75,7 @@ public class Member {
 	public int getBirthMonth() {
 		return Integer.parseInt(personalnumber.substring(4,6));
 	}
-
-	public int getBirthDate() {
-		return Integer.parseInt(personalnumber.substring(6,8));
-	}
-
+	
 	public int getAge() {
 		return Year.now().getValue() - getBirthYear();
 	}
