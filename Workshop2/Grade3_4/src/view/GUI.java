@@ -368,7 +368,35 @@ public class GUI implements Initializable, IView {
 				return null;
 		
 		try {
-			switch (searchByChoiceBox.getSelectionModel().getSelectedItem()) {
+			SimpleSearchMode selectedMode = searchByChoiceBox.getSelectionModel().getSelectedItem();
+			Object searchKeyword;
+			
+			switch (selectedMode) {
+			case BY_NAME:
+				searchKeyword = searchField.getText();
+				break;
+			case BY_MONTH:
+				searchKeyword = (searchByMonth.getSelectionModel().getSelectedItem().ordinal() + 1);
+				break;
+			case BY_BOAT_TYPE:
+				searchKeyword = (searchByBoatType.getSelectionModel().getSelectedItem());
+				break;
+			case BY_AGE_EQUAL_TO:
+				searchKeyword = (Integer.parseInt(searchField.getText()));
+				break;
+			case BY_AGE_GREATER_THAN:
+				searchKeyword = (Integer.parseInt(searchField.getText()));
+				break;
+			case BY_AGE_LESS_THAN:
+				searchKeyword = (Integer.parseInt(searchField.getText()));
+				break;
+			case BY_BOAT_LENGTH:
+				searchKeyword = (Double.parseDouble(searchField.getText()));
+				break;
+			default:
+				searchKeyword = null;
+				break;
+			/*
 			case BY_NAME:
 					simpleSearchStrategy = factory.getSearchByName(searchField.getText());
 					return simpleSearchStrategy.simpleSearch(list);
@@ -392,6 +420,11 @@ public class GUI implements Initializable, IView {
 				return simpleSearchStrategy.simpleSearch(list);
 			default:
 				break;
+			*/
+			}
+			if(searchKeyword!=null && selectedMode != null){
+				simpleSearchStrategy = factory.getSearch(selectedMode,searchKeyword);
+				return simpleSearchStrategy.simpleSearch(list);
 			}
 		} catch (Exception e) {
 			displayError("Incorrect Data Type!!");
