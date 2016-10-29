@@ -7,15 +7,14 @@ import model.Member;
 class ByBoatLength implements ISimpleSearchStrategy {
 
 	private double length;
-	private ArrayList<Member> foundMembers;
 
 	public ByBoatLength(double length) {
 		this.length = length;
-		foundMembers = new ArrayList<Member>();
 	}
 
 	@Override
 	public ArrayList<Member> simpleSearch(ArrayList<Member> list) {
+		ArrayList<Member> foundMembers = new ArrayList<Member>();
 		for (Member m : list) {
 			for (Boat b : m.getBoatList()) {
 				if (b.getLength() == length) {

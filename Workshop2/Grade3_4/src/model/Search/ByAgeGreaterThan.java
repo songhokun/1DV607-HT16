@@ -11,6 +11,7 @@ class ByAgeGreaterThan extends ByAgeEqualTo {
 
 	@Override
 	public ArrayList<Member> simpleSearch(ArrayList<Member> list) {
+		ArrayList<Member> foundMembers = new ArrayList<Member>();
 		for (Member m : list) {
 			if (m.getAge() > age) {
 				foundMembers.add(m);
