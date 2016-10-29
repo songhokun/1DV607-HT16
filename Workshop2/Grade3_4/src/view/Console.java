@@ -258,13 +258,13 @@ public class Console implements IView {
 					simpleSearchStrategy = factory.getSearchByBoatType(getBoatTypeFromUser());
 					return simpleSearchStrategy.simpleSearch(list);
 				case BY_AGE_EQUAL_TO:
-					simpleSearchStrategy = factory.getSearchByAge(getSearchAgeFromUser(), SimpleSearchMode.BY_AGE_EQUAL_TO);
+					simpleSearchStrategy = factory.getSearchByAgeEqualTo(getSearchAgeFromUser());
 					return simpleSearchStrategy.simpleSearch(list);
 				case BY_AGE_GREATER_THAN:
-					simpleSearchStrategy = factory.getSearchByAge(getSearchAgeFromUser(), SimpleSearchMode.BY_AGE_GREATER_THAN);
+					simpleSearchStrategy = factory.getSearchByAgeGreaterThan(getSearchAgeFromUser());
 					return simpleSearchStrategy.simpleSearch(list);
 				case BY_AGE_LESS_THAN:
-					simpleSearchStrategy = factory.getSearchByAge(getSearchAgeFromUser(), SimpleSearchMode.BY_AGE_LESS_THAN);
+					simpleSearchStrategy = factory.getSearchByAgeLessThan(getSearchAgeFromUser());
 					return simpleSearchStrategy.simpleSearch(list);
 				case BY_BOAT_LENGTH:
 					simpleSearchStrategy = factory.getSearchByBoatLength(getBoatLengthFromUser());

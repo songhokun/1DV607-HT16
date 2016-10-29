@@ -1,7 +1,6 @@
 package model.Search;
 
 import model.Boat.BoatType;
-import model.Search.SearchMode.SimpleSearchMode;
 
 public class SearchFactory {
 
@@ -9,10 +8,18 @@ public class SearchFactory {
 		return new ByName(name);
 	}
 
-	public ISimpleSearchStrategy getSearchByAge(int age, SimpleSearchMode mode) {
-		return new ByAge(age, mode);
+	public ISimpleSearchStrategy getSearchByAgeEqualTo(int age) {
+		return new ByAgeEqualTo(age);
 	}
-	
+
+	public ISimpleSearchStrategy getSearchByAgeGreaterThan(int age) {
+		return new ByAgeGreaterThan(age);
+	}
+
+	public ISimpleSearchStrategy getSearchByAgeLessThan(int age) {
+		return new ByAgeLessThan(age);
+	}
+
 	public ISimpleSearchStrategy getSearchByBoatLength(double length) {
 		return new ByBoatLength(length);
 	}

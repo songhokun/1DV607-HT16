@@ -379,13 +379,13 @@ public class GUI implements Initializable, IView {
 					simpleSearchStrategy = factory.getSearchByBoatType(searchByBoatType.getSelectionModel().getSelectedItem());
 					return simpleSearchStrategy.simpleSearch(list);
 			case BY_AGE_EQUAL_TO:
-				simpleSearchStrategy = factory.getSearchByAge(Integer.parseInt(searchField.getText()), SimpleSearchMode.BY_AGE_EQUAL_TO);
+				simpleSearchStrategy = factory.getSearchByAgeEqualTo(Integer.parseInt(searchField.getText()));
 				return simpleSearchStrategy.simpleSearch(list);
 			case BY_AGE_GREATER_THAN:
-				simpleSearchStrategy = factory.getSearchByAge(Integer.parseInt(searchField.getText()), SimpleSearchMode.BY_AGE_GREATER_THAN);
+				simpleSearchStrategy = factory.getSearchByAgeGreaterThan(Integer.parseInt(searchField.getText()));
 				return simpleSearchStrategy.simpleSearch(list);
 			case BY_AGE_LESS_THAN:
-				simpleSearchStrategy = factory.getSearchByAge(Integer.parseInt(searchField.getText()), SimpleSearchMode.BY_AGE_LESS_THAN);
+				simpleSearchStrategy = factory.getSearchByAgeLessThan(Integer.parseInt(searchField.getText()));
 				return simpleSearchStrategy.simpleSearch(list);
 			case BY_BOAT_LENGTH:
 				simpleSearchStrategy = factory.getSearchByBoatLength(Double.parseDouble(searchField.getText()));
