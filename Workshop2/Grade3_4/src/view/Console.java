@@ -246,8 +246,11 @@ public class Console implements IView {
 			quitProgram();
 		else
 			try {
-				switch (SimpleSearchMode.values()[Integer.parseInt(input)]) {
-
+				Object searchKeyword;
+				SimpleSearchMode selectedMode = SimpleSearchMode.values()[Integer.parseInt(input)];
+				
+				switch (selectedMode) {
+				/*
 				case BY_NAME:
 					simpleSearchStrategy = factory.getSearchByName(getMemberNameFromUser());
 					return simpleSearchStrategy.simpleSearch(list);
@@ -271,6 +274,36 @@ public class Console implements IView {
 					return simpleSearchStrategy.simpleSearch(list);
 				default:
 					break;
+				*/
+				case BY_NAME:
+					searchKeyword = getMemberNameFromUser();
+					break;
+				case BY_MONTH:
+					searchKeyword = getSearchMonthFromUser();
+					break;
+				case BY_BOAT_TYPE:
+					searchKeyword =getBoatTypeFromUser();
+					break;
+				case BY_AGE_EQUAL_TO:
+					searchKeyword = getSearchAgeFromUser();
+					break;
+				case BY_AGE_GREATER_THAN:
+					searchKeyword = getSearchAgeFromUser();
+					break;
+				case BY_AGE_LESS_THAN:
+					searchKeyword = getSearchAgeFromUser();
+					break;
+				case BY_BOAT_LENGTH:
+					searchKeyword = getBoatLengthFromUser();
+					break;
+				default:
+					searchKeyword = null;
+					break;
+				}
+				
+				if(searchKeyword!=null && selectedMode != null){
+					simpleSearchStrategy = factory.getSearch(selectedMode,searchKeyword);
+					return simpleSearchStrategy.simpleSearch(list);
 				}
 			} catch (Exception e) {
 				displayError("INVALID OPTION");
@@ -301,6 +334,14 @@ public class Console implements IView {
 				displaySearchResult(firstList);
 			else {
 				try {
+					ComplexSearchMode selectedMode = ComplexSearchMode.values()[Integer.parseInt(in)];
+					
+					if(selectedMode!=null){
+						secondList = doSimpleSearch(list, factory);
+						complexSearchStrategy = factory.getComplex(selectedMode);
+						firstList = complexSearchStrategy.complexSearch(firstList, secondList);
+					}
+					/*
 					switch (ComplexSearchMode.values()[Integer.parseInt(in)]) {
 
 					case AND:
@@ -314,6 +355,7 @@ public class Console implements IView {
 						firstList = complexSearchStrategy.complexSearch(firstList, secondList);
 						break;
 					}
+					*/
 				} catch (Exception e) {
 					displayError("INVALID OPTION");
 				}
