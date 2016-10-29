@@ -1,16 +1,15 @@
 package BlackJack.controller;
 
-import BlackJack.view.IView;
 import BlackJack.model.Game;
 import BlackJack.model.IObserver;
+import BlackJack.view.IView;
 
 public class PlayGame implements IObserver {
 
-	public enum Command{PLAY, HIT, STAND, QUIT, INVALID}
+	public enum Command {PLAY, HIT, STAND, QUIT, INVALID}
 	private Game a_game;
 	private IView a_view;
 
-	
 	public PlayGame(Game a_game, IView a_view) {
 		this.a_game = a_game;
 		this.a_view = a_view;
@@ -18,7 +17,7 @@ public class PlayGame implements IObserver {
 	}
 
 	public boolean Play() {
-		this.a_view.DisplayWelcomeMessage();
+		a_view.DisplayWelcomeMessage(a_game.GetNewGameStrategyRuleName(), a_game.GetHitStrategyRuleName(), a_game.GetWinStrategyRuleName());
 		Command input = a_view.GetInput();
 		switch (input) {
 		case PLAY:
@@ -44,7 +43,7 @@ public class PlayGame implements IObserver {
 			Thread.sleep(2000);
 			a_view.DisplayPlayerHand(a_game.GetPlayerHand(), a_game.GetPlayerScore());
 			Thread.sleep(1000);
-			
+
 			if (a_game.IsGameOver()) {
 				a_view.DisplayGameOver(a_game.IsDealerWinner());
 			}

@@ -4,7 +4,7 @@ import BlackJack.controller.PlayGame.Command;
 
 public interface IView {
 	
-	void DisplayWelcomeMessage();
+	void DisplayWelcomeMessage(String newGameStrategy, String hitStrategy, String winStrategy);
 
 	Command GetInput();
 
@@ -15,5 +15,4 @@ public interface IView {
 	void DisplayDealerHand(Iterable<BlackJack.model.Card> a_hand, int a_score);
 
 	void DisplayGameOver(boolean a_dealerIsWinner);
-
 }

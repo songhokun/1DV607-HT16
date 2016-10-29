@@ -13,5 +13,4 @@ class PlayerWinStrategy implements IWinStrategy {
 		}
 		return a_dealer.CalcScore() > a_player.CalcScore();
 	}
-
 }

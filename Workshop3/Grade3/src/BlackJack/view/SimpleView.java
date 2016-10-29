@@ -9,8 +9,11 @@ public class SimpleView implements IView {
 	private final char stand = 's';
 	private final char quit = 'q';
 
-	public void DisplayWelcomeMessage() {
+	public void DisplayWelcomeMessage(String newGameStrategy, String hitStrategy, String winStrategy) {
 		System.out.println("Hello Black Jack World");
+		System.out.println("Game Strategy : " + newGameStrategy);
+		System.out.println("Hit Strategy  : " + hitStrategy);
+		System.out.println("Win Strategy  : " + winStrategy);
 		System.out.println("Type " + "\'" + play + "\' to Play, " + "\'" + hit + "\' to Hit, " + "\'" + stand
 				+ "\' to Stand, " + "\'" + quit + "\' to Quit\n");
 	}

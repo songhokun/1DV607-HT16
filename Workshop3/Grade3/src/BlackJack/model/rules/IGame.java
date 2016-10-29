@@ -7,4 +7,6 @@ public interface IGame {
 	public IHitStrategy GetHitStrategy();
 
 	public IWinStrategy GetWinStrategy();
+	
+	public void Accept(IGameVisitor a_visitor);
 }

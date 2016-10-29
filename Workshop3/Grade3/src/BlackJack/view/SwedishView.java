@@ -9,8 +9,11 @@ public class SwedishView implements IView {
 	private final char stand 	= 's';
 	private final char quit 	= 'q';
 
-	public void DisplayWelcomeMessage() {
+	public void DisplayWelcomeMessage(String newGameStrategy, String hitStrategy, String winStrategy) {
 		System.out.println("Hej Black Jack Världen");
+		System.out.println("Game Strategy : " + newGameStrategy);
+		System.out.println("Hit Strategy  : " + hitStrategy);
+		System.out.println("Win Strategy  : " + winStrategy);
 		System.out.println("----------------------");
 		System.out.println("Skriv " + "\'" + play + "\' för att Spela, " + "\'" + hit + "\' för nytt Kort, " + "\'"
 				+ stand + "\' för att Stanna, " + "\'" + quit + "\' för att avsluta\n");
