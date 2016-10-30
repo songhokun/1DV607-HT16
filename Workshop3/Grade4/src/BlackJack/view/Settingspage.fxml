@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BlackJack.view.Settingspage">
+   <children>
+      <ImageView fx:id="imageView" fitHeight="450.0" fitWidth="811.0" pickOnBounds="true">
+       </ImageView>
+      <Label fx:id="gameMode" layoutX="8.0" layoutY="357.0" text="Game Mode" textFill="#c9e8f2">
+         <font>
+            <Font size="25.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <Glow />
+         </effect>
+      </Label>
+      <ChoiceBox fx:id="gameModeChoices" layoutX="173.0" layoutY="359.0" prefHeight="27.0" prefWidth="370.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <Glow />
+         </effect>
+      </ChoiceBox>
+      <Label fx:id="back" layoutX="5.0" layoutY="3.0" onMouseClicked="#displayMainpage" text="Go back" textFill="#c9e8f2">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <Glow />
+         </effect>
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="language" layoutX="8.0" layoutY="409.0" text="Language" textFill="#c9e8f2">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <Glow />
+         </effect>
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="languageChoices" layoutX="173.0" layoutY="411.0" prefHeight="27.0" prefWidth="145.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <Glow />
+         </effect>
+      </ChoiceBox>
+   </children>
+</AnchorPane>
