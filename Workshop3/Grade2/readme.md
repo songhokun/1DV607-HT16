@@ -16,6 +16,7 @@ We mean player advantage by letting player to be a winner on equal score.
 If you want to test other strategy rules, you can modify the RulesFactory on the your IDE and compile the project.
 
 Should you have questions contact to either,
+
 1. Sarpreet Singh Buttar sb223ce [at] student.lnu.se
 2. Songho Lee sl222xk [at] student.lnu.se
 
