@@ -1,7 +1,5 @@
 package BlackJack.view;
 
-import BlackJack.controller.PlayGame.Command;
-
 public class SwedishView implements IView {
 
 	private final char play 	= 'p';

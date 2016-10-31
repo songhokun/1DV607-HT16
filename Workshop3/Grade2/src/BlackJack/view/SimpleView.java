@@ -1,7 +1,5 @@
 package BlackJack.view;
 
-import BlackJack.controller.PlayGame.Command;
-
 public class SimpleView implements IView {
 
 	private final char play = 'p';
@@ -45,15 +43,11 @@ public class SimpleView implements IView {
 	}
 
 	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
-		if (!a_hand.iterator().hasNext()) {
-			System.out.println(a_name + " Has no cards yet.\n");
-		} else {
-			System.out.println(a_name + " Has: ");
-			for (BlackJack.model.Card c : a_hand) {
-				DisplayCard(c);
-			}
-			System.out.println("Score: " + a_score + "\n");
+		System.out.println(a_name + " Has: ");
+		for (BlackJack.model.Card c : a_hand) {
+			DisplayCard(c);
 		}
+		System.out.println("Score: " + a_score + "\n");
 	}
 
 	public void DisplayGameOver(boolean a_dealerIsWinner) {

@@ -1,8 +1,7 @@
 package BlackJack.view;
 
-import BlackJack.controller.PlayGame.Command;
-
 public interface IView {
+	public enum Command{PLAY, HIT, STAND, QUIT, INVALID}
 	
 	void DisplayWelcomeMessage();
 
