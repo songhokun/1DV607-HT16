@@ -7,7 +7,6 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +34,7 @@ import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
 import model.Search.ISimpleSearchStrategy;
-import model.Search.SearchFactory;
+import model.Search.SearchStrategy;
 import model.Search.SearchMode.SimpleSearchMode;
 
 public class GUI implements Initializable, IView {
@@ -85,7 +84,6 @@ public class GUI implements Initializable, IView {
 	private ISimpleSearchStrategy simpleSearchStrategy;
 
 
-	
 	public GUI() {
 		registry = new Registry();
 		authentication = new Authentication();
@@ -116,7 +114,7 @@ public class GUI implements Initializable, IView {
 		searchByChoiceBox.setItems(FXCollections.observableArrayList(SimpleSearchMode.values()));
 		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.BY_NAME); // default
 		
-		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(registry.getMemberList(), new SearchFactory())));
+		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(registry.getMemberList(), new SearchStrategy())));
 	}
 
 	@Override
@@ -356,87 +354,52 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchFactory factory) {
+	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy factory) {
 		// if search field is empty
 		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_NAME)
 				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_LENGTH)
 				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_AGE_GREATER_THAN)
 				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_AGE_LESS_THAN)
-				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_AGE_EQUAL_TO))
+				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_AGE_EQUAL_TO)) {
 
-			if (searchField.getText().isEmpty())
+			if (searchField.getText().isEmpty()) {
 				return null;
-		
+			}
+		}
+
 		try {
-			SimpleSearchMode selectedMode = searchByChoiceBox.getSelectionModel().getSelectedItem();
-			Object searchKeyword;
-			
-			switch (selectedMode) {
+			switch (searchByChoiceBox.getSelectionModel().getSelectedItem()) {
 			case BY_NAME:
-				searchKeyword = searchField.getText();
+				simpleSearchStrategy = factory.getSearchByName(searchField.getText());
 				break;
 			case BY_MONTH:
-				searchKeyword = (searchByMonth.getSelectionModel().getSelectedItem().ordinal() + 1);
+				simpleSearchStrategy = factory.getSearchByMonth(searchByMonth.getSelectionModel().getSelectedItem().ordinal() + 1);
 				break;
 			case BY_BOAT_TYPE:
-				searchKeyword = (searchByBoatType.getSelectionModel().getSelectedItem());
+				simpleSearchStrategy = factory.getSearchByBoatType(searchByBoatType.getSelectionModel().getSelectedItem());
 				break;
-			case BY_AGE_EQUAL_TO:
-				searchKeyword = (Integer.parseInt(searchField.getText()));
-				break;
-			case BY_AGE_GREATER_THAN:
-				searchKeyword = (Integer.parseInt(searchField.getText()));
-				break;
-			case BY_AGE_LESS_THAN:
-				searchKeyword = (Integer.parseInt(searchField.getText()));
-				break;
-			case BY_BOAT_LENGTH:
-				searchKeyword = (Double.parseDouble(searchField.getText()));
-				break;
-			default:
-				searchKeyword = null;
-				break;
-			/*
-			case BY_NAME:
-					simpleSearchStrategy = factory.getSearchByName(searchField.getText());
-					return simpleSearchStrategy.simpleSearch(list);
-			case BY_MONTH:
-					simpleSearchStrategy = factory.getSearchByMonth(searchByMonth.getSelectionModel().getSelectedItem().ordinal() + 1);
-					return simpleSearchStrategy.simpleSearch(list);
-			case BY_BOAT_TYPE:
-					simpleSearchStrategy = factory.getSearchByBoatType(searchByBoatType.getSelectionModel().getSelectedItem());
-					return simpleSearchStrategy.simpleSearch(list);
 			case BY_AGE_EQUAL_TO:
 				simpleSearchStrategy = factory.getSearchByAgeEqualTo(Integer.parseInt(searchField.getText()));
-				return simpleSearchStrategy.simpleSearch(list);
+				break;
 			case BY_AGE_GREATER_THAN:
 				simpleSearchStrategy = factory.getSearchByAgeGreaterThan(Integer.parseInt(searchField.getText()));
-				return simpleSearchStrategy.simpleSearch(list);
+				break;
 			case BY_AGE_LESS_THAN:
 				simpleSearchStrategy = factory.getSearchByAgeLessThan(Integer.parseInt(searchField.getText()));
-				return simpleSearchStrategy.simpleSearch(list);
+				break;
 			case BY_BOAT_LENGTH:
 				simpleSearchStrategy = factory.getSearchByBoatLength(Double.parseDouble(searchField.getText()));
-				return simpleSearchStrategy.simpleSearch(list);
+				break;
 			default:
 				break;
-			*/
-			}
-			if(searchKeyword!=null && selectedMode != null){
-				simpleSearchStrategy = factory.getSearch(selectedMode,searchKeyword);
-				return simpleSearchStrategy.simpleSearch(list);
 			}
 		} catch (Exception e) {
 			displayError("Incorrect Data Type!!");
 		}
 		searchField.clear();
-		return new ArrayList<Member>();
+		return simpleSearchStrategy.simpleSearch(list);
 	}
 
-	@Override
-	public void doComplexSearch(ArrayList<Member> list, SearchFactory factory) {
-	}
-	
 	@Override
 	public void displaySearchResult(ArrayList<Member> m) {
 		if(m == null)

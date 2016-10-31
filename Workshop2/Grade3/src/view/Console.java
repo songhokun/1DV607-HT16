@@ -10,10 +10,8 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
-import model.Search.IComplexSearchStrategy;
 import model.Search.ISimpleSearchStrategy;
 import model.Search.SearchStrategy;
-import model.Search.SearchMode.ComplexSearchMode;
 import model.Search.SearchMode.SimpleSearchMode;
 
 public class Console implements IView {
@@ -25,7 +23,7 @@ public class Console implements IView {
 	private final String returnSequence = "r";
 	private Authentication authentication;
 	private ISimpleSearchStrategy simpleSearchStrategy;
-	private IComplexSearchStrategy complexSearchStrategy;
+
 
 	/**
 	 * Constructor of console. Reads member data and boat file
@@ -62,9 +60,8 @@ public class Console implements IView {
 			System.out.println("2: DISPLAY VERBOSE LIST");
 			System.out.println("3: CREATE A MEMBER");
 			System.out.println("4: SIMPLE SEARCH");
-			System.out.println("5: COMPLEX SEARCH");
 			if (!authentication.isLoggedIn())
-				System.out.println("6: LOG IN");
+				System.out.println("5: LOG IN");
 			System.out.print(quitSequence + ": SAVE & QUIT\n>");
 
 			input = scan.next();
@@ -90,9 +87,6 @@ public class Console implements IView {
 				displaySearchResult(m);
 				break;
 			case ("5"):
-				doComplexSearch(registry.getMemberList(), new SearchStrategy());
-				break;
-			case ("6"):
 				if (!authentication.isLoggedIn())
 					logIn(getUsernameFromUser(), getPasswordFromUser());
 				else
@@ -280,48 +274,6 @@ public class Console implements IView {
 		return simpleSearchStrategy.simpleSearch(list);
 	}
 
-	@Override
-	public void doComplexSearch(ArrayList<Member> list, SearchStrategy strategy) {
-		ArrayList<Member> firstList = doSimpleSearch(list, strategy);
-		ArrayList<Member> secondList = null;
-		String in;
-		
-		do {
-			for (ComplexSearchMode operator : ComplexSearchMode.values())
-				System.out.println(operator.ordinal() + ": " + operator);
-
-			System.out.println("s: SHOW RESULT");
-			System.out.println(returnSequence + ": RETURN");
-			System.out.print(quitSequence + ": SAVE & QUIT\n");
-			in = scan.next();
-
-			if (in.equals(returnSequence))
-				return;
-			else if (in.equals(quitSequence))
-				quitProgram();
-			else if (in.equals("s"))
-				displaySearchResult(firstList);
-			else {
-				try {
-					switch (ComplexSearchMode.values()[Integer.parseInt(in)]) {
-
-					case AND:
-						secondList = doSimpleSearch(list, strategy);
-						complexSearchStrategy = strategy.getByAndStrategy();
-						firstList = complexSearchStrategy.complexSearch(firstList, secondList);
-						break;
-					case OR:
-						secondList = doSimpleSearch(list, strategy);
-						complexSearchStrategy = strategy.getByOrStrategy();
-						firstList = complexSearchStrategy.complexSearch(firstList, secondList);
-						break;
-					}
-				} catch (Exception e) {
-					displayError("INVALID OPTION");
-				}
-			}
-		} while (!in.equals("s"));
-	}
 
 	@Override
 	public void displaySearchResult(ArrayList<Member> m) {

@@ -129,16 +129,6 @@ public interface IView {
 	ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy);
 
 	/**
-	 * 
-	 * @param firstList
-	 * @param secondList
-	 * @param SearchMode
-	 *            operator
-	 * @return ArrayList<Member> after doing AND/OR operation on given arrays.
-	 */
-	void doComplexSearch(ArrayList<Member> list, SearchStrategy strategy);
-
-	/**
 	 * Print the given parameter array
 	 * 
 	 * @param m
