@@ -14,6 +14,6 @@ public class RulesFactory {
 	
 	public IWinStrategy GetWinRule(){
 		return new PlayerWinStrategy();
-		//return new BasicWinStrategy();
+		//return new DealerWinStrategy();
 	}
 }

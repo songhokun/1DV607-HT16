@@ -2,7 +2,7 @@ package BlackJack.model.rules;
 
 import BlackJack.model.Player;
 
-class BasicWinStrategy implements IWinStrategy {
+class DealerWinStrategy implements IWinStrategy {
 
 	public boolean IsDealerWinner(Player a_player, Player a_dealer, int g_maxScore) {
 		if (a_player.CalcScore() > g_maxScore) {
