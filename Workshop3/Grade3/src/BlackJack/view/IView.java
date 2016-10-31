@@ -3,8 +3,14 @@ package BlackJack.view;
 import BlackJack.controller.PlayGame.Command;
 
 public interface IView {
-	
-	void DisplayWelcomeMessage(String newGameStrategy, String hitStrategy, String winStrategy);
+
+	void DisplayWelcomeMessage();
+
+	void DisplayCurrentNewGameRule(String name);
+
+	void DisplayCurrentHitRule(String name);
+
+	void DisplayCurrentWinRule(String name);
 
 	Command GetInput();
 

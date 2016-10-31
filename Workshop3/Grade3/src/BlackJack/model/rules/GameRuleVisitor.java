@@ -2,18 +2,24 @@ package BlackJack.model.rules;
 
 public class GameRuleVisitor implements IGameVisitor {
 
-	@Override
-	public String VistNewGameStrategy(INewGameStrategy a_newGameStrategy) {
-		return a_newGameStrategy.getClass().getSimpleName();
+	private BlackJack.view.IView view;
+
+	public GameRuleVisitor(BlackJack.view.IView view) {
+		this.view = view;
 	}
 
 	@Override
-	public String VisitHitStrategy(IHitStrategy a_hitStrategy) {
-		return a_hitStrategy.getClass().getSimpleName();
+	public void VistNewGameStrategy(INewGameStrategy a_newGameStrategy) {
+		view.DisplayCurrentNewGameRule(a_newGameStrategy.getClass().getSimpleName());
 	}
 
 	@Override
-	public String VisitWinStrategy(IWinStrategy a_winStrategy) {
-		return a_winStrategy.getClass().getSimpleName();
+	public void VisitHitStrategy(IHitStrategy a_hitStrategy) {
+		view.DisplayCurrentHitRule(a_hitStrategy.getClass().getSimpleName());
+	}
+
+	@Override
+	public void VisitWinStrategy(IWinStrategy a_winStrategy) {
+		view.DisplayCurrentWinRule(a_winStrategy.getClass().getSimpleName());
 	}
 }

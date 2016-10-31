@@ -17,7 +17,8 @@ public class PlayGame implements IObserver {
 	}
 
 	public boolean Play() {
-		a_view.DisplayWelcomeMessage(a_game.GetNewGameStrategyRuleName(), a_game.GetHitStrategyRuleName(), a_game.GetWinStrategyRuleName());
+		a_view.DisplayWelcomeMessage();
+		//a_view.DisplayWelcomeMessage(a_game.GetNewGameStrategyRuleName(), a_game.GetHitStrategyRuleName(), a_game.GetWinStrategyRuleName());
 		Command input = a_view.GetInput();
 		switch (input) {
 		case PLAY:

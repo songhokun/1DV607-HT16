@@ -4,19 +4,27 @@ import BlackJack.controller.PlayGame.Command;
 
 public class SwedishView implements IView {
 
-	private final char play 	= 'p';
-	private final char hit 		= 'h';
-	private final char stand 	= 's';
-	private final char quit 	= 'q';
+	private final char play = 'p';
+	private final char hit = 'h';
+	private final char stand = 's';
+	private final char quit = 'q';
 
-	public void DisplayWelcomeMessage(String newGameStrategy, String hitStrategy, String winStrategy) {
+	public void DisplayWelcomeMessage() {
 		System.out.println("Hej Black Jack Världen");
-		System.out.println("Game Strategy : " + newGameStrategy);
-		System.out.println("Hit Strategy  : " + hitStrategy);
-		System.out.println("Win Strategy  : " + winStrategy);
-		System.out.println("----------------------");
 		System.out.println("Skriv " + "\'" + play + "\' för att Spela, " + "\'" + hit + "\' för nytt Kort, " + "\'"
 				+ stand + "\' för att Stanna, " + "\'" + quit + "\' för att avsluta\n");
+	}
+
+	public void DisplayCurrentNewGameRule(String name) {
+		System.out.println("Game Strategy : " + name);
+	}
+
+	public void DisplayCurrentHitRule(String name) {
+		System.out.println("Hit Strategy  : " + name);
+	}
+
+	public void DisplayCurrentWinRule(String name) {
+		System.out.println("Win Strategy  : " + name);
 	}
 
 	public Command GetInput() {
@@ -41,7 +49,8 @@ public class SwedishView implements IView {
 			System.out.println("Dolt Kort");
 		} else {
 			String colors[] = { "Hjärter", "Spader", "Ruter", "Klöver" };
-			String values[] = { "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "knekt", "dam", "kung", "ess" };
+			String values[] = { "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "knekt", "dam", "kung",
+					"ess" };
 			System.out.println("" + colors[a_card.GetColor().ordinal()] + " " + values[a_card.GetValue().ordinal()]);
 		}
 	}
@@ -64,16 +73,11 @@ public class SwedishView implements IView {
 	}
 
 	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
-		if(!a_hand.iterator().hasNext())
-			System.out.println(a_name + " Har inget kort ännu.\n");
-		else
-		{
-			System.out.println(a_name + " Har: " + a_score);
-			for (BlackJack.model.Card c : a_hand) {
-				DisplayCard(c);
-			}
-			System.out.println("Poäng: " + a_score+"\n");
+		System.out.println(a_name + " Har: " + a_score);
+		for (BlackJack.model.Card c : a_hand) {
+			DisplayCard(c);
 		}
+		System.out.println("Poäng: " + a_score + "\n");
 	}
 
 	private int GetIntInput() {

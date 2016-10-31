@@ -9,13 +9,23 @@ public class SimpleView implements IView {
 	private final char stand = 's';
 	private final char quit = 'q';
 
-	public void DisplayWelcomeMessage(String newGameStrategy, String hitStrategy, String winStrategy) {
+	public void DisplayWelcomeMessage() {
 		System.out.println("Hello Black Jack World");
-		System.out.println("Game Strategy : " + newGameStrategy);
-		System.out.println("Hit Strategy  : " + hitStrategy);
-		System.out.println("Win Strategy  : " + winStrategy);
+
 		System.out.println("Type " + "\'" + play + "\' to Play, " + "\'" + hit + "\' to Hit, " + "\'" + stand
 				+ "\' to Stand, " + "\'" + quit + "\' to Quit\n");
+	}
+
+	public void DisplayCurrentNewGameRule(String name) {
+		System.out.println("Game Strategy : " + name);
+	}
+
+	public void DisplayCurrentHitRule(String name) {
+		System.out.println("Hit Strategy  : " + name);
+	}
+
+	public void DisplayCurrentWinRule(String name) {
+		System.out.println("Win Strategy  : " + name);
 	}
 
 	public Command GetInput() {
@@ -48,15 +58,11 @@ public class SimpleView implements IView {
 	}
 
 	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {
-		if (!a_hand.iterator().hasNext()) {
-			System.out.println(a_name + " Has no cards yet.\n");
-		} else {
-			System.out.println(a_name + " Has: ");
-			for (BlackJack.model.Card c : a_hand) {
-				DisplayCard(c);
-			}
-			System.out.println("Score: " + a_score + "\n");
+		System.out.println(a_name + " Has: ");
+		for (BlackJack.model.Card c : a_hand) {
+			DisplayCard(c);
 		}
+		System.out.println("Score: " + a_score + "\n");
 	}
 
 	public void DisplayGameOver(boolean a_dealerIsWinner) {
