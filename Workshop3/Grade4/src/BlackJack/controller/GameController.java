@@ -32,38 +32,18 @@ public class GameController extends MainController implements IObserver{
 	private final double imageWidth = 200.0;
 	private ImageView imageView;
 	
-	private enum CommonLabel{
-		Player("Player","Spelaren"),
-		Dealer("Dealer","Givare"),
-		Score("Score","Poäng"), Game("Game","Spel"), over("over","slut"), won("won","vann");
-		
-		private String engelsk;
-		private String svensk;
-		
-		private CommonLabel(String eng, String swe){
-			this.engelsk=eng;
-			this.svensk=swe;
-		}
-		public String getLabel(Language inLang){
-			if(inLang == Language.English)
-				return engelsk;
-			else
-				return svensk;
-		}
-		
-	}
-	
 	public void initialize(URL location, ResourceBundle resources) {
 		quit.setOnMouseClicked(e -> super.quit());
 		this.rules.setText(super.rules.getText());
-		playerScore.setText(CommonLabel.Player.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
-		dealerScore.setText(CommonLabel.Dealer.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
+		playerScore.setText("Player Score: " + super.game.GetPlayerScore());
+		dealerScore.setText("Dealer Score: " + super.game.GetDealerScore());
 		play.setOnMouseClicked(e -> play());
 		stand.setOnMouseClicked(e -> stand());
 		hit.setOnMouseClicked(e -> hit());
 		game.AddSubscribers(this);
 		hit.setDisable(true);
 		stand.setDisable(true);
+		setPageLanguage();
 	}
 	
 	@FXML
@@ -94,8 +74,9 @@ public class GameController extends MainController implements IObserver{
 			imageView.setPreserveRatio(false);
 			playerCardDisplayer.getChildren().add(imageView);
 		}
-		playerScore.setText(CommonLabel.Player.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
-		dealerScore.setText(CommonLabel.Dealer.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
+		playerScore.setText("Player Score: " + super.game.GetPlayerScore());
+		dealerScore.setText("Dealer Score: " + super.game.GetDealerScore());
+
 		if(game.IsGameOver())
 			gameOver();
 	}
@@ -130,11 +111,40 @@ public class GameController extends MainController implements IObserver{
 	public void gameOver(){
 			Alert alert = new Alert(AlertType.INFORMATION, "Game Over");
 			if(game.IsDealerWinner())
-				alert.setContentText(CommonLabel.Dealer.getLabel(currentLanguage)+" "+CommonLabel.won.getLabel(currentLanguage)+"!");
-			else alert.setContentText(CommonLabel.Player.getLabel(currentLanguage)+" "+CommonLabel.won.getLabel(currentLanguage)+"!"); 
+				alert.setContentText("Dealer Won!");
+			else alert.setContentText("You Won!"); 
+ 
 			alert.show();
 			play.setDisable(false);
 			hit.setDisable(true);
 			stand.setDisable(true);
+	}
+	private void setPageLanguage() {
+		switch (currentLanguage) {
+		case English:
+			changeToEnglish();
+			break;
+		case Swedish:
+			changeToSwedish();
+			break;
+		}
+	}
+	private void changeToEnglish(){
+		back.setText("back");
+		play.setText("play");
+		stand.setText("stand");
+		hit.setText("hit");
+		quit.setText("quit");
+		player.setText("player");
+		dealer.setText("dealer");
+	}
+	private void changeToSwedish(){
+		back.setText("tillbacka");
+		play.setText("Spela");
+		stand.setText("stanna");
+		hit.setText("hämta");
+		quit.setText("avsluta");
+		player.setText("spelaren");
+		dealer.setText("givaren");
 	}
 }
