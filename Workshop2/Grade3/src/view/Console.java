@@ -12,7 +12,7 @@ import model.Member;
 import model.Registry;
 import model.Search.ISimpleSearchStrategy;
 import model.Search.SearchStrategy;
-import model.Search.SearchMode.SimpleSearchMode;
+import model.Search.SearchStrategy.SimpleSearchMode;
 
 public class Console implements IView {
 
