@@ -8,7 +8,7 @@ class Soft17HitStrategy extends BasicHitStrategy {
 	@Override
 	public boolean DoHit(Player a_dealer) {
 		// Special condition for Soft-17.
-		if (a_dealer.CalcScore() == 17) {
+		if (a_dealer.CalcScoreWithoutAce() == g_hitLimit) {
 			for (Card c : a_dealer.GetHand()) {
 				if (c.GetValue() == Card.Value.Ace) {
 					return true;

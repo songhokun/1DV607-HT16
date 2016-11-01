@@ -39,15 +39,7 @@ public class Player {
 	}
 	
 	public int CalcScore() {
-		int cardScores[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
-		assert (cardScores.length == Card.Value.Count.ordinal()) : "Card Scores array size does not match number of card values";
-		
-		int score = 0;
-		for (Card c : GetHand()) {
-			if (c.GetValue() != Card.Value.Hidden) {
-				score += cardScores[c.GetValue().ordinal()];
-			}
-		}
+		int score = CalcScoreWithoutAce();
 		if (score > g_maxScore) {
 			for (Card c : GetHand()) {
 				if (c.GetValue() == Card.Value.Ace && score > g_maxScore) {
@@ -57,6 +49,20 @@ public class Player {
 		}
 		return score;
 	}
+	public int CalcScoreWithoutAce() {
+		int cardScores[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
+		assert (cardScores.length == Card.Value.Count.ordinal()) : "Card Scores array size does not match number of card values";
+		
+		int score = 0;
+		for (Card c : GetHand()) {
+			if (c.GetValue() != Card.Value.Hidden) {
+				score += cardScores[c.GetValue().ordinal()];
+			}
+		}
+		
+		return score;
+	}
+	
 	
 	public void AddSubscribers(IObserver a_subscriber){
 		m_subscribers.add(a_subscriber);
