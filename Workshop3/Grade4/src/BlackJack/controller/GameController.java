@@ -32,12 +32,32 @@ public class GameController extends MainController implements IObserver{
 	private final double imageWidth = 200.0;
 	private ImageView imageView;
 	
+	private enum CommonLabel{
+		Player("Player","Spelaren"),
+		Dealer("Dealer","Givare"),
+		Score("Score","Poäng"), Game("Game","Spel"), over("over","slut"), won("won","vann");
+		
+		private String engelsk;
+		private String svensk;
+		
+		private CommonLabel(String eng, String swe){
+			this.engelsk=eng;
+			this.svensk=swe;
+		}
+		public String getLabel(Language inLang){
+			if(inLang == Language.English)
+				return engelsk;
+			else
+				return svensk;
+		}
+		
+	}
 	
 	public void initialize(URL location, ResourceBundle resources) {
 		quit.setOnMouseClicked(e -> super.quit());
 		this.rules.setText(super.rules.getText());
-		playerScore.setText("Player Score: " + super.game.GetPlayerScore());
-		dealerScore.setText("Dealer Score: " + super.game.GetDealerScore());
+		playerScore.setText(CommonLabel.Player.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
+		dealerScore.setText(CommonLabel.Dealer.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
 		play.setOnMouseClicked(e -> play());
 		stand.setOnMouseClicked(e -> stand());
 		hit.setOnMouseClicked(e -> hit());
@@ -58,8 +78,8 @@ public class GameController extends MainController implements IObserver{
 		dealerCardDisplayer.getChildren().clear();
 		playerCardDisplayer.getChildren().clear();
 		for(Card c: game.GetDealerHand()){
-			//imageView = new ImageView(new Image(c.GetLink()));
-			imageView = new ImageView(new Image("http://opengameart.org/sites/default/files/styles/watermarked/public/king_of_hearts2.png"));
+			imageView = new ImageView(new Image(c.GetLink()));
+			//imageView = new ImageView(new Image("http://opengameart.org/sites/default/files/styles/watermarked/public/king_of_hearts2.png"));
 			imageView.setFitHeight(imageHeight);
 			imageView.setFitWidth(imageWidth);
 			imageView.setPreserveRatio(false);
@@ -67,15 +87,15 @@ public class GameController extends MainController implements IObserver{
 		}
 		
 		for(Card c: game.GetPlayerHand()){
-			//imageView = new ImageView(new Image(c.GetLink()));
-			imageView = new ImageView(new Image("http://opengameart.org/sites/default/files/styles/watermarked/public/king_of_hearts2.png"));
+			imageView = new ImageView(new Image(c.GetLink()));
+			//imageView = new ImageView(new Image("http://opengameart.org/sites/default/files/styles/watermarked/public/king_of_hearts2.png"));
 			imageView.setFitHeight(imageHeight);
 			imageView.setFitWidth(imageWidth);
 			imageView.setPreserveRatio(false);
 			playerCardDisplayer.getChildren().add(imageView);
 		}
-		playerScore.setText("Player Score: " + super.game.GetPlayerScore());
-		dealerScore.setText("Dealer Score: " + super.game.GetDealerScore());
+		playerScore.setText(CommonLabel.Player.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
+		dealerScore.setText(CommonLabel.Dealer.getLabel(currentLanguage)+" "+CommonLabel.Score.getLabel(currentLanguage)+": " + super.game.GetPlayerScore());
 		if(game.IsGameOver())
 			gameOver();
 	}
@@ -110,8 +130,8 @@ public class GameController extends MainController implements IObserver{
 	public void gameOver(){
 			Alert alert = new Alert(AlertType.INFORMATION, "Game Over");
 			if(game.IsDealerWinner())
-				alert.setContentText("Dealer Won!");
-			else alert.setContentText("You Won!"); 
+				alert.setContentText(CommonLabel.Dealer.getLabel(currentLanguage)+" "+CommonLabel.won.getLabel(currentLanguage)+"!");
+			else alert.setContentText(CommonLabel.Player.getLabel(currentLanguage)+" "+CommonLabel.won.getLabel(currentLanguage)+"!"); 
 			alert.show();
 			play.setDisable(false);
 			hit.setDisable(true);

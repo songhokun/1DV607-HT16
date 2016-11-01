@@ -35,15 +35,15 @@ public class MainController implements Initializable{
 	
 	// My swedish is not good. You can translate these names.
 	public enum SwedishGameMode {
-		Basic_AmericanStyleGame_With_DealerAdvantage, 
-		Basic_AmericanStyleGame_With_PlayerAdvantage, 
-		Soft17_AmericanStyleGame_With_DealerAdvantage, 
-		Soft17_AmericanStyleGame_With_PlayerAdvantage,
+		Basic_Amerikansk_stil_spel_med_Givarens_fördel,
+		Basic_Amerikansk_stil_spel_med_Spelarens_fördel, 
+		Soft17_Amerikansk_stil_spel_med_Givarens_fördel, 
+		Soft17_Amerikansk_stil_spel_med_Spelarens_fördel,
 
-		Basic_InternationalStyleGame_With_DealerAdvantage, 
-		Basic_InternationalStyleGame_With_PlayerAdvantage, 
-		Soft17_InternationalStyleGame_With_DealerAdvantage, 
-		Soft17_InternationalStyleGame_With_PlayerAdvantage
+		Basic_InternationellStilSpel_Med_Givarens_fördel, 
+		Basic_InternationellStilSpel_Med_Spelarens_fördel, 
+		Soft17_InternationellStilSpel_Med_Givarens_fördel, 
+		Soft17_InternationellStilSpel_Med_Spelarens_fördel
 	}
 	
 	protected static Language currentLanguage = Language.English;
