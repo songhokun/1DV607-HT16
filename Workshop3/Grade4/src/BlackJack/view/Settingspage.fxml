@@ -9,11 +9,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BlackJack.view.Settingspage">
+<AnchorPane prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BlackJack.controller.SettingspageController">
    <children>
-      <ImageView fx:id="imageView" fitHeight="450.0" fitWidth="811.0" pickOnBounds="true">
-       </ImageView>
-      <Label fx:id="gameMode" layoutX="8.0" layoutY="357.0" text="Game Mode" textFill="#c9e8f2">
+      <ImageView fx:id="imageView" fitHeight="700.0" fitWidth="850.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../../../../../../../../Downloads/blackjack.jpg" />
+         </image></ImageView>
+      <Label fx:id="gameMode" layoutX="283.0" layoutY="46.0" text="Game Mode" textFill="WHITE">
          <font>
             <Font size="25.0" />
          </font>
@@ -24,7 +26,7 @@
             <Glow />
          </effect>
       </Label>
-      <ChoiceBox fx:id="gameModeChoices" layoutX="173.0" layoutY="359.0" prefHeight="27.0" prefWidth="370.0">
+      <ChoiceBox fx:id="gameModeChoices" layoutX="460.0" layoutY="47.0" prefHeight="27.0" prefWidth="370.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -32,7 +34,7 @@
             <Glow />
          </effect>
       </ChoiceBox>
-      <Label fx:id="back" layoutX="5.0" layoutY="3.0" onMouseClicked="#displayMainpage" text="Go back" textFill="#c9e8f2">
+      <Label fx:id="back" layoutX="5.0" layoutY="3.0" onMouseClicked="#displayMainpage" text="Back" textFill="#bc1515">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -43,7 +45,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label fx:id="language" layoutX="8.0" layoutY="409.0" text="Language" textFill="#c9e8f2">
+      <Label fx:id="language" layoutX="309.0" layoutY="101.0" text="Language" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -54,13 +56,27 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="languageChoices" layoutX="173.0" layoutY="411.0" prefHeight="27.0" prefWidth="145.0">
+      <Label fx:id="english" layoutX="460.0" layoutY="102.0" onMouseClicked="#changeToEnglish" text="English" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
          <effect>
             <Glow />
          </effect>
-      </ChoiceBox>
+         <font>
+            <Font name="Chalkboard SE Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="swedish" layoutX="557.0" layoutY="102.0" onMouseClicked="#changeToSwedish" text="Swedish" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <Glow />
+         </effect>
+         <font>
+            <Font name="Chalkboard SE Bold" size="22.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

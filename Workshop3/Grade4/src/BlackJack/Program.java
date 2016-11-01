@@ -1,9 +1,7 @@
 package BlackJack;
 
+import BlackJack.controller.MainController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Program extends Application {
@@ -14,14 +12,9 @@ public class Program extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/BlackJack/view/Mainpage.fxml"));
-			Scene scene = new Scene(root, 800, 450);
-			primaryStage.setScene(scene);
+			MainController ctr = new MainController();
+			primaryStage.setScene(ctr.getMainScence());
 			primaryStage.setResizable(false);
 			primaryStage.show();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

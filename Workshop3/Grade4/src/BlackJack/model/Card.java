@@ -3,7 +3,7 @@ package BlackJack.model;
 public class Card {
 
 	public enum Color {Hearts, Spades, Diamonds, Clubs, Count, Hidden}
-	public enum Value {Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace, Count, Hidden}
+	public enum Value {Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Knight, Queen, King, Ace, Count, Hidden}
 	private Color m_color;
 	private Value m_value;
 	private boolean m_isHidden;
@@ -27,17 +27,21 @@ public class Card {
 		}
 		return m_value;
 	}
-	public String getLink(){
+
+	public void Show(boolean a_show) {
+		m_isHidden = !a_show;
+	}
+	
+	public String GetLink() {
+		if(this.GetValue() == Value.Hidden){
+			return "http://chetart.com/blog/wp-content/uploads/2012/05/playing-card-back.jpg";
+		}
 		StringBuilder make = new StringBuilder("http://homepage.lnu.se/student/sl222xk/playingcards/");
 		make.append(this.GetValue());
 		make.append("_of_");
 		make.append(this.GetColor());
 		make.append(".png");
-		
-		return make.toString();
-	}
 
-	public void Show(boolean a_show) {
-		m_isHidden = !a_show;
+		return make.toString();
 	}
 }

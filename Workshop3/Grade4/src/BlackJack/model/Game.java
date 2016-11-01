@@ -1,15 +1,14 @@
 package BlackJack.model;
 
 import BlackJack.model.rules.IGame;
-import BlackJack.model.rules.IGameVisitor;
 
 public class Game {
 
 	private Dealer m_dealer;
 	private Player m_player;
 
-	public Game(IGame a_game, IGameVisitor a_visitor) {
-		m_dealer = new Dealer(a_game, a_visitor);
+	public Game(IGame a_game) {
+		m_dealer = new Dealer(a_game);
 		m_player = new Player();
 	}
 
@@ -52,17 +51,5 @@ public class Game {
 	public void AddSubscribers(IObserver a_subscriber) {
 		m_player.AddSubscribers(a_subscriber);
 		m_dealer.AddSubscribers(a_subscriber);
-	}
-	
-	public String GetNewGameStrategyRuleName(){
-		return m_dealer.GetNewGameStrategyRuleName();
-	}
-	
-	public String GetHitStrategyRuleName(){
-		return m_dealer.GetHitStrategyRuleName();
-	}
-	
-	public String GetWinStrategyRuleName(){
-		return m_dealer.GetWinStrategyRuleName();
 	}
 }
