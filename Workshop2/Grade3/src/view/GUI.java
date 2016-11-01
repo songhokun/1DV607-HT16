@@ -81,7 +81,7 @@ public class GUI implements Initializable, IView {
 	
 	private Registry registry;
 	private Authentication authentication;
-	private ISimpleSearchStrategy simpleSearchStrategy;
+	
 
 
 	public GUI() {
@@ -355,6 +355,7 @@ public class GUI implements Initializable, IView {
 
 	@Override
 	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy factory) {
+		ISimpleSearchStrategy simpleSearchStrategy = null;
 		// if search field is empty
 		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_NAME)
 				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_LENGTH)

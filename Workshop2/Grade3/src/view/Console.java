@@ -22,7 +22,6 @@ public class Console implements IView {
 	private final String quitSequence = "q";
 	private final String returnSequence = "r";
 	private Authentication authentication;
-	private ISimpleSearchStrategy simpleSearchStrategy;
 
 
 	/**
@@ -225,6 +224,8 @@ public class Console implements IView {
 
 	@Override
 	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy) {
+		ISimpleSearchStrategy simpleSearchStrategy = null;
+		
 		System.out.println("\nSELECT THE OPTION");
 
 		for (SimpleSearchMode mode : SimpleSearchMode.values())

@@ -24,8 +24,6 @@ public class Console implements IView {
 	private final String quitSequence = "q";
 	private final String returnSequence = "r";
 	private Authentication authentication;
-	private ISimpleSearchStrategy simpleSearchStrategy;
-	private IComplexSearchStrategy complexSearchStrategy;
 
 	/**
 	 * Constructor of console. Reads member data and boat file
@@ -231,6 +229,8 @@ public class Console implements IView {
 
 	@Override
 	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy) {
+		ISimpleSearchStrategy simpleSearchStrategy = null;
+		
 		System.out.println("\nSELECT THE OPTION");
 
 		for (SimpleSearchMode mode : SimpleSearchMode.values())
@@ -282,6 +282,8 @@ public class Console implements IView {
 
 	@Override
 	public void doComplexSearch(ArrayList<Member> list, SearchStrategy strategy) {
+		IComplexSearchStrategy complexSearchStrategy;
+		
 		ArrayList<Member> firstList = doSimpleSearch(list, strategy);
 		ArrayList<Member> secondList = null;
 		String in;
