@@ -13,8 +13,8 @@ import model.Registry;
 import model.Search.IComplexSearchStrategy;
 import model.Search.ISimpleSearchStrategy;
 import model.Search.SearchStrategy;
-import model.Search.SearchMode.ComplexSearchMode;
-import model.Search.SearchMode.SimpleSearchMode;
+import model.Search.SearchStrategy.ComplexSearchMode;
+import model.Search.SearchStrategy.SimpleSearchMode;
 
 public class Console implements IView {
 
