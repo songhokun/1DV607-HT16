@@ -3,10 +3,10 @@ package BlackJack;
 import BlackJack.controller.PlayGame;
 import BlackJack.model.Game;
 import BlackJack.model.rules.GameFactory;
-import BlackJack.model.rules.GameRuleVisitor;
 import BlackJack.model.rules.IGame;
 import BlackJack.model.rules.IGameFactory;
 import BlackJack.model.rules.IGameVisitor;
+import BlackJack.view.GameRuleVisitor;
 import BlackJack.view.IView;
 import BlackJack.view.SimpleView;
 
