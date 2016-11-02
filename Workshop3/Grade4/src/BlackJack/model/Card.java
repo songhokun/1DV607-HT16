@@ -31,17 +31,4 @@ public class Card {
 	public void Show(boolean a_show) {
 		m_isHidden = !a_show;
 	}
-	
-	public String GetLink() {
-		if(this.GetValue() == Value.Hidden){
-			return "http://chetart.com/blog/wp-content/uploads/2012/05/playing-card-back.jpg";
-		}
-		StringBuilder make = new StringBuilder("http://homepage.lnu.se/student/sl222xk/playingcards/");
-		make.append(this.GetValue());
-		make.append("_of_");
-		make.append(this.GetColor());
-		make.append(".png");
-
-		return make.toString();
-	}
 }

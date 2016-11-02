@@ -2,13 +2,12 @@ package BlackJack.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
+import BlackJack.view.SettingsView.GameMode;
+import BlackJack.view.SettingsView.Language;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 public class SettingspageController extends MainController {
 
@@ -17,57 +16,33 @@ public class SettingspageController extends MainController {
 	@FXML private Label english;
 	@FXML private Label swedish;
 	@FXML private Label back;
-	@FXML private ChoiceBox<EnglishGameMode> gameModeChoices;
-	@FXML ImageView imageView;
+	@FXML private ChoiceBox<GameMode> gameModeChoices;
+	@FXML private ImageView imageView;
 
-	@SuppressWarnings("static-access")
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		setPageLanguage();
-		
-		super.image = new Image("http://www.casinoonline.se/images/blackjack.jpg");
-		imageView.setImage(image);
-		
-		gameModeChoices.setItems(FXCollections.observableArrayList(EnglishGameMode.values()));
-		gameModeChoices.setOnAction(e -> super.selectedGame = gameModeChoices.getSelectionModel().getSelectedItem());
+		settingsView.SetPageLanguage(currentLanguage, language, back, gameMode, english, swedish);
+		settingsView.SetBackgroundImage(imageView);
+		settingsView.SetAllGameModes(gameModeChoices);
+		back.setOnMouseClicked(e -> settingsView.GoBack(stage, back));
+		english.setOnMouseClicked( e -> ChangeToEnglish());
+		swedish.setOnMouseClicked(e -> ChangeToSwedish());
+		gameModeChoices.setOnAction(e -> GetNewGameMode());
+		AddEffects(new Label[]{back, english, swedish});
 	}
 	
-	@FXML
-	public void displayMainpage(){
-		super.stage = (Stage) back.getScene().getWindow();
-		super.GoToPage("Mainpage");
-	}
-
-	@FXML
-	public void changeToEnglish() {
+	public void ChangeToEnglish(){
 		currentLanguage = Language.English;
-		
-		language.setText("Language");
-		back.setText("Back");
-		gameMode.setText("Game Mode");
-		english.setText("English");
-		swedish.setText("Swedish");
-	}
-
-	@FXML
-	public void changeToSwedish() {
-		currentLanguage = Language.Swedish;
-		
-		language.setText("Språk");
-		back.setText("Tillbacka");
-		gameMode.setText("Spel Mode");
-		english.setText("Engleska");
-		swedish.setText("Svenska");
+		settingsView.ChangeToEnglish(language, back, gameMode, english, swedish);
 	}
 	
-	private void setPageLanguage() {
-		switch (currentLanguage) {
-		case English:
-			changeToEnglish();
-			break;
-		case Swedish:
-			changeToSwedish();
-			break;
-		}
+	public void ChangeToSwedish(){
+		currentLanguage = Language.Swedish;
+		settingsView.ChangeToSwedish(language, back, gameMode, english, swedish);
+	}
+	
+	public void GetNewGameMode(){
+		settingsView.SetGameMode(gameModeChoices);
 	}
 }

@@ -34,7 +34,7 @@
             <Glow />
          </effect>
       </ChoiceBox>
-      <Label fx:id="back" layoutX="5.0" layoutY="3.0" onMouseClicked="#displayMainpage" text="Back" textFill="#bc1515">
+      <Label fx:id="back" layoutX="5.0" layoutY="3.0" text="Back" textFill="#bc1515">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -56,7 +56,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label fx:id="english" layoutX="460.0" layoutY="102.0" onMouseClicked="#changeToEnglish" text="English" textFill="WHITE">
+      <Label fx:id="english" layoutX="460.0" layoutY="102.0" text="English" textFill="#bc1515">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -67,7 +67,7 @@
             <Font name="Chalkboard SE Bold" size="22.0" />
          </font>
       </Label>
-      <Label fx:id="swedish" layoutX="557.0" layoutY="102.0" onMouseClicked="#changeToSwedish" text="Swedish" textFill="WHITE">
+      <Label fx:id="swedish" layoutX="609.0" layoutY="102.0" text="Swedish" textFill="#bc1515">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

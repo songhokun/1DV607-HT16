@@ -6,41 +6,41 @@ import BlackJack.model.rules.INewGameStrategy;
 import BlackJack.model.rules.IWinStrategy;
 import javafx.scene.control.TextArea;
 
-public class GameRuleVisitor implements IGameVisitor {
+public class RulePrinterVisitor implements IGameVisitor {
 
-	private TextArea view;
+	private TextArea textArea;
 
-	public GameRuleVisitor(TextArea view) {
-		this.view = view;
+	public RulePrinterVisitor(TextArea view) {
+		this.textArea = view;
 	}
+	
 	@Override
 	public void VisitAmericanNewGameStrategy(INewGameStrategy am_newGameStrategy) {	
-		view.setText("Game Strategy: American new game\n");
+		textArea.setText("Game Strategy: American Style\n");
 	}
 
 	@Override
 	public void VisitInternationalNewGameStrategy(INewGameStrategy int_newGameStrategy) {
-		view.setText("Game Strategy: International new game\n");	
+		textArea.setText("Game Strategy: International Style\n");	
 	}
 
 	@Override
 	public void VisitBasicHitStrategy(IHitStrategy bas_hitStrategy) {	
-		view.setText(view.getText() + "Hit Strategy: Basic\n");
+		textArea.setText(textArea.getText() + "Hit Strategy: Basic\n");
 	}
 	
 	@Override
 	public void VisitSoft17HitStrategy(IHitStrategy soft17_hitStrategy) {
-		view.setText(view.getText() + "Hit Strategy: Soft-17\n");	
+		textArea.setText(textArea.getText() + "Hit Strategy: Soft-17\n");	
 	}
-
 
 	@Override
 	public void VisitDealerWinStrategy(IWinStrategy deal_winStrategy) {
-		view.setText(view.getText() + "Win Strategy: Dealer win");
+		textArea.setText(textArea.getText() + "Win Strategy: Dealer Win");
 	}
 
 	@Override
 	public void VisitPlayerWinStrategy(IWinStrategy deal_winStrategy) {
-		view.setText(view.getText() + "Win Strategy: Player win");	
+		textArea.setText(textArea.getText() + "Win Strategy: Player Win");	
 	}
 }

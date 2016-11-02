@@ -11,13 +11,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BlackJack.controller.MainpageController">
+<AnchorPane prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BlackJack.controller.MainController">
    <children>
-      <ImageView fx:id="imageView" fitHeight="700.0" fitWidth="850.0" pickOnBounds="true">
-         <image>
-            <Image url="@../../../../../../../../../../Downloads/unnamed.png" />
-         </image></ImageView>
-      <Label fx:id="play" layoutX="719.0" layoutY="572.0" onMouseClicked="#displayGamepage" text="PLAY" textFill="#bc1515">
+      <ImageView fx:id="imageView" fitHeight="700.0" fitWidth="850.0" pickOnBounds="true" />
+      <Label fx:id="play" layoutX="679.0" layoutY="592.0" text="PLAY" textFill="#bc1515">
          <font>
             <Font size="25.0" />
          </font>
@@ -25,7 +22,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Label>
-      <Label fx:id="settings" layoutX="699.0" layoutY="610.0" onMouseClicked="#displaySettingspage" text="SETTINGS" textFill="#bc1515">
+      <Label fx:id="settings" layoutX="641.0" layoutY="627.0" text="SETTINGS" textFill="#bc1515">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -33,7 +30,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label fx:id="quit" layoutX="730.0" layoutY="647.0"  text="QUIT" textFill="#bc1515">
+      <Label fx:id="quit" layoutX="680.0" layoutY="662.0" text="QUIT" textFill="#bc1515">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

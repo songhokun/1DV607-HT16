@@ -12,9 +12,7 @@ public class Program extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-			MainController ctr = new MainController();
-			primaryStage.setScene(ctr.getMainScence());
-			primaryStage.setResizable(false);
-			primaryStage.show();
+		MainController ctr = new MainController();
+		ctr.Start(primaryStage);
 	}
 }
