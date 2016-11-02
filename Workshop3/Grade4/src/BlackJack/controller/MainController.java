@@ -8,6 +8,7 @@ import BlackJack.model.rules.GameFactory;
 import BlackJack.model.rules.IGame;
 import BlackJack.model.rules.IGameFactory;
 import BlackJack.model.rules.IGameVisitor;
+import BlackJack.view.GameRuleVisitor;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
