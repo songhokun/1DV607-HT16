@@ -3,10 +3,10 @@ package BlackJack.controller;
 import BlackJack.model.Game;
 import BlackJack.model.IObserver;
 import BlackJack.view.IView;
+import BlackJack.view.IView.Command;
 
 public class PlayGame implements IObserver {
 
-	public enum Command {PLAY, HIT, STAND, QUIT, INVALID}
 	private Game a_game;
 	private IView a_view;
 
