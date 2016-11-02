@@ -58,7 +58,9 @@ public class SimpleView implements IView {
 			System.out.println("You Won!");
 		}
 	}
-
+	public void CreateNewView(){
+		 for(int i = 0; i < 50; i++) {System.out.print("\n");}; 
+	}
 	private int GetIntInput() {
 		try {
 			int c = System.in.read();
@@ -71,4 +73,5 @@ public class SimpleView implements IView {
 			return 0;
 		}
 	}
+	
 }

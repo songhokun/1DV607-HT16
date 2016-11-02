@@ -70,7 +70,9 @@ public class SwedishView implements IView {
 			System.out.println("Poäng: " + a_score+"\n");
 		}
 	}
-
+	public void CreateNewView(){
+		 for(int i = 0; i < 50; i++) {System.out.print("\n");}; 
+	}
 	private int GetIntInput() {
 		try {
 			int c = System.in.read();
