@@ -15,18 +15,6 @@ public class SwedishView implements IView {
 				+ stand + "\' för att Stanna, " + "\'" + quit + "\' för att avsluta\n");
 	}
 
-	public void DisplayCurrentNewGameRule(String name) {
-		System.out.println("Game Strategy : " + name);
-	}
-
-	public void DisplayCurrentHitRule(String name) {
-		System.out.println("Hit Strategy  : " + name);
-	}
-
-	public void DisplayCurrentWinRule(String name) {
-		System.out.println("Win Strategy  : " + name);
-	}
-
 	public Command GetInput() {
 		int input = GetIntInput();
 		switch (input) {
@@ -70,6 +58,10 @@ public class SwedishView implements IView {
 		} else {
 			System.out.println("Du vann!");
 		}
+	}
+	
+	public void CreateNewView(){
+		 for(int i = 0; i < 50; i++) {System.out.print("\n");}; 
 	}
 
 	private void DisplayHand(String a_name, Iterable<BlackJack.model.Card> a_hand, int a_score) {

@@ -11,21 +11,8 @@ public class SimpleView implements IView {
 
 	public void DisplayWelcomeMessage() {
 		System.out.println("Hello Black Jack World");
-
 		System.out.println("Type " + "\'" + play + "\' to Play, " + "\'" + hit + "\' to Hit, " + "\'" + stand
 				+ "\' to Stand, " + "\'" + quit + "\' to Quit\n");
-	}
-
-	public void DisplayCurrentNewGameRule(String name) {
-		System.out.println("Game Strategy : " + name);
-	}
-
-	public void DisplayCurrentHitRule(String name) {
-		System.out.println("Hit Strategy  : " + name);
-	}
-
-	public void DisplayCurrentWinRule(String name) {
-		System.out.println("Win Strategy  : " + name);
 	}
 
 	public Command GetInput() {
@@ -74,6 +61,10 @@ public class SimpleView implements IView {
 		}
 	}
 
+	public void CreateNewView(){
+		 for(int i = 0; i < 50; i++) {System.out.print("\n");}; 
+	}
+	
 	private int GetIntInput() {
 		try {
 			int c = System.in.read();

@@ -19,7 +19,7 @@ class Soft17InternationalStyleWithPlayerAdvantange implements IGame {
 	
 	@Override
 	public void Accept(IGameVisitor a_visitor) {
-		a_visitor.VisitAmericanNewGameStrategy(this.GetNewGameStrategy());
+		a_visitor.VisitInternationalNewGameStrategy(this.GetNewGameStrategy());
 		a_visitor.VisitSoft17HitStrategy(this.GetHitStrategy());
 		a_visitor.VisitPlayerWinStrategy(this.GetWinStrategy());
 	}

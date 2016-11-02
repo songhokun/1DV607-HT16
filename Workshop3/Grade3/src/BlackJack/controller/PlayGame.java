@@ -18,7 +18,6 @@ public class PlayGame implements IObserver {
 
 	public boolean Play() {
 		a_view.DisplayWelcomeMessage();
-		//a_view.DisplayWelcomeMessage(a_game.GetNewGameStrategyRuleName(), a_game.GetHitStrategyRuleName(), a_game.GetWinStrategyRuleName());
 		Command input = a_view.GetInput();
 		switch (input) {
 		case PLAY:
@@ -39,15 +38,14 @@ public class PlayGame implements IObserver {
 	@Override
 	public void PlayerGetNewCard() {
 		try {
-			Thread.sleep(2000);
+			a_view.CreateNewView();
 			a_view.DisplayDealerHand(a_game.GetDealerHand(), a_game.GetDealerScore());
-			Thread.sleep(2000);
 			a_view.DisplayPlayerHand(a_game.GetPlayerHand(), a_game.GetPlayerScore());
-			Thread.sleep(1000);
 
 			if (a_game.IsGameOver()) {
 				a_view.DisplayGameOver(a_game.IsDealerWinner());
 			}
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

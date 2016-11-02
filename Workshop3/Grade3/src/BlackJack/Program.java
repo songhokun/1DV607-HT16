@@ -5,8 +5,7 @@ import BlackJack.model.Game;
 import BlackJack.model.rules.GameFactory;
 import BlackJack.model.rules.IGame;
 import BlackJack.model.rules.IGameFactory;
-import BlackJack.model.rules.IGameVisitor;
-import BlackJack.view.GameRuleVisitor;
+import BlackJack.view.RulePrinterVisitor;
 import BlackJack.view.IView;
 import BlackJack.view.SimpleView;
 
@@ -20,7 +19,7 @@ public class Program {
 		IView v = new SimpleView();// new SwedishView();
 		PlayGame ctrl = new PlayGame(g, v);
 		
-		IGameVisitor visitor = new GameRuleVisitor(v);
+		RulePrinterVisitor visitor = new RulePrinterVisitor();
 		interfacegame.Accept(visitor);
 		while (ctrl.Play());
 	}

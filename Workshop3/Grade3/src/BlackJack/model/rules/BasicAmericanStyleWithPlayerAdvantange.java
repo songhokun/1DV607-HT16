@@ -16,7 +16,7 @@ class BasicAmericanStyleWithPlayerAdvantange implements IGame {
 	public IWinStrategy GetWinStrategy() {
 		return new PlayerWinStrategy();
 	}
-
+	
 	@Override
 	public void Accept(IGameVisitor a_visitor) {
 		a_visitor.VisitAmericanNewGameStrategy(this.GetNewGameStrategy());
