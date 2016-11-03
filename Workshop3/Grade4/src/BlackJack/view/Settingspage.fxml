@@ -64,7 +64,7 @@
             <Glow />
          </effect>
          <font>
-            <Font name="Chalkboard SE Bold" size="22.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
       <Label fx:id="swedish" layoutX="609.0" layoutY="102.0" text="Swedish" textFill="WHITE">
@@ -75,7 +75,7 @@
             <Glow />
          </effect>
          <font>
-            <Font name="Chalkboard SE Bold" size="22.0" />
+            <Font size="22.0" />
          </font>
       </Label>
    </children>
