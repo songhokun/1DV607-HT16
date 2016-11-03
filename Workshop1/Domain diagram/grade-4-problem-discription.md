@@ -35,8 +35,8 @@ and location of the book.
 7. The librarian places the book in its shelf.
 
 ###Secondary scenario
- 1. Registering a book into different catalogues [Libris (national), LNU (own)]
- . Librarian selects which catalogue to register, and perform the same.
+1. Registering a book into different catalogues [Libris (national), LNU (own)]
+2. Librarian selects which catalogue to register, and perform the same.
 
 
 ##2. Modify a book
@@ -62,8 +62,8 @@ using its title, author's name, and topic.
 7. The registered resources is available in the catalogue
 
 ###Secondary scenario
-  4-1. Register the book into different catalogues [Libris (national), LNU (own)]
-  4-1.1. Librarian selects which catalogue to register, and perform the same afterwards.
+1. Register the book into different catalogues [Libris (national), LNU (own)]
+2. Librarian selects which catalogue to register, and perform the same afterwards.
 
 
 ##5. Searching book
@@ -104,5 +104,5 @@ _Precondition: a guest are located with in the territory of the university or us
 4. A detailed information(metadata) of the publication is presented when user selects it.
 
 ###Secondary scenario
-  7-1. Viewing the publication
-  7-1. 1. After performing the search, user can have access to fulltext of the publication.
+  1. Viewing the publication
+  2. After performing the search, user can have access to fulltext of the publication.
