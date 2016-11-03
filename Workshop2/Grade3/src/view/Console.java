@@ -207,7 +207,7 @@ public class Console implements IView {
 			registry.saveRegistry();
 			scan.close();
 			displaySuccess("REGISTRY SAVED SUCCESSFULLY!!.");
-			System.exit(1);
+			System.exit(0);
 		} catch (IOException e) {
 			displayError("ERROR!! REGISTRY FILE IS NOT SAVED.");
 		}
@@ -225,12 +225,12 @@ public class Console implements IView {
 	@Override
 	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy) {
 		ISimpleSearchStrategy simpleSearchStrategy = null;
-		
+
 		System.out.println("\nSELECT THE OPTION");
 
 		for (SimpleSearchMode mode : SimpleSearchMode.values())
 			System.out.println(mode.ordinal() + ": " + mode);
-		
+
 		System.out.println(returnSequence + ": RETURN");
 		System.out.print(quitSequence + ": SAVE & QUIT\n>");
 		input = scan.next();
@@ -289,7 +289,7 @@ public class Console implements IView {
 	private void displayMemberInstructions() {
 		if (registry.getMemberList().isEmpty())
 			return;
-		
+
 		while (input != quitSequence || input != returnSequence) {
 			System.out.println("\nSELECT THE OPTION");
 			System.out.println("1: CREATE A MEMBER");
@@ -553,7 +553,7 @@ public class Console implements IView {
 
 	/****************** HELPER METHODS FOR CORRECT INPUT *********/
 	/**
-	 * 
+	 *
 	 * @param name
 	 * @return true if name is only consists of alphabetic letters and white
 	 *         spaces.
@@ -571,7 +571,7 @@ public class Console implements IView {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param input
 	 * @return true if member id exists in registry
 	 */

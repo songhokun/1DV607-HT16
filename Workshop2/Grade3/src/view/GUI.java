@@ -42,11 +42,11 @@ public class GUI implements Initializable, IView {
 	//General fields of the program
 	@FXML private Text welcomeText;
 	@FXML private Button compactListButton;
-	@FXML private Button verboListButton;	
+	@FXML private Button verboListButton;
 	@FXML private Button createMemberButton;
 	@FXML private Button saveAndQuitButton;
 	@FXML private Button logInButton;
-	
+
 	//All fields are related to member
 	@FXML private TableView<Member> memberTable;
 	@FXML private TableColumn<Member, String> memberNameColumn;
@@ -58,7 +58,7 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Member, Member> memberDeleteColumn;
 	private TextField memberName = new TextField();
 	private TextField memberPN = new TextField();
-	
+
 	//All fields are related to Boat
 	@FXML private AnchorPane boatTablePane;
 	@FXML private TableView<Boat> boatTable;
@@ -66,11 +66,11 @@ public class GUI implements Initializable, IView {
 	@FXML private TableColumn<Boat, String> boatTypeColumn;
 	@FXML private TableColumn<Boat, Boat> boatEditColumn;
 	@FXML private TableColumn<Boat, Boat> boatDeleteColumn;
-	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values())); 
+	private ChoiceBox <BoatType> boatTypeChoiceBox = new ChoiceBox<BoatType>(FXCollections.observableArrayList(BoatType.values()));
 	@FXML private Button addBoatButton;
-	@FXML private Button closeBoatListButton;	
+	@FXML private Button closeBoatListButton;
 	private TextField boatLength = new TextField();
-	
+
 	//Search
 	@FXML private TextField searchField = new TextField();
 	@FXML private Button searchButton;
@@ -78,10 +78,10 @@ public class GUI implements Initializable, IView {
 	@FXML private ChoiceBox <BoatType> searchByBoatType;
 	@FXML private ChoiceBox <Month> searchByMonth;
 	@FXML private AnchorPane searchPane;
-	
+
 	private Registry registry;
 	private Authentication authentication;
-	
+
 
 
 	public GUI() {
@@ -101,7 +101,7 @@ public class GUI implements Initializable, IView {
 		memberName.setPromptText("Eg: John Smith");
 		boatLength.setPromptText("Eg: 14.65");
 		searchField.setPromptText("Simple Search Mode");
-		
+
 		compactListButton.setOnAction(e -> displayCompactList(registry.getMemberList()));
 		verboListButton.setOnAction(e -> displayVerboseList(registry.getMemberList()));
 		createMemberButton.setDisable(!authentication.isLoggedIn());
@@ -109,11 +109,11 @@ public class GUI implements Initializable, IView {
 		closeBoatListButton.setOnAction(e -> changeView());
 		saveAndQuitButton.setOnAction(e -> quitProgram());
 		logInButton.setOnAction(e -> logIn("", ""));
-		
+
 		searchByChoiceBox.setOnAction(e -> showOtherSearchMode());
 		searchByChoiceBox.setItems(FXCollections.observableArrayList(SimpleSearchMode.values()));
 		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.BY_NAME); // default
-		
+
 		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(registry.getMemberList(), new SearchStrategy())));
 	}
 
@@ -169,7 +169,7 @@ public class GUI implements Initializable, IView {
 		alert.getButtonTypes().add(ButtonType.CANCEL);															//boatType button is null
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == alert.getButtonTypes().get(0)) { 
+		if (result.get() == alert.getButtonTypes().get(0)) {
 			if (checkMemberDetails(memberName, memberPN)) {
 				try {
 					registry.registerMember(memberName.getText(), memberPN.getText());
@@ -187,14 +187,14 @@ public class GUI implements Initializable, IView {
 	public void updateMember(Member m, String name, String personalnumber) {
 		memberName.setText(name); //It sets given name and personal number in the fields.
 		memberPN.setText(personalnumber);
-		
+
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Member");
 		alert.getButtonTypes().add(new ButtonType("Save"));
 		alert.getButtonTypes().add(ButtonType.CANCEL);														//boatType button is null
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Name*"), memberName, new Label("Personal Number*"), memberPN, null));
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == alert.getButtonTypes().get(0)) { 
+		if (result.get() == alert.getButtonTypes().get(0)) {
 			if (checkMemberDetails(memberName, memberPN)) {
 				try {
 					registry.updateMember(m, memberName.getText(), memberPN.getText());
@@ -230,7 +230,7 @@ public class GUI implements Initializable, IView {
 		logInButton.setVisible(false);
 		saveAndQuitButton.setVisible(false);
 		searchPane.setVisible(false);
-		
+
 		//Hereby display selected member´s boats.
 		setBoatTable(m);
 		boatTablePane.setVisible(true);
@@ -251,7 +251,7 @@ public class GUI implements Initializable, IView {
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)*"), this.boatLength, new Label("Type*"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if (checkBoatLength(this.boatLength)) { 
+			if (checkBoatLength(this.boatLength)) {
 				try {
 					m.registerBoat(Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem());
 					displaySuccess("Boat Registerd Succesfully!!");
@@ -268,7 +268,7 @@ public class GUI implements Initializable, IView {
 	public void updateBoat(Member m, double length, BoatType type, Boat boat) {
 		boatLength.setText("" + length); //text fields only take strings.
 		boatTypeChoiceBox.getSelectionModel().select(type); // set the present type of given boat
-		
+
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setHeaderText("Update Boat");
 		alert.getButtonTypes().add(new ButtonType("Save"));
@@ -276,7 +276,7 @@ public class GUI implements Initializable, IView {
 		alert.getDialogPane().setContent(createDialogeBox(new Label("Length(m)"), boatLength, new Label("Type"), null, boatTypeChoiceBox));
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == alert.getButtonTypes().get(0)) {
-			if (checkBoatLength(this.boatLength)) { 
+			if (checkBoatLength(this.boatLength)) {
 				try {
 					m.updateBoat(Double.parseDouble(this.boatLength.getText()), boatTypeChoiceBox.getSelectionModel().getSelectedItem(), boat);
 					displaySuccess("Boat Updated Successfully!!");
@@ -317,13 +317,13 @@ public class GUI implements Initializable, IView {
 	public void quitProgram() {
 		try {
 			registry.saveRegistry();
-			displaySuccess("REGISTRY SAVED SUCCESSFULLY!!.");	
-			System.exit(1);
+			displaySuccess("REGISTRY SAVED SUCCESSFULLY!!.");
+			System.exit(0);
 		} catch (IOException e) {
 			displayError("ERROR!! REGISTRY FILE IS NOT SAVED.");
 		}
 	}
-	
+
 	@Override
 	public void logIn(String username, String password) {
 		TextField usernameField = new TextField();
@@ -414,7 +414,7 @@ public class GUI implements Initializable, IView {
 	}
 
 	/********************************** FOR CREATING VIEW ************************/
-			
+
 	private void showOtherSearchMode(){
 		// search by boat type
 		if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_TYPE)){
@@ -452,12 +452,12 @@ public class GUI implements Initializable, IView {
 		searchPane.setVisible(true);
 		memberTable.setVisible(true);
 		setMemberTable(registry.getMemberList());
-		
+
 		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_TYPE))
 			searchByBoatType.setVisible(true);
 		else if(searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_MONTH))
 			searchByMonth.setVisible(true);
-		else 
+		else
 			searchField.setVisible(true);
 	}
 
@@ -597,7 +597,7 @@ public class GUI implements Initializable, IView {
 	}
 
 	private boolean checkName(TextField name) {
-		if (name.getText().isEmpty()) 
+		if (name.getText().isEmpty())
 			return false;
 		boolean charexists = false;
 		for (int i = 0; i < name.getText().length(); i++) {
