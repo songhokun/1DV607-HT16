@@ -54,7 +54,7 @@ public class MainController implements Initializable {
 	}
 	
 	protected void QuitGame(){
-		System.exit(1);
+		System.exit(0);
 	}
 	
 	protected void AddEffects(Label[] list){
