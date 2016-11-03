@@ -34,9 +34,9 @@ and location of the book.
 6. The system registers the book into the catalogue.
 7. The librarian places the book in its shelf.
 
-  Secondary scenario
-  1 - 1. Registering a book into different catalogues [Libris (national), LNU (own)]
-     a. Librarian selects which catalogue to register, and perform the same.
+###Secondary scenario
+ 1. Registering a book into different catalogues [Libris (national), LNU (own)]
+ . Librarian selects which catalogue to register, and perform the same.
 
 
 ##2. Modify a book
