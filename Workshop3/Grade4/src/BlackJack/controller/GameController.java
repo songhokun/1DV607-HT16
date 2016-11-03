@@ -41,6 +41,8 @@ public class GameController extends MainController implements IObserver{
 			if(game.IsGameOver()){
 				gameView.DisplayGameOver(currentLanguage, game.IsDealerWinner());
 				play.setDisable(false);
+				hit.setDisable(true);
+				stand.setDisable(true);
 			}
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -50,6 +52,8 @@ public class GameController extends MainController implements IObserver{
 	
 	public void NewGame() {
 		play.setDisable(true);
+		hit.setDisable(false);
+		stand.setDisable(false);
 		game.NewGame();
 	}
 	
