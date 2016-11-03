@@ -24,7 +24,7 @@ Wants to publish its own article to university's catalogue.
 A librarian wants to register a book into library's catalogue.
 If the book is registered, everyone in the library should be able to find the book with its title, or author's name, published year.
 
-Main scenario
+###Main scenario
 1. The librarian wants to register a book.
 2. The system asks for information of the book.
 3. The librarian enters the 'metadata' of the book which includes title, author, publisher, edition, year of the publication,
