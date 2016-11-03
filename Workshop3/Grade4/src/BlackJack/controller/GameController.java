@@ -30,6 +30,8 @@ public class GameController extends MainController implements IObserver{
 		gameView.SetPageLanguage(currentLanguage, back, play, stand, hit, quit, player, dealer);
 		SetLabelsOnAction();
 		AddEffects(new Label[]{back, play, stand, hit, quit});
+		stand.setDisable(true);
+		hit.setDisable(true);
 	}
 
 	@Override
