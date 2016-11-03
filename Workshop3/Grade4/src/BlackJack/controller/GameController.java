@@ -4,8 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import BlackJack.model.Game;
 import BlackJack.model.IObserver;
-import BlackJack.model.rules.IGame;
-import BlackJack.view.RulePrinterVisitor;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -23,19 +21,15 @@ public class GameController extends MainController implements IObserver{
 	@FXML private TextArea rules;
 	@FXML private HBox playerCardDisplayer;
 	@FXML private HBox dealerCardDisplayer;
-	private RulePrinterVisitor visitor;
-	private IGame IGame;
 	private Game game;
 	
+	
 	public void initialize(URL location, ResourceBundle resources) {
-		visitor = new RulePrinterVisitor(rules);
-		IGame = settingsView.GetSelectedIGame();
-		IGame.Accept(visitor);
-		game = new Game(IGame);
+		game = settingsView.GetSelectedGame(rules);
 		game.AddSubscribers(this);
 		gameView.SetPageLanguage(currentLanguage, back, play, stand, hit, quit, player, dealer);
 		SetLabelsOnAction();
-		AddEffects(new Label[]{back, play, stand, hit, quit, player, dealer});
+		AddEffects(new Label[]{back, play, stand, hit, quit});
 	}
 
 	@Override
@@ -58,11 +52,10 @@ public class GameController extends MainController implements IObserver{
 		play.setDisable(true);
 		game.NewGame();
 	}
-
 	
 	public void SetLabelsOnAction() {
 		quit.setOnMouseClicked(e -> super.QuitGame());
-		back.setOnMouseClicked(e -> gameView.GoBack(stage, back));
+		back.setOnMouseClicked(e -> super.DisaplayMainPage(back));
 		play.setOnMouseClicked(e -> NewGame());
 		stand.setOnMouseClicked(e -> game.Stand());
 		hit.setOnMouseClicked(e -> game.Hit());

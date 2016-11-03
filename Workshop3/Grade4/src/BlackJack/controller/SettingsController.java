@@ -9,7 +9,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
-public class SettingspageController extends MainController {
+public class SettingsController extends MainController {
 
 	@FXML private Label gameMode;
 	@FXML private Label language;
@@ -25,7 +25,7 @@ public class SettingspageController extends MainController {
 		settingsView.SetPageLanguage(currentLanguage, language, back, gameMode, english, swedish);
 		settingsView.SetBackgroundImage(imageView);
 		settingsView.SetAllGameModes(gameModeChoices);
-		back.setOnMouseClicked(e -> settingsView.GoBack(stage, back));
+		back.setOnMouseClicked(e -> super.DisaplayMainPage(back));
 		english.setOnMouseClicked( e -> ChangeToEnglish());
 		swedish.setOnMouseClicked(e -> ChangeToSwedish());
 		gameModeChoices.setOnAction(e -> GetNewGameMode());

@@ -1,20 +1,14 @@
 package BlackJack.view;
 
-import java.io.IOException;
-
 import BlackJack.model.Card;
 import BlackJack.model.Card.Value;
 import BlackJack.view.SettingsView.Language;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
 public class GameView {
 	
@@ -65,17 +59,12 @@ public class GameView {
 			break;
 		case Swedish:
 			if (isDealerWinner)
-				alert.setContentText("Dealer Vann !!");
+				alert.setContentText("Dealern Vann !!");
 			else
 				alert.setContentText("Du Vann !!");
 			break;
 		}
 		alert.show();
-	}
-	
-	public void GoBack(Stage stage, Label back) {
-		stage = (Stage) back.getScene().getWindow();
-		DisplayPage(stage, "Mainpage");
 	}
 	
 	private void DisplayHand(Iterable<Card> hand, HBox cardDisplayer, int score, Label player) {
@@ -88,17 +77,6 @@ public class GameView {
 			cardDisplayer.getChildren().add(imageView);
 		}
 		player.setText(player.getText().split(":")[0]  + ":  " + score + ")");
-	}
-	
-	private void DisplayPage(Stage stage, String path) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/BlackJack/view/" + path + ".fxml"));
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private String GetCardLink(Card card) {

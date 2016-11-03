@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BlackJack.controller.SettingspageController">
+<AnchorPane prefHeight="700.0" prefWidth="850.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BlackJack.controller.SettingsController">
    <children>
       <ImageView fx:id="imageView" fitHeight="700.0" fitWidth="850.0" pickOnBounds="true">
          <image>
             <Image url="@../../../../../../../../../../Downloads/blackjack.jpg" />
          </image></ImageView>
-      <Label fx:id="gameMode" layoutX="283.0" layoutY="46.0" text="Game Mode" textFill="WHITE">
+      <Label fx:id="gameMode" layoutX="283.0" layoutY="46.0" text="Game Mode" textFill="YELLOW">
          <font>
             <Font size="25.0" />
          </font>
@@ -34,7 +34,7 @@
             <Glow />
          </effect>
       </ChoiceBox>
-      <Label fx:id="back" layoutX="5.0" layoutY="3.0" text="Back" textFill="#bc1515">
+      <Label fx:id="back" layoutX="5.0" layoutY="3.0" text="Back" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -45,7 +45,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label fx:id="language" layoutX="309.0" layoutY="101.0" text="Language" textFill="WHITE">
+      <Label fx:id="language" layoutX="309.0" layoutY="101.0" text="Language" textFill="YELLOW">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -56,7 +56,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label fx:id="english" layoutX="460.0" layoutY="102.0" text="English" textFill="#bc1515">
+      <Label fx:id="english" layoutX="460.0" layoutY="102.0" text="English" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -67,7 +67,7 @@
             <Font name="Chalkboard SE Bold" size="22.0" />
          </font>
       </Label>
-      <Label fx:id="swedish" layoutX="609.0" layoutY="102.0" text="Swedish" textFill="#bc1515">
+      <Label fx:id="swedish" layoutX="609.0" layoutY="102.0" text="Swedish" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
