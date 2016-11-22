@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import model.Search.ISimpleSearchStrategy;
+
 public class Registry {
 
 	private ArrayList<Member> memberList;
@@ -45,7 +47,15 @@ public class Registry {
 		}
 		return null;
 	}
-
+	public ArrayList<Member> search(ISimpleSearchStrategy a_search) {
+		ArrayList<Member> ret = new ArrayList<Member>();
+		for (Member m : this.memberList) {
+			if (a_search.isMemberSelected(m)){
+	    		ret.add(m);
+	    	}
+		}
+		return ret;
+	}
 	public void saveRegistry() throws IOException {
 		// This maxID in argument is current maximum value of user's ID. This is
 		// because userID is generated based on increment of maxID.

@@ -398,7 +398,7 @@ public class GUI implements Initializable, IView {
 			displayError("Incorrect Data Type!!");
 		}
 		searchField.clear();
-		return simpleSearchStrategy.simpleSearch(list);
+		return registry.search(simpleSearchStrategy);
 	}
 
 	@Override

@@ -272,7 +272,7 @@ public class Console implements IView {
 				doSimpleSearch(list, strategy);
 			}
 		}
-		return simpleSearchStrategy.simpleSearch(list);
+		return registry.search(simpleSearchStrategy);
 	}
 
 

@@ -1,6 +1,6 @@
 package model.Search;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import model.Member;
 
 class ByAgeEqualTo implements ISimpleSearchStrategy {
@@ -11,6 +11,7 @@ class ByAgeEqualTo implements ISimpleSearchStrategy {
 		this.age = age;
 	}
 
+	/*
 	@Override
 	public ArrayList<Member> simpleSearch(ArrayList<Member> list) {
 		ArrayList<Member> foundMembers = new ArrayList<Member>();
@@ -20,5 +21,10 @@ class ByAgeEqualTo implements ISimpleSearchStrategy {
 			}
 		}
 		return foundMembers;
+	}
+	*/
+	@Override
+	public boolean isMemberSelected(Member a_m) {
+		return a_m.getAge() == age;
 	}
 }
