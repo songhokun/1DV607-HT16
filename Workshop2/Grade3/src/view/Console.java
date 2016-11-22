@@ -82,7 +82,7 @@ public class Console implements IView {
 				registerMember(getMemberNameFromUser(), getMemberPersonalnumberFromUser());
 				break;
 			case ("4"):
-				ArrayList<Member> m = doSimpleSearch(registry.getMemberList(), new SearchStrategy());
+				ArrayList<Member> m = doSimpleSearch(new SearchStrategy());
 				displaySearchResult(m);
 				break;
 			case ("5"):
@@ -223,7 +223,7 @@ public class Console implements IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy) {
+	public ArrayList<Member> doSimpleSearch(SearchStrategy strategy) {
 		ISimpleSearchStrategy simpleSearchStrategy = null;
 
 		System.out.println("\nSELECT THE OPTION");
@@ -269,7 +269,7 @@ public class Console implements IView {
 				}
 			} catch (Exception e) {
 				displayError("INVALID OPTION");
-				doSimpleSearch(list, strategy);
+				doSimpleSearch(strategy);
 			}
 		}
 		return registry.search(simpleSearchStrategy);

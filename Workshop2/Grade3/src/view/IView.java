@@ -126,7 +126,7 @@ public interface IView {
 	 *            searchMode
 	 * @return ArrayList<Member> who have given parameter object
 	 */
-	ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy);
+	ArrayList<Member> doSimpleSearch(SearchStrategy strategy);
 
 	/**
 	 * Print the given parameter array

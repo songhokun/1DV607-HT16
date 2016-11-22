@@ -114,7 +114,7 @@ public class GUI implements Initializable, IView {
 		searchByChoiceBox.setItems(FXCollections.observableArrayList(SimpleSearchMode.values()));
 		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.BY_NAME); // default
 
-		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(registry.getMemberList(), new SearchStrategy())));
+		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(new SearchStrategy())));
 	}
 
 	@Override
@@ -354,7 +354,7 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy factory) {
+	public ArrayList<Member> doSimpleSearch(SearchStrategy factory) {
 		ISimpleSearchStrategy simpleSearchStrategy = null;
 		// if search field is empty
 		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_NAME)
