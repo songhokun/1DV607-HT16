@@ -11,7 +11,7 @@ import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
 import model.Search.IComplexSearchStrategy;
-import model.Search.ISimpleSearchStrategy;
+import model.Search.ISearchStrategy;
 import model.Search.SearchStrategy;
 import model.Search.SearchStrategy.ComplexSearchMode;
 import model.Search.SearchStrategy.SimpleSearchMode;
@@ -84,11 +84,11 @@ public class Console implements IView {
 				registerMember(getMemberNameFromUser(), getMemberPersonalnumberFromUser());
 				break;
 			case ("4"):
-				ArrayList<Member> m = doSimpleSearch(registry.getMemberList(), new SearchStrategy());
+				ArrayList<Member> m = registry.search(doSimpleSearch());
 				displaySearchResult(m);
 				break;
 			case ("5"):
-				doComplexSearch(registry.getMemberList(), new SearchStrategy());
+				doComplexSearch();
 				break;
 			case ("6"):
 				if (!authentication.isLoggedIn())
@@ -228,8 +228,9 @@ public class Console implements IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy) {
-		ISimpleSearchStrategy simpleSearchStrategy = null;
+	public ISearchStrategy doSimpleSearch() {
+		SearchStrategy strategy = new SearchStrategy();
+		ISearchStrategy simpleSearchStrategy = null;
 
 		System.out.println("\nSELECT THE OPTION");
 
@@ -274,18 +275,17 @@ public class Console implements IView {
 				}
 			} catch (Exception e) {
 				displayError("INVALID OPTION");
-				doSimpleSearch(list, strategy);
+				doSimpleSearch();
 			}
 		}
-		return simpleSearchStrategy.simpleSearch(list);
+		return simpleSearchStrategy;
 	}
 
 	@Override
-	public void doComplexSearch(ArrayList<Member> list, SearchStrategy strategy) {
-		IComplexSearchStrategy complexSearchStrategy;
-
-		ArrayList<Member> firstList = doSimpleSearch(list, strategy);
-		ArrayList<Member> secondList = null;
+	public void doComplexSearch() {
+		SearchStrategy strategy = new SearchStrategy();
+		ISearchStrategy complexSearchStrategy = doSimpleSearch();
+		
 		String in;
 
 		do {
@@ -302,20 +302,16 @@ public class Console implements IView {
 			else if (in.equals(quitSequence))
 				quitProgram();
 			else if (in.equals("s"))
-				displaySearchResult(firstList);
+				displaySearchResult(registry.search(complexSearchStrategy));
 			else {
 				try {
 					switch (ComplexSearchMode.values()[Integer.parseInt(in)]) {
 
 					case AND:
-						secondList = doSimpleSearch(list, strategy);
-						complexSearchStrategy = strategy.getByAndStrategy();
-						firstList = complexSearchStrategy.complexSearch(firstList, secondList);
+						complexSearchStrategy = strategy.getByAndStrategy(complexSearchStrategy, doSimpleSearch());
 						break;
 					case OR:
-						secondList = doSimpleSearch(list, strategy);
-						complexSearchStrategy = strategy.getByOrStrategy();
-						firstList = complexSearchStrategy.complexSearch(firstList, secondList);
+						complexSearchStrategy = strategy.getByOrStrategy(complexSearchStrategy, doSimpleSearch());
 						break;
 					}
 				} catch (Exception e) {

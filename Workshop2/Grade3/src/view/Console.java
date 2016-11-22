@@ -10,7 +10,7 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
-import model.Search.ISimpleSearchStrategy;
+import model.Search.ISearchStrategy;
 import model.Search.SearchStrategy;
 import model.Search.SearchStrategy.SimpleSearchMode;
 
@@ -82,7 +82,7 @@ public class Console implements IView {
 				registerMember(getMemberNameFromUser(), getMemberPersonalnumberFromUser());
 				break;
 			case ("4"):
-				ArrayList<Member> m = doSimpleSearch(new SearchStrategy());
+				ArrayList<Member> m = registry.search(doSimpleSearch());
 				displaySearchResult(m);
 				break;
 			case ("5"):
@@ -223,8 +223,9 @@ public class Console implements IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(SearchStrategy strategy) {
-		ISimpleSearchStrategy simpleSearchStrategy = null;
+	public ISearchStrategy doSimpleSearch() {
+		SearchStrategy strategy = new SearchStrategy();
+		ISearchStrategy simpleSearchStrategy = null;
 
 		System.out.println("\nSELECT THE OPTION");
 
@@ -269,10 +270,10 @@ public class Console implements IView {
 				}
 			} catch (Exception e) {
 				displayError("INVALID OPTION");
-				doSimpleSearch(strategy);
+				doSimpleSearch();
 			}
 		}
-		return registry.search(simpleSearchStrategy);
+		return simpleSearchStrategy;
 	}
 
 

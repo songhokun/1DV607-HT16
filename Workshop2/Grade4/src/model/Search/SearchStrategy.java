@@ -11,39 +11,39 @@ public class SearchStrategy {
 		AND, OR
 	}
 	
-	public ISimpleSearchStrategy getSearchByName(String name) {
+	public ISearchStrategy getSearchByName(String name) {
 		return new ByName(name);
 	}
 
-	public ISimpleSearchStrategy getSearchByAgeEqualTo(int age) {
+	public ISearchStrategy getSearchByAgeEqualTo(int age) {
 		return new ByAgeEqualTo(age);
 	}
 
-	public ISimpleSearchStrategy getSearchByAgeGreaterThan(int age) {
+	public ISearchStrategy getSearchByAgeGreaterThan(int age) {
 		return new ByAgeGreaterThan(age);
 	}
 
-	public ISimpleSearchStrategy getSearchByAgeLessThan(int age) {
+	public ISearchStrategy getSearchByAgeLessThan(int age) {
 		return new ByAgeLessThan(age);
 	}
 
-	public ISimpleSearchStrategy getSearchByBoatLength(double length) {
+	public ISearchStrategy getSearchByBoatLength(double length) {
 		return new ByBoatLength(length);
 	}
 
-	public ISimpleSearchStrategy getSearchByBoatType(BoatType type) {
+	public ISearchStrategy getSearchByBoatType(BoatType type) {
 		return new ByBoatType(type);
 	}
 
-	public ISimpleSearchStrategy getSearchByMonth(int month) {
+	public ISearchStrategy getSearchByMonth(int month) {
 		return new ByMonth(month);
 	}
 
-	public IComplexSearchStrategy getByAndStrategy() {
-		return new ByAndStrategy();
+	public ISearchStrategy getByAndStrategy(ISearchStrategy criteria_1, ISearchStrategy criteria_2) {
+		return new ByAndStrategy(criteria_1,criteria_2);
 	}
 
-	public IComplexSearchStrategy getByOrStrategy() {
-		return new ByOrStrategy();
+	public ISearchStrategy getByOrStrategy(ISearchStrategy criteria_1, ISearchStrategy criteria_2) {
+		return new ByOrStrategy(criteria_1,criteria_2);
 	}
 }

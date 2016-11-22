@@ -33,7 +33,7 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
-import model.Search.ISimpleSearchStrategy;
+import model.Search.ISearchStrategy;
 import model.Search.SearchStrategy;
 import model.Search.SearchStrategy.SimpleSearchMode;
 
@@ -114,7 +114,7 @@ public class GUI implements Initializable, IView {
 		searchByChoiceBox.setItems(FXCollections.observableArrayList(SimpleSearchMode.values()));
 		searchByChoiceBox.getSelectionModel().select(SimpleSearchMode.BY_NAME); // default
 
-		searchButton.setOnAction(e -> displaySearchResult(doSimpleSearch(new SearchStrategy())));
+		searchButton.setOnAction(e -> displaySearchResult(registry.search(doSimpleSearch())));
 	}
 
 	@Override
@@ -354,8 +354,9 @@ public class GUI implements Initializable, IView {
 	}
 
 	@Override
-	public ArrayList<Member> doSimpleSearch(SearchStrategy factory) {
-		ISimpleSearchStrategy simpleSearchStrategy = null;
+	public ISearchStrategy doSimpleSearch() {
+		SearchStrategy factory = new SearchStrategy();
+		ISearchStrategy simpleSearchStrategy = null;
 		// if search field is empty
 		if (searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_NAME)
 				|| searchByChoiceBox.getSelectionModel().getSelectedItem().equals(SimpleSearchMode.BY_BOAT_LENGTH)
@@ -398,7 +399,7 @@ public class GUI implements Initializable, IView {
 			displayError("Incorrect Data Type!!");
 		}
 		searchField.clear();
-		return registry.search(simpleSearchStrategy);
+		return simpleSearchStrategy;
 	}
 
 	@Override

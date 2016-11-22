@@ -5,7 +5,7 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 
-class ByBoatType implements ISimpleSearchStrategy {
+class ByBoatType implements ISearchStrategy {
 
 	private BoatType type;
 

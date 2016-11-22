@@ -4,7 +4,7 @@ package model.Search;
 import model.Boat;
 import model.Member;
 
-class ByBoatLength implements ISimpleSearchStrategy {
+class ByBoatLength implements ISearchStrategy {
 
 	private double length;
 

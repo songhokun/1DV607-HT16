@@ -3,7 +3,7 @@ package model.Search;
 //import java.util.ArrayList;
 import model.Member;
 
-class ByName implements ISimpleSearchStrategy {
+class ByName implements ISearchStrategy {
 
 	private String name;
 

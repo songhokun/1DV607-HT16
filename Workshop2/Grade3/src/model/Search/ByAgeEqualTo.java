@@ -3,7 +3,7 @@ package model.Search;
 //import java.util.ArrayList;
 import model.Member;
 
-class ByAgeEqualTo implements ISimpleSearchStrategy {
+class ByAgeEqualTo implements ISearchStrategy {
 
 	protected int age;
 

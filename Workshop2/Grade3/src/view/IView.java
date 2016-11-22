@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
+import model.Search.ISearchStrategy;
 import model.Search.SearchStrategy;
 
 
@@ -126,7 +127,7 @@ public interface IView {
 	 *            searchMode
 	 * @return ArrayList<Member> who have given parameter object
 	 */
-	ArrayList<Member> doSimpleSearch(SearchStrategy strategy);
+	ISearchStrategy doSimpleSearch();
 
 	/**
 	 * Print the given parameter array

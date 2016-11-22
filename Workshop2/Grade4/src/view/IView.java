@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
-import model.Search.SearchStrategy;
+import model.Search.ISearchStrategy;
 
 
 /**
@@ -120,13 +120,7 @@ public interface IView {
 	 */
 	void logIn(String username, String password);
 
-	/**
-	 * 
-	 * @param o,
-	 *            searchMode
-	 * @return ArrayList<Member> who have given parameter object
-	 */
-	ArrayList<Member> doSimpleSearch(ArrayList<Member> list, SearchStrategy strategy);
+	ISearchStrategy doSimpleSearch();
 
 	/**
 	 * 
@@ -136,7 +130,7 @@ public interface IView {
 	 *            operator
 	 * @return ArrayList<Member> after doing AND/OR operation on given arrays.
 	 */
-	void doComplexSearch(ArrayList<Member> list, SearchStrategy strategy);
+	void doComplexSearch();
 
 	/**
 	 * Print the given parameter array

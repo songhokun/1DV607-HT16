@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import model.Search.ISimpleSearchStrategy;
+import model.Search.ISearchStrategy;
 
 public class Registry {
 
@@ -47,7 +47,7 @@ public class Registry {
 		}
 		return null;
 	}
-	public ArrayList<Member> search(ISimpleSearchStrategy a_search) {
+	public ArrayList<Member> search(ISearchStrategy a_search) {
 		ArrayList<Member> ret = new ArrayList<Member>();
 		for (Member m : this.memberList) {
 			if (a_search.isMemberSelected(m)){
