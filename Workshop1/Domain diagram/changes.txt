@@ -17,6 +17,14 @@ The final version of the grade 2 assignment can be found in 'Grade-2-Final.pdf',
 5. Relationship between member and boat is now 'owns.'
 ** End of Changes **
 
+** Changes after final submission **
+1. Grade 4, Book is renamed as physical medium/media.
+2. Types of physical media is presented in a domain model.
+3. Secondary scenario for borrowing is added. Different media has different loan periods.
+4. Main scenario for extending a current loan is added in use cases.
+5. Borrower is introduced in the domain model;
+** End of Changes **
+
 
 Reference
 (1) Larman C. , Applying UML and Patterns 3rd Ed, 2004, ISBN: 0131489062
