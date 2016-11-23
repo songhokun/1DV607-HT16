@@ -10,7 +10,6 @@ import model.Boat;
 import model.Boat.BoatType;
 import model.Member;
 import model.Registry;
-import model.Search.IComplexSearchStrategy;
 import model.Search.ISearchStrategy;
 import model.Search.SearchStrategy;
 import model.Search.SearchStrategy.ComplexSearchMode;
@@ -283,6 +282,7 @@ public class Console implements IView {
 
 	@Override
 	public void doComplexSearch() {
+		/*
 		SearchStrategy strategy = new SearchStrategy();
 		ISearchStrategy complexSearchStrategy = doSimpleSearch();
 		
@@ -319,6 +319,36 @@ public class Console implements IView {
 				}
 			}
 		} while (!in.equals("s"));
+		*/
+		model.Search.ByComplex complexSearch = new model.Search.ByComplex(); 
+		String in;
+
+		complexSearch.add(doSimpleSearch(), model.Search.SearchStrategy.ComplexSearchMode.OR);
+		
+		do {
+			for (ComplexSearchMode operator : ComplexSearchMode.values())
+				System.out.println(operator.ordinal() + ": " + operator);
+
+			System.out.println("s: SHOW RESULT");
+			System.out.println(returnSequence + ": RETURN");
+			System.out.print(quitSequence + ": SAVE & QUIT\n");
+			in = scan.next();
+
+			if (in.equals(returnSequence))
+				return;
+			else if (in.equals(quitSequence))
+				quitProgram();
+			else if (in.equals("s"))
+				displaySearchResult(registry.search(complexSearch));
+			else {
+				try {
+					complexSearch.add(doSimpleSearch(), ComplexSearchMode.values()[Integer.parseInt(in)]);
+				} catch (Exception e) {
+					displayError("INVALID OPTION");
+				}
+			}
+		} while (!in.equals("s"));
+
 	}
 
 	@Override
